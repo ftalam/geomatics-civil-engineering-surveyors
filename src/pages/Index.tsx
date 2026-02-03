@@ -12,6 +12,8 @@ import civilWorksImg from "@/assets/civil-works.jpg";
 import geospatialImg from "@/assets/geospatial.jpg";
 import miningImg from "@/assets/mining.jpg";
 import renewableImg from "@/assets/renewable-energy.jpg";
+import bestSellerImg from "@/assets/chcnav-vili-i100-visual-lidar-gnss-rtk-receiver-surveying.jpg";
+
 
 const industries = [
   {
@@ -38,6 +40,11 @@ const industries = [
     title: "Renewable Energy",
     description: "Site surveys for solar, wind, and other renewable energy installations.",
     image: renewableImg,
+  },
+  {
+    title: "Best Seller",
+    description: "Top-rated products for precision surveying.",
+    image: bestSellerImg,
   },
 ];
 
@@ -118,7 +125,7 @@ const Index = () => {
                   ))}
                 </div>
                 <p className="text-muted-foreground text-sm">
-                  <span className="font-semibold text-foreground">4.8 Stars</span> (285 Customers)
+                  <span className="font-semibold text-foreground">4.8 Stars</span> (200+ Customers)
                 </p>
               </div>
             </motion.div>
@@ -208,7 +215,7 @@ const Index = () => {
               viewport={{ once: true }}
             >
               <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-4">
-                Why Choose Us
+                Why Choose Us?
               </span>
               <h2 className="font-display font-bold text-3xl md:text-4xl text-foreground mb-6">
                 Your Trusted Partner for Precision Surveying

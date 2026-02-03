@@ -17,12 +17,12 @@ const contactInfo = [
   {
     icon: Phone,
     title: "Phone",
-    details: ["+254 712 345 678", "+254 733 456 789"],
+    details: ["+254 721 235 501", "+254 768 922 891"],
   },
   {
     icon: Mail,
     title: "Email",
-    details: ["info@geomatics.co.ke", "sales@geomatics.co.ke"],
+    details: ["pmugo@geomatics.co.ke", "sales@geomatics.co.ke"],
   },
   {
     icon: Clock,
@@ -95,7 +95,7 @@ const Contact = () => {
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
-                      placeholder="John Doe"
+                      placeholder="First Last"
                       required
                       className="bg-card border-border"
                     />
@@ -110,7 +110,7 @@ const Contact = () => {
                       type="email"
                       value={formData.email}
                       onChange={handleChange}
-                      placeholder="john@example.com"
+                      placeholder="name@geomatics.com"
                       required
                       className="bg-card border-border"
                     />

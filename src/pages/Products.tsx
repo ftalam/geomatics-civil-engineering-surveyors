@@ -5,67 +5,104 @@ import { Button } from "@/components/ui/button";
 import { ShoppingCart, Star, Search, Filter, ArrowRight } from "lucide-react";
 import { useState } from "react";
 
-import heroImage from "@/assets/hero-surveying.jpg";
+import bestSellerImg from "@/assets/chcnav-vili-i100-visual-lidar-gnss-rtk-receiver-surveying.jpg";
+import totalStationImg from "@/assets/chcnav-Total-Station-cts-a100.jpg";
+import ctsM100Img from "@/assets/chcnav-cts-m100-total-station-surveying.jpg";
+import droneImg from "@/assets/chcnav-x500-uav-professional-multirotor-drone.jpg";
+import iBaseImg from "@/assets/chcnav-ibase.jpg";
+import laseScannerImg from "@/assets/handheld-+Laser-scanners-chcnav-RS10.jpg";
+import i93Img from "@/assets/gnss-smart-full-antennas-chcnav-i93.jpg";
+import i89Img from "@/assets/gnss-smart-full-antennas-chcnav-i89.jpg";
+import i76Img from "@/assets/gnss-smart-full-antennas-chcnav-i76.jpg";
+import i73PlusImg from "@/assets/gnss-smart-full-antennas-chcnav-i73+.jpg";
 
 const categories = ["All", "GNSS Receivers", "Total Stations", "Drones", "Accessories"];
 
 const products = [
   {
     id: 1,
-    name: "CHC i90 GNSS Receiver",
+    name: "CHCNAV Vi-Li i100 GNSS Receiver",
     category: "GNSS Receivers",
-    price: 4500,
     rating: 4.8,
     reviews: 45,
-    image: heroImage,
+    image: bestSellerImg,
     badge: "Bestseller",
   },
   {
     id: 2,
-    name: "Topcon GT-1200 Total Station",
+    name: "CHCNAV CTS-A100 Total Station",
     category: "Total Stations",
-    price: 8200,
     rating: 4.9,
     reviews: 32,
-    image: heroImage,
+    image: totalStationImg,
     badge: "New",
   },
   {
     id: 3,
-    name: "DJI Matrice 350 RTK Drone",
+    name: "CHCNAV X500 UAV",
     category: "Drones",
-    price: 12500,
     rating: 4.7,
     reviews: 28,
-    image: heroImage,
+    image: droneImg,
+    badge: "Professional Multirotor Drone",
   },
   {
     id: 4,
-    name: "CHC X12 GNSS Receiver",
+    name: "CHCNAV iBase",
     category: "GNSS Receivers",
-    price: 3800,
     rating: 4.6,
     reviews: 56,
-    image: heroImage,
+    image: iBaseImg,
   },
   {
     id: 5,
-    name: "Surveying Tripod Pro",
-    category: "Accessories",
-    price: 450,
-    rating: 4.5,
-    reviews: 89,
-    image: heroImage,
+    name: "CHCNAV CTS-M100 Total Station",
+    category: "Total Stations",
+    rating: 4.6,
+    reviews: 18,
+    image: ctsM100Img,
+    badge: "Cost effective",
   },
   {
     id: 6,
-    name: "Leica TS16 Total Station",
-    category: "Total Stations",
-    price: 9800,
+    name: "CHCNAV RS10",
+    category: "Accessories",
     rating: 4.9,
     reviews: 41,
-    image: heroImage,
-    badge: "Premium",
+    image: laseScannerImg,
+    badge: "Handheld",
+  },
+  {
+    id: 7,
+    name: "CHCNAV i93",
+    category: "GNSS Receivers",
+    rating: 4.5,
+    reviews: 89,
+    image: i93Img,
+  },
+  {
+    id: 8,
+    name: "CHCNAV i89",
+    category: "GNSS Receivers",
+    rating: 4.5,
+    reviews: 89,
+    image: i89Img,
+  },
+  {
+    id: 9,
+    name: "CHCNAV i76",
+    category: "GNSS Receivers",
+    rating: 4.4,
+    reviews: 79,
+    image: i76Img,
+  },
+  {
+    id: 10,
+    name: "CHCNAV i73+",
+    category: "GNSS Receivers",
+    rating: 4.5,
+    reviews: 89,
+    image: i73PlusImg,
   },
 ];
 
@@ -172,9 +209,6 @@ const Products = () => {
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <p className="font-display font-bold text-xl text-foreground">
-                      ${product.price.toLocaleString()}
-                    </p>
                     <Button size="sm" variant="hero">
                       <ShoppingCart className="w-4 h-4" />
                       Add to Cart
