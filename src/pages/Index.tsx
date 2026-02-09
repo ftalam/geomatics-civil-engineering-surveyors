@@ -88,11 +88,9 @@ const Index = () => {
                 Innovative surveying solutions for businesses that need precision. Delivering cutting-edge geomatics services since 2000.
               </p>
               <div className="flex flex-wrap gap-4">
-                <Link to="/products">
-                  <Button variant="hero" size="lg">
-                    Shop Now <ArrowRight className="w-5 h-5" />
-                  </Button>
-                </Link>
+                  <Button variant="hero" size="lg" onClick={() => window.open('/geoshop', '_blank')}>
+                  Shop Now <ArrowRight className="w-5 h-5" />
+                </Button>
                 <Link to="/contact">
                   <Button variant="outline" size="lg">
                     Contact Us
@@ -283,11 +281,9 @@ const Index = () => {
                   Get in Touch
                 </Button>
               </Link>
-              <Link to="/products">
-                <Button variant="outline" size="xl">
-                  Browse Products
-                </Button>
-              </Link>
+              <Button variant="outline" size="xl" onClick={() => window.open('/geoshop', '_blank')}>
+                Browse Products
+              </Button>
             </div>
           </motion.div>
         </div>

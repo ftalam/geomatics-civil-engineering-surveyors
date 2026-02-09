@@ -17,7 +17,7 @@ const contactInfo = [
   {
     icon: Phone,
     title: "Phone",
-    details: ["+254 721 235 501", "+254 768 922 891"],
+    details: ["+254 721 235 501", "+254 768 123 456"],
   },
   {
     icon: Mail,
@@ -188,39 +188,80 @@ const Contact = () => {
               <h2 className="font-display font-bold text-2xl text-foreground mb-6">
                 Contact Information
               </h2>
-              <div className="space-y-6">
-                {contactInfo.map((info) => (
-                  <div
-                    key={info.title}
-                    className="p-6 rounded-2xl bg-gradient-card shadow-card flex items-start gap-4"
-                  >
-                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <info.icon className="w-6 h-6 text-primary" />
+              <div className="space-y-4">
+                               {/* Phone and Email - side by side */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {contactInfo.filter(info => info.title === "Phone" || info.title === "Email").map((info) => (
+                    <div
+                      key={info.title}
+                      className="p-6 rounded-2xl bg-gradient-card shadow-card flex items-start gap-4"
+                    >
+                      <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <info.icon className="w-6 h-6 text-primary" />
+                      </div>
+                      <div>
+                        <h3 className="font-display font-semibold text-lg text-foreground mb-2">
+                          {info.title}
+                        </h3>
+                        {info.details.map((detail, i) => (
+                          <p key={i} className="text-muted-foreground text-sm">
+                            {detail}
+                          </p>
+                        ))}
+                      </div>
+                      </div>
+                  ))}
+                </div>
+                {/* Location and Working Hours - side by side */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {contactInfo.filter(info => info.title === "Our Location" || info.title === "Working Hours").map((info) => (
+                    <div
+                      key={info.title}
+                      className="p-6 rounded-2xl bg-gradient-card shadow-card flex items-start gap-4"
+                    >
+                      <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <info.icon className="w-6 h-6 text-primary" />
+                      </div>
+                      <div>
+                        <h3 className="font-display font-semibold text-lg text-foreground mb-2">
+                          {info.title}
+                        </h3>
+                        {info.details.map((detail, i) => (
+                          <p key={i} className="text-muted-foreground text-sm">
+                            {detail}
+                          </p>
+                        ))}
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="font-display font-semibold text-lg text-foreground mb-2">
-                        {info.title}
-                      </h3>
-                      {info.details.map((detail, i) => (
-                        <p key={i} className="text-muted-foreground text-sm">
-                          {detail}
-                        </p>
-                      ))}
-                    </div>
-                  </div>
                 ))}
-              </div>
-
-              {/* Map Placeholder */}
-              <div className="mt-8 rounded-2xl overflow-hidden shadow-card">
-                <div className="aspect-video bg-gradient-card flex items-center justify-center">
-                  <div className="text-center">
-                    <MapPin className="w-12 h-12 text-primary mx-auto mb-4" />
-                    <p className="text-foreground font-medium">Phileo Arcade, Ruiru</p>
-                    <p className="text-muted-foreground text-sm">Kenya</p>
-                  </div>
                 </div>
               </div>
+              {/* Map */}
+              <div className="mt-8 rounded-2xl overflow-hidden shadow-card">
+                <div className="aspect-video">
+                  <iframe
+                    title="Phileo Arcade Location"
+                    width="425"
+                    height="350"
+                    src="https://www.openstreetmap.org/export/embed.html?bbox=36.95646286010743%2C-1.1593754579321676%2C36.96710586547852%2C-1.1512339267489746&layer=mapnik&marker=-1.155297,36.960920"
+                    style={{ border: "1px solid black", width: "100%", height: "100%" }}
+                    loading="lazy"
+                  />
+                </div>
+                <div className="text-center mt-2">
+                  <small>
+                    <a
+                      href="https://www.openstreetmap.org/#map=6/-1.155297/36.960920"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary hover:underline"
+                    >
+                      View Larger Map
+                    </a>
+                  </small>
+                </div>
+              </div>
+
             </motion.div>
           </div>
         </div>

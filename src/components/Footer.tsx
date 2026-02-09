@@ -77,7 +77,7 @@ const Footer = () => {
               <li className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <span className="text-muted-foreground text-sm">
-                  Phileo Arcade, Ruiru, next to Wonders Church, Opposite Plainsview Hospital
+                  Phileo Arcade, Ruiru, next to Wonders Church, Opposite Plainsview Hospital  P.O. BOX. 7726-00100, NAIROBI KENYA
                 </span>
               </li>
               <li className="flex items-center gap-3">

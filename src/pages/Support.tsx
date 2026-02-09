@@ -98,6 +98,9 @@ const Support = () => {
               </Button>
             </a>
           </div>
+          <p className="text-center text-muted-foreground mt-4">
+            <strong>Address:</strong> P.O. BOX. 7726-00100, NAIROBI KENYA
+          </p>
         </div>
       </section>
 
