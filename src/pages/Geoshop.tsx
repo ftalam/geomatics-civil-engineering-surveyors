@@ -1,8 +1,6 @@
 import { motion } from "framer-motion";
-import Layout from "@/components/Layout";
-import SectionHeader from "@/components/SectionHeader";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, Star, Search, Filter, ArrowRight } from "lucide-react";
+import { ShoppingCart, Star, Search, Filter, ArrowRight, LogIn } from "lucide-react";
 import { useState } from "react";
 
 import bestSellerImg from "@/assets/chcnav-vili-i100-visual-lidar-gnss-rtk-receiver-surveying.jpg";
@@ -120,15 +118,33 @@ const Geoshop = () => {
   });
 
   return (
-    <Layout>
+    <>
       {/* Hero Section */}
       <section className="py-20 bg-gradient-card">
         <div className="container mx-auto px-4">
-          <SectionHeader
-            badge="GEOSHOP"
-            title="Welcome to GEOSHOP"
-            description="This is our dedicated store — browse a curated selection of premium surveying instruments and accessories."
-          />
+          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+            <div>
+              <h1 className="font-display font-bold text-4xl md:text-5xl text-foreground mb-4">
+                GEOSHOP
+              </h1>
+              <p className="text-lg text-muted-foreground">
+                Browse a curated selection of premium surveying instruments and accessories
+              </p>
+            </div>
+            <div>
+              <Button 
+                variant="hero" 
+                size="lg" 
+                className="flex items-center gap-2 whitespace-nowrap"
+              >
+                <LogIn className="w-5 h-5" />
+                Login to Shop
+              </Button>
+              <p className="text-m text-muted-foreground italic mt-2">
+                  👆 Get your quote!
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -251,7 +267,7 @@ const Geoshop = () => {
           </motion.div>
         </div>
       </section>
-    </Layout>
+    </>
   );
 };
 
