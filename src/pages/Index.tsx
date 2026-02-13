@@ -16,14 +16,13 @@ import renewableImg from "@/assets/renewable-energy.jpg";
 import bestSellerImg from "@/assets/chcnav-vili-i100-visual-lidar-gnss-rtk-receiver-surveying.jpg";
 import topoMapsImg from "@/assets/topo-maps.jpg";
 import kenhaLogo from "@/assets/KeNHA.jpg";
-import kenyaRedCrossLogo from "@/assets/Kenya-Red-Cross.jpg";
+import ministryLogo from "@/assets/ministry-water-lg.png";
 import kplcLogo from "@/assets/kplc.jpg";
-import unhcrLogo from "@/assets/UNHCR.png";
+import MIBPLogo from "@/assets/Logo - MIBP Small.avif";
 import uonLogo from "@/assets/UoN.png";
 import kengenLogo from "@/assets/KenGen.png";
 import nibLogo from "@/assets/National-Irrigation-Board.png";
-import kpaLogo from "@/assets/kpa.jpg";
-import jicaLogo from "@/assets/jiCA.jpg";
+import HHSGSLogo from "@/assets/HH-SGS.png";
 import konzaLogo from "@/assets/Konza_Techno_City_Logo.png";
 const services = [
   {
@@ -78,14 +77,13 @@ const services = [
 
 const clientLogos = [
   { name: "KeNHA", logo: kenhaLogo },
-  { name: "Kenya Red Cross", logo: kenyaRedCrossLogo },
+  { name: "Ministry of Water Sanitation and Irrigation", logo: ministryLogo },
   { name: "KPLC", logo: kplcLogo },
-  { name: "UNHCR", logo: unhcrLogo },
+  { name: "Mangat.I.B.Patel(MIBP) Ltd.", logo: MIBPLogo },
   { name: "University of Nairobi", logo: uonLogo },
   { name: "KenGen", logo: kengenLogo },
   { name: "National Irrigation Board", logo: nibLogo },
-  { name: "Kenya Ports Authority", logo: kpaLogo },
-  { name: "JICA", logo: jicaLogo },
+  { name: "Howard Humphreys Consulting Engineers", logo: HHSGSLogo },
   { name: "Konza Technopolis", logo: konzaLogo },
 ];
 const industries = [
@@ -280,7 +278,7 @@ const Index = () => {
               </motion.div>
             ))}
           </div>
-          <div className="mt-6 flex items-center justify-center gap-3 text-xs text-muted-foreground">
+          <div className="mt-6 flex items-right justify-end gap-3 text-xs text-muted-foreground">
             <button
               type="button"
               onClick={() =>
@@ -314,7 +312,7 @@ const Index = () => {
       
       <section className="py-2 border-y border-border bg-card/50">
         <div className="container mx-auto px-4">
-          <p className="text-center text-muted-foreground text-m mb-3">
+          <p className="text-center text-muted-foreground text-L mb-3">
             Our Clients
           </p>
           <div className="flex flex-col items-center gap-2">
