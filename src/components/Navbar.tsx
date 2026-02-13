@@ -43,19 +43,6 @@ const Navbar = () => {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 glass-effect relative">
-      {/* Theme toggle in top-left corner */}
-      <button
-        type="button"
-        onClick={() => setIsDark((prev) => !prev)}
-        className="absolute left-4 top-4 inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background/80 text-muted-foreground hover:text-primary hover:border-primary transition-colors shadow-card"
-        aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
-      >
-        {isDark ? (
-          <SunMedium className="w-4 h-4" />
-        ) : (
-          <Moon className="w-4 h-4" />
-        )}
-      </button>
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}

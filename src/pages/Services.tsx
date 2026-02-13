@@ -5,7 +5,7 @@ const services = [
   "Land Surveys",
   "Engineering Surveys",
   "GIS",
-  "Mapping",
+  "UAV-Based Mapping",
   "Physical Planning",
   "Environmental Consultants",
   "Topographic Mapping",

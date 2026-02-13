@@ -9,12 +9,12 @@ const Footer = () => {
           {/* Company Info */}
           <div>
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-lg bg-gradient-primary flex items-center justify-center">
-                <span className="font-display font-bold text-xl text-primary-foreground">G</span>
+              <div className="w-11 h-10 rounded-lg bg-gradient-primary flex items-center justify-center">
+                <span className="font-display font-bold text-l text-primary-foreground">GCES</span>
               </div>
               <div>
                 <span className="font-display font-bold text-lg text-foreground">GEOMATICS</span>
-                <p className="text-xs text-muted-foreground -mt-1">Civil Engineering Surveyors</p>
+                <p className="text-xs text-muted-foreground -mt-1">Civil Engineering Surveyors Ltd.</p>
               </div>
             </div>
             <p className="text-muted-foreground text-sm mb-6">

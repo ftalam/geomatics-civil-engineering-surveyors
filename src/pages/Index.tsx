@@ -44,7 +44,7 @@ const services = [
     image: topoMapsImg,
   },
   {
-    title: "Mapping",
+    title: "UAV-Based Mapping",
     description:
       "Professional mapping services to support planning, design, and decision making.",
     image: topoMapsImg,
@@ -200,35 +200,6 @@ const Index = () => {
                     Contact Us
                   </Button>
                 </Link>
-              </div>
-            </motion.div>
-
-            {/* Rating */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="flex items-center gap-4 mt-12"
-            >
-              <div className="flex -space-x-3">
-                {[1, 2, 3, 4].map((i) => (
-                  <div
-                    key={i}
-                    className="w-10 h-10 rounded-full bg-muted border-2 border-background flex items-center justify-center text-sm font-bold text-foreground"
-                  >
-                    {String.fromCharCode(64 + i)}
-                  </div>
-                ))}
-              </div>
-              <div>
-                <div className="flex items-center gap-1">
-                  {[1, 2, 3, 4, 5].map((i) => (
-                    <Star key={i} className="w-4 h-4 fill-primary text-primary" />
-                  ))}
-                </div>
-                <p className="text-muted-foreground text-sm">
-                  <span className="font-semibold text-foreground">4.8 Stars</span> (200+ Customers)
-                </p>
               </div>
             </motion.div>
           </div>
