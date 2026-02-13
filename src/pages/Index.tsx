@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -13,8 +14,80 @@ import geospatialImg from "@/assets/geospatial.jpg";
 import miningImg from "@/assets/mining.jpg";
 import renewableImg from "@/assets/renewable-energy.jpg";
 import bestSellerImg from "@/assets/chcnav-vili-i100-visual-lidar-gnss-rtk-receiver-surveying.jpg";
+import topoMapsImg from "@/assets/topo-maps.jpg";
+import kenhaLogo from "@/assets/KeNHA.jpg";
+import kenyaRedCrossLogo from "@/assets/Kenya-Red-Cross.jpg";
+import kplcLogo from "@/assets/kplc.jpg";
+import unhcrLogo from "@/assets/UNHCR.png";
+import uonLogo from "@/assets/UoN.png";
+import kengenLogo from "@/assets/KenGen.png";
+import nibLogo from "@/assets/National-Irrigation-Board.png";
+import kpaLogo from "@/assets/kpa.jpg";
+import jicaLogo from "@/assets/jiCA.jpg";
+import konzaLogo from "@/assets/Konza_Techno_City_Logo.png";
+const services = [
+  {
+    title: "Land Surveys",
+    description:
+      "Comprehensive land surveys supporting ownership, subdivision, and development decisions.",
+    image: topoMapsImg,
+  },
+  {
+    title: "Engineering Surveys",
+    description:
+      "High-precision engineering surveys for infrastructure and construction projects.",
+    image: topoMapsImg,
+  },
+  {
+    title: "GIS",
+    description:
+      "Geographic Information Systems (GIS) solutions for analyzing, managing, and presenting spatial data.",
+    image: topoMapsImg,
+  },
+  {
+    title: "Mapping",
+    description:
+      "Professional mapping services to support planning, design, and decision making.",
+    image: topoMapsImg,
+  },
+  {
+    title: "Physical Planning",
+    description:
+      "Physical planning services that guide sustainable land development and infrastructure layouts.",
+    image: topoMapsImg,
+  },
+  {
+    title: "Environmental Consultants",
+    description:
+      "Environmental consulting to assess, monitor, and guide compliance for development projects.",
+    image: topoMapsImg,
+  },
+  {
+    title: "Topographic Mapping",
+    description:
+      "Accurate topographic mapping to capture terrain details for engineering and design.",
+    image: topoMapsImg,
+  },
+  {
+    title: "Land Use Planning",
+    description:
+      "Strategic land use planning services supporting zoning, development, and sustainable community growth initiatives.",
+    image: topoMapsImg,
+  },
+];
 
-
+const clientLogos = [
+  { name: "KeNHA", logo: kenhaLogo },
+  { name: "Kenya Red Cross", logo: kenyaRedCrossLogo },
+  { name: "KPLC", logo: kplcLogo },
+  { name: "UNHCR", logo: unhcrLogo },
+  { name: "University of Nairobi", logo: uonLogo },
+  { name: "KenGen", logo: kengenLogo },
+  { name: "National Irrigation Board", logo: nibLogo },
+  { name: "Kenya Ports Authority", logo: kpaLogo },
+  { name: "JICA", logo: jicaLogo },
+  { name: "Konza Technopolis", logo: konzaLogo },
+];
 const industries = [
   {
     title: "Architecture & Construction",
@@ -57,10 +130,38 @@ const stats = [
 ];
 
 const Index = () => {
+  const [clientSlideIndex, setClientSlideIndex] = useState(0);
+  const [serviceSlideIndex, setServiceSlideIndex] = useState(0);
+
+  useEffect(() => {
+    const clientInterval = setInterval(() => {
+      setClientSlideIndex((prev) => (prev + 1) % clientLogos.length);
+    }, 3000);
+
+    const serviceInterval = setInterval(() => {
+      setServiceSlideIndex((prev) => (prev + 1) % services.length);
+    }, 3500);
+
+    return () => {
+      clearInterval(clientInterval);
+      clearInterval(serviceInterval);
+    };
+  }, []);
+
+  const visibleClients = Array.from({ length: 4 }, (_, i) => {
+    const index = (clientSlideIndex + i) % clientLogos.length;
+    return clientLogos[index];
+  });
+
+  const visibleServices = Array.from({ length: 3 }, (_, i) => {
+    const index = (serviceSlideIndex + i) % services.length;
+    return services[index];
+  });
+
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center">
+      <section className="relative min-h-[40vh] flex items-center">
         <div className="absolute inset-0">
           <img
             src={heroImage}
@@ -78,7 +179,7 @@ const Index = () => {
               transition={{ duration: 0.6 }}
             >
               <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-6">
-                Welcome to Geomatics
+                Welcome to Geomatics Civil Engineering Limited
               </span>
               <h1 className="font-display font-bold text-4xl md:text-5xl lg:text-6xl text-foreground mb-6 leading-tight">
                 Precision-Based{" "}
@@ -88,7 +189,12 @@ const Index = () => {
                 Innovative surveying solutions for businesses that need precision. Delivering cutting-edge geomatics services since 2000.
               </p>
               <div className="flex flex-wrap gap-4">
-                  <Button variant="hero" size="lg" onClick={() => window.open('/geoshop', '_blank')}>
+                <Button
+                  variant="hero"
+                  size="lg"
+                  className="products-theme"
+                  onClick={() => window.open("/geoshop", "_blank")}
+                >
                   Shop Now <ArrowRight className="w-5 h-5" />
                 </Button>
                 <Link to="/contact">
@@ -131,73 +237,107 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Partners Section */}
-      <section className="py-12 border-y border-border bg-card/50">
-        <div className="container mx-auto px-4">
-          <p className="text-center text-muted-foreground text-sm mb-8">
-            Trusted Partners & Technology Providers
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16">
-            {partners.map((partner) => (
-              <div
-                key={partner}
-                className="text-muted-foreground font-display font-bold text-lg tracking-wider hover:text-primary transition-colors cursor-pointer"
-              >
-                {partner}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {stats.map((stat, index) => (
+      {/* Services Section (3 at a time slider) */}
+      <section id="services" className="py-5 bg-card/30">
+        <div className="container mx-auto px-2">
+          <SectionHeader
+            badge="Our Services"
+            title="Professional Surveying & Geomatics"
+            description="Explore our core surveying and geomatics services tailored to your projects."
+          />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {visibleServices.map((service, index) => (
               <motion.div
-                key={stat.label}
+                key={`${service.title}-${index}`}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="text-center p-8 rounded-2xl bg-gradient-card shadow-card"
+                className="group relative overflow-hidden rounded-2xl bg-gradient-card shadow-card"
               >
-                <stat.icon className="w-12 h-12 text-primary mx-auto mb-4" />
-                <p className="font-display font-bold text-4xl text-foreground mb-2">
-                  {stat.value}
-                </p>
-                <p className="text-muted-foreground">{stat.label}</p>
+                <div className="aspect-[4/3] overflow-hidden">
+                  <img
+                    src={service.image}
+                    alt={service.title}
+                    className="w-full h-full object-cover transition-shadow duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent" />
+                </div>
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <h3 className="font-display font-bold text-xl text-foreground mb-2">
+                    {service.title}
+                  </h3>
+                  <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
+                    {service.description}
+                  </p>
+                  <Link
+                    to="/services"
+                    className="inline-flex items-center gap-2 text-primary font-semibold text-sm group-hover:gap-3 transition-all"
+                  >
+                    Learn More <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
               </motion.div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* Industries Section */}
-      <section className="py-20 bg-card/30">
-        <div className="container mx-auto px-4">
-          <SectionHeader
-            badge="Industries We Serve"
-            title="Precision Solutions Across Sectors"
-            description="From construction to renewable energy, we provide specialized surveying services tailored to your industry needs."
-          />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {industries.slice(0, 3).map((industry, index) => (
-              <IndustryCard key={industry.title} {...industry} index={index} />
-            ))}
+          <div className="mt-6 flex items-center justify-center gap-3 text-xs text-muted-foreground">
+            <button
+              type="button"
+              onClick={() =>
+                setServiceSlideIndex(
+                  (prev) => (prev - 1 + services.length) % services.length
+                )
+              }
+              className="px-3 py-1 rounded-full border border-border hover:border-primary hover:text-primary transition-colors"
+            >
+              Previous
+            </button>
+            <button
+              type="button"
+              onClick={() =>
+                setServiceSlideIndex((prev) => (prev + 1) % services.length)
+              }
+              className="px-3 py-1 rounded-full border border-border hover:border-primary hover:text-primary transition-colors"
+            >
+              Next
+            </button>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 max-w-4xl mx-auto">
-            {industries.slice(3).map((industry, index) => (
-              <IndustryCard key={industry.title} {...industry} index={index + 3} />
-            ))}
-          </div>
-          <div className="text-center mt-12">
-            <Link to="/industries">
+          <div className="text-center mt-8">
+            <Link to="/services">
               <Button variant="outline" size="lg">
-                View All Industries <ArrowRight className="w-5 h-5" />
+                View All Services <ArrowRight className="w-5 h-5" />
               </Button>
             </Link>
+          </div>
+        </div>
+      </section>
+      
+      <section className="py-2 border-y border-border bg-card/50">
+        <div className="container mx-auto px-4">
+          <p className="text-center text-muted-foreground text-m mb-3">
+            Our Clients
+          </p>
+          <div className="flex flex-col items-center gap-2">
+            <motion.div
+              key={clientSlideIndex}
+              initial={{ opacity: 0, x: 40 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.4 }}
+              className="flex items-center justify-center gap-10 md:gap-8"
+            >
+              {visibleClients.map((client) => (
+                <div
+                  key={client.name}
+                  className="h-21 flex items-center opacity-90 hover:opacity-100 transition-all"
+                >
+                  <img
+                    src={client.logo}
+                    alt={client.name}
+                    className="h-full w-full object-contain"
+                  />
+                </div>
+              ))}
+            </motion.div>
           </div>
         </div>
       </section>
@@ -255,6 +395,52 @@ const Index = () => {
                 <p className="text-primary-foreground/80 text-sm">Years of Excellence</p>
               </div>
             </motion.div>
+          </div>
+        </div>
+      </section>
+
+ {/* Industries Section */}
+      <section className="py-5 bg-card/30">
+        <div className="container mx-auto px-2">
+          <SectionHeader
+            badge="Diverse Industries Expertise"
+          />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
+            {industries.slice(0, 5).map((industry, index) => (
+              <IndustryCard key={industry.title} {...industry} index={index} />
+            ))}
+          </div>
+          <div className="text-center mt-12">
+            <Link to="/industries">
+              <Button variant="outline" size="lg">
+                View All Industries <ArrowRight className="w-5 h-5" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      
+      {/* Stats Section */}
+      <section className="py-8">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {stats.map((stat, index) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="text-center p-8 rounded-2xl bg-gradient-card shadow-card"
+              >
+                <stat.icon className="w-12 h-12 text-primary mx-auto mb-4" />
+                <p className="font-display font-bold text-4xl text-foreground mb-2">
+                  {stat.value}
+                </p>
+                <p className="text-muted-foreground">{stat.label}</p>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>

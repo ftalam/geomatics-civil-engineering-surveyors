@@ -118,7 +118,7 @@ const Geoshop = () => {
   });
 
   return (
-    <>
+    <div className="products-theme">
       {/* Hero Section */}
       <section className="py-20 bg-gradient-card">
         <div className="container mx-auto px-4">
@@ -267,7 +267,7 @@ const Geoshop = () => {
           </motion.div>
         </div>
       </section>
-    </>
+    </div>
   );
 };
 

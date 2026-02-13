@@ -14,7 +14,7 @@ const SectionHeader = ({ badge, title, description, centered = true }: SectionHe
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
       viewport={{ once: true }}
-      className={`mb-12 ${centered ? "text-center" : ""}`}
+      className={`mb-8 ${centered ? "text-center" : ""}`}
     >
       {badge && (
         <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-4">
@@ -25,7 +25,7 @@ const SectionHeader = ({ badge, title, description, centered = true }: SectionHe
         {title}
       </h2>
       {description && (
-        <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+        <p className="text-muted-foreground text-lg max-w-6xl mx-auto">
           {description}
         </p>
       )}

@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import Layout from "@/components/Layout";
 import SectionHeader from "@/components/SectionHeader";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, Star, Search, Filter, ArrowRight } from "lucide-react";
+import { Search, Filter, ArrowRight } from "lucide-react";
 import { useState } from "react";
 
 import bestSellerImg from "@/assets/chcnav-vili-i100-visual-lidar-gnss-rtk-receiver-surveying.jpg";
@@ -121,6 +121,7 @@ const Products = () => {
 
   return (
     <Layout>
+      <div className="products-theme">
       {/* Hero Section */}
       <section className="py-20 bg-gradient-card">
         <div className="container mx-auto px-4">
@@ -194,24 +195,12 @@ const Products = () => {
                   <span className="text-primary text-xs font-semibold">
                     {product.category}
                   </span>
-                  <h3 className="font-display font-bold text-lg text-foreground mt-1 mb-2">
+                  <h3 className="font-display font-bold text-lg text-foreground mt-3">
                     {product.name}
                   </h3>
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="flex items-center gap-1">
-                      <Star className="w-4 h-4 fill-primary text-primary" />
-                      <span className="text-foreground text-sm font-medium">
-                        {product.rating}
-                      </span>
-                    </div>
-                    <span className="text-muted-foreground text-sm">
-                      ({product.reviews} reviews)
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <Button size="sm" variant="hero">
-                      <ShoppingCart className="w-4 h-4" />
-                      Add to Cart
+                  <div className="mt-4 flex items-center justify-between">
+                    <Button size="sm" variant="outline">
+                      View Details
                     </Button>
                   </div>
                 </div>
@@ -251,6 +240,7 @@ const Products = () => {
           </motion.div>
         </div>
       </section>
+      </div>
     </Layout>
   );
 };

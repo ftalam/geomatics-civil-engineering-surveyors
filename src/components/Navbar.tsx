@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Phone } from "lucide-react";
+import { Menu, X, Phone, Moon, SunMedium } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import logoImg from "@/assets/logo-geomatics.png";
 
 const navLinks = [
   { name: "Home", path: "/" },
@@ -15,21 +16,55 @@ const navLinks = [
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isDark, setIsDark] = useState(false);
   const location = useLocation();
 
+  // Initialize theme from localStorage on mount
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const storedTheme = window.localStorage.getItem("theme");
+    if (storedTheme === "dark") {
+      setIsDark(true);
+      document.documentElement.classList.add("dark");
+    }
+  }, []);
+
+  // Apply theme changes
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (isDark) {
+      document.documentElement.classList.add("dark");
+      window.localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      window.localStorage.setItem("theme", "light");
+    }
+  }, [isDark]);
+
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 glass-effect">
+    <nav className="fixed top-0 left-0 right-0 z-50 glass-effect relative">
+      {/* Theme toggle in top-left corner */}
+      <button
+        type="button"
+        onClick={() => setIsDark((prev) => !prev)}
+        className="absolute left-4 top-4 inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background/80 text-muted-foreground hover:text-primary hover:border-primary transition-colors shadow-card"
+        aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
+      >
+        {isDark ? (
+          <SunMedium className="w-4 h-4" />
+        ) : (
+          <Moon className="w-4 h-4" />
+        )}
+      </button>
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-gradient-primary flex items-center justify-center">
-              <span className="font-display font-bold text-xl text-primary-foreground">G</span>
-            </div>
-            <div className="hidden sm:block">
-              <span className="font-display font-bold text-lg text-foreground">GEOMATICS</span>
-              <p className="text-xs text-muted-foreground -mt-1">Civil Engineering Surveyors</p>
-            </div>
+            <img
+              src={logoImg}
+              alt="Geomatics Civil Engineering Surveyors logo"
+              className="h-10 w-auto object-contain"
+            />
           </Link>
 
           {/* Desktop Navigation */}
@@ -52,8 +87,8 @@ const Navbar = () => {
               <Phone className="w-4 h-4" />
               <span className="text-sm font-medium">+254 712 345 678</span>
             </a>
-            <Link to="/products" className="hidden sm:block">
-              <Button variant="hero" size="sm">
+            <Link to="/geoshop" className="hidden sm:block">
+              <Button variant="hero" size="sm" className="products-theme">
                 Shop Now
               </Button>
             </Link>
@@ -95,8 +130,8 @@ const Navbar = () => {
                 </Link>
               ))}
               <div className="mt-4 pt-4 border-t border-border">
-                <Link to="/products" onClick={() => setIsOpen(false)}>
-                  <Button variant="hero" className="w-full">
+                <Link to="/geoshop" onClick={() => setIsOpen(false)}>
+                  <Button variant="hero" className="w-full products-theme">
                     Shop Now
                   </Button>
                 </Link>
