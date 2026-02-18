@@ -5,7 +5,9 @@ import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
 import SectionHeader from "@/components/SectionHeader";
 import IndustryCard from "@/components/IndustryCard";
-import { Star, Users, Award, Target, ArrowRight, CheckCircle } from "lucide-react";
+import ServiceCard from "@/components/ServiceCard";
+import { Star, Users, Award, Target, ArrowRight, CheckCircle, Mountain, MapPinned, HardHat, Satellite, Plane,
+  Globe, LayoutGrid, Trees, Building2, Wrench, } from "lucide-react";
 
 import heroImage from "@/assets/hero-surveying.jpg";
 import architectureImg from "@/assets/architecture.jpg";
@@ -24,54 +26,57 @@ import kengenLogo from "@/assets/KenGen.png";
 import nibLogo from "@/assets/National-Irrigation-Board.png";
 import HHSGSLogo from "@/assets/HH-SGS.png";
 import konzaLogo from "@/assets/Konza_Techno_City_Logo.png";
+
 const services = [
   {
-    title: "Land Surveys",
-    description:
-      "Comprehensive land surveys supporting ownership, subdivision, and development decisions.",
-    image: topoMapsImg,
+    title: "Topographic Surveys",
+    description: "Detailed terrain mapping and elevation data for project planning and design.",
+    icon: Mountain,
+  },
+  {
+    title: "Land (Cadastral) Surveys",
+    description: "Boundary determination, subdivision, and land ownership documentation.",
+    icon: MapPinned,
   },
   {
     title: "Engineering Surveys",
-    description:
-      "High-precision engineering surveys for infrastructure and construction projects.",
-    image: topoMapsImg,
+    description: "High-precision surveys for infrastructure and construction projects.",
+    icon: HardHat,
   },
   {
-    title: "GIS",
-    description:
-      "Geographic Information Systems (GIS) solutions for analyzing, managing, and presenting spatial data.",
-    image: topoMapsImg,
+    title: "Geodetic GPS Control",
+    description: "CORS Network-based geodetic control surveys for large-scale projects.",
+    icon: Satellite,
   },
   {
     title: "UAV-Based Mapping",
-    description:
-      "Professional mapping services to support planning, design, and decision making.",
-    image: topoMapsImg,
+    description: "Drone-powered aerial surveys for rapid and accurate terrain mapping.",
+    icon: Plane,
   },
   {
-    title: "Physical Planning",
-    description:
-      "Physical planning services that guide sustainable land development and infrastructure layouts.",
-    image: topoMapsImg,
+    title: "GIS & Remote Sensing",
+    description: "Spatial data analysis, management, and presentation using GIS technology.",
+    icon: Globe,
   },
   {
-    title: "Environmental Consultants",
-    description:
-      "Environmental consulting to assess, monitor, and guide compliance for development projects.",
-    image: topoMapsImg,
+    title: "Spatial Planning",
+    description: "Strategic spatial analysis and planning for sustainable development.",
+    icon: LayoutGrid,
   },
   {
-    title: "Topographic Mapping",
-    description:
-      "Accurate topographic mapping to capture terrain details for engineering and design.",
-    image: topoMapsImg,
+    title: "Land-Use Planning",
+    description: "Optimal land allocation and use strategies for communities and projects.",
+    icon: Trees,
   },
   {
-    title: "Land Use Planning",
-    description:
-      "Strategic land use planning services supporting zoning, development, and sustainable community growth initiatives.",
-    image: topoMapsImg,
+    title: "Urban & Regional Planning",
+    description: "Comprehensive planning solutions for urban and regional development.",
+    icon: Building2,
+  },
+  {
+    title: "Equipment Supply & Training",
+    description: "Sales, calibration, and training on professional surveying equipment.",
+    icon: Wrench,
   },
 ];
 
@@ -159,12 +164,12 @@ const Index = () => {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="relative min-h-[40vh] flex items-center">
+      <section className="relative min-h-[20vh] md:min-h-[24vh] flex items-center py-8">
         <div className="absolute inset-0">
           <img
             src={heroImage}
             alt="Surveying equipment"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover object-center max-h-full"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-background via-background/90 to-background/50" />
         </div>
@@ -176,14 +181,14 @@ const Index = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-6">
+              <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-4">
                 Welcome to Geomatics Civil Engineering Limited
               </span>
-              <h1 className="font-display font-bold text-4xl md:text-5xl lg:text-6xl text-foreground mb-6 leading-tight">
+              <h1 className="font-display font-bold text-3xl md:text-4xl lg:text-5xl text-foreground mb-4 leading-tight">
                 Precision-Based{" "}
                 <span className="text-gradient">Decision Making</span>
               </h1>
-              <p className="text-muted-foreground text-lg md:text-xl mb-8 leading-relaxed">
+              <p className="text-muted-foreground text-base md:text-lg mb-6 leading-relaxed">
                 Innovative surveying solutions for businesses that need precision. Delivering cutting-edge geomatics services since 2000.
               </p>
               <div className="flex flex-wrap gap-4">
@@ -206,70 +211,19 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Services Section (3 at a time slider) */}
+      {/* Services Section*/}
       <section id="services" className="py-5 bg-card/30">
         <div className="container mx-auto px-2">
-          <SectionHeader
-            badge="Our Services"
-            title="Professional Surveying & Geomatics"
-            description="Explore our core surveying and geomatics services tailored to your projects."
-          />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            {visibleServices.map((service, index) => (
-              <motion.div
-                key={`${service.title}-${index}`}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="group relative overflow-hidden rounded-2xl bg-gradient-card shadow-card"
-              >
-                <div className="aspect-[4/3] overflow-hidden">
-                  <img
-                    src={service.image}
-                    alt={service.title}
-                    className="w-full h-full object-cover transition-shadow duration-500 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent" />
-                </div>
-                <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <h3 className="font-display font-bold text-xl text-foreground mb-2">
-                    {service.title}
-                  </h3>
-                  <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
-                    {service.description}
-                  </p>
-                  <Link
-                    to="/services"
-                    className="inline-flex items-center gap-2 text-primary font-semibold text-sm group-hover:gap-3 transition-all"
-                  >
-                    Learn More <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </div>
-              </motion.div>
+         
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {services.slice(0, 5).map((service, index) => (
+              <ServiceCard key={service.title} {...service} index={index} />
             ))}
           </div>
-          <div className="mt-6 flex items-right justify-end gap-3 text-xs text-muted-foreground">
-            <button
-              type="button"
-              onClick={() =>
-                setServiceSlideIndex(
-                  (prev) => (prev - 1 + services.length) % services.length
-                )
-              }
-              className="px-3 py-1 rounded-full border border-border hover:border-primary hover:text-primary transition-colors"
-            >
-              Previous
-            </button>
-            <button
-              type="button"
-              onClick={() =>
-                setServiceSlideIndex((prev) => (prev + 1) % services.length)
-              }
-              className="px-3 py-1 rounded-full border border-border hover:border-primary hover:text-primary transition-colors"
-            >
-              Next
-            </button>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-4">
+            {services.slice(5).map((service, index) => (
+              <ServiceCard key={service.title} {...service} index={index + 5} />
+            ))}
           </div>
           <div className="text-center mt-8">
             <Link to="/services">
@@ -368,7 +322,7 @@ const Index = () => {
         </div>
       </section>
 
- {/* Industries Section */}
+      {/* Industries Section */}
       <section className="py-5 bg-card/30">
         <div className="container mx-auto px-2">
           <SectionHeader
