@@ -214,7 +214,6 @@ const Index = () => {
       {/* Services Section*/}
       <section id="services" className="py-5 bg-card/30">
         <div className="container mx-auto px-2">
-         
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {services.slice(0, 5).map((service, index) => (
               <ServiceCard key={service.title} {...service} index={index} />
