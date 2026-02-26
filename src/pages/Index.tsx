@@ -16,7 +16,6 @@ import geospatialImg from "@/assets/geospatial.jpg";
 import miningImg from "@/assets/mining.jpg";
 import renewableImg from "@/assets/renewable-energy.jpg";
 import bestSellerImg from "@/assets/chcnav-vili-i100-visual-lidar-gnss-rtk-receiver-surveying.jpg";
-import topoMapsImg from "@/assets/topo-maps.jpg";
 import kenhaLogo from "@/assets/KeNHA.jpg";
 import ministryLogo from "@/assets/ministry-water-lg.png";
 import kplcLogo from "@/assets/kplc.jpg";
@@ -198,7 +197,7 @@ const Index = () => {
                   className="products-theme"
                   onClick={() => window.open("/geoshop", "_blank")}
                 >
-                  Shop Now <ArrowRight className="w-5 h-5" />
+                  Shop Now <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
                 <Link to="/contact">
                   <Button variant="outline" size="lg">
@@ -234,6 +233,7 @@ const Index = () => {
         </div>
       </section>
       
+       {/* Clients Section*/}
       <section className="py-2 border-y border-border bg-card/50">
         <div className="container mx-auto px-4">
           <p className="text-center text-muted-foreground text-L mb-3">
@@ -325,8 +325,7 @@ const Index = () => {
       <section className="py-5 bg-card/30">
         <div className="container mx-auto px-2">
           <SectionHeader
-            badge="Diverse Industries Expertise"
-          />
+            badge="Diverse Industries Expertise"/>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
             {industries.slice(0, 5).map((industry, index) => (
               <IndustryCard key={industry.title} {...industry} index={index} />

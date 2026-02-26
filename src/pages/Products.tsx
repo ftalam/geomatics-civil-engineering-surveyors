@@ -35,7 +35,7 @@ const products = [
     rating: 4.9,
     reviews: 32,
     image: totalStationImg,
-    badge: "New",
+    badge: "Premium",
   },
   {
     id: 3,
@@ -85,7 +85,7 @@ const products = [
     name: "CHCNAV i89",
     category: "GNSS Receivers",
     rating: 4.5,
-    reviews: 89,
+    reviews: 39,
     image: i89Img,
   },
   {
