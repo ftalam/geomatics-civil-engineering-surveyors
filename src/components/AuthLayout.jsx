@@ -1,41 +1,73 @@
-import geoshopLogo from "@/assets/logo-geomatics.png";
 import cardBackground from "@/assets/geoshop-layout.png";
 
 export default function AuthLayout({ title, subtitle, children, footer }) {
-  return (
-    <div className="products-theme min-h-screen bg-slate-950 px-4 py-20">
-      <div className="mx-auto flex min-h-[calc(100vh-4rem)] w-auto max-w-screen-md items-center justify-center">
-        <div className="relative w-auto overflow-hidden rounded-2xl border border-white/20 shadow-2xl">
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{
-              backgroundImage: `linear-gradient(155deg, rgba(4, 9, 23, 0.9) 0%, rgba(9, 16, 33, 0.7) 52%, rgba(219, 112, 35, 0.4) 100%), url(${cardBackground})`,
-            }}
-          />
+  const isLogin = title.toLowerCase().includes("login");
 
-          <div className="relative p-5 backdrop-blur-[1px] sm:p-6">
-            <div className="mb-6 flex items-center gap-3">
-              <img
-                src={geoshopLogo}
-                alt="Geoshop Limited logo"
-                className="h-12 w-12 rounded-full border border-white/25 bg-white/95 object-contain p-1"
-              />
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-orange-300">
-                  A GCES Company
-                </p>
-                <h1 className="text-2xl font-semibold text-white">Geoshop Limited</h1>
+  return (
+    <div className="min-h-screen bg-slate-100 px-4 py-20">
+      <div className="mx-auto flex min-h-[calc(100vh-6rem)] max-w-6xl items-center">
+        <div className="w-full overflow-hidden rounded-3xl bg-white shadow-lg lg:flex">
+          <div className="relative w-full p-8 md:p-10 lg:w-1/2">
+            {isLogin && (
+              <>
+                <img
+                  src={cardBackground}
+                  alt=""
+                  aria-hidden="true"
+                  className="absolute inset-0 h-full w-full object-cover opacity-15"
+                />
+                <div className="absolute inset-0 bg-white/90" />
+              </>
+            )}
+
+            <div className="relative z-10">
+              <div className="mb-8 min-h-[132px]">
+                <div className="flex flex-col">
+                  <div className="flex items-center">
+                    <div className="relative">
+                      <div className="absolute -right-1 -top-2 h-3 w-3 rounded-full bg-cyan-500" />
+                      <div className="absolute bottom-0 left-1 h-0.5 w-5 bg-cyan-500" />
+                    </div>
+                    <div className="relative ml-2">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mb-8 mt-6">
+                <h1 className="text-2xl font-semibold text-gray-800">
+                  {isLogin ? "Welcome back" : "Create account"}
+                </h1>
+                {subtitle && <p className="mt-1 text-sm text-gray-500">{subtitle}</p>}
+              </div>
+
+              {children}
+
+              {footer && <div className="mt-6 text-center text-sm">{footer}</div>}
+            </div>
+          </div>
+
+          <div className="relative hidden bg-cyan-50 lg:block lg:w-1/2">
+            <img
+              src={cardBackground}
+              alt="Geoshop layout"
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-10 text-white">
+              <h2 className="mb-3 text-3xl font-bold">
+                {isLogin ? "Welcome Back" : "Welcome to geoshop"}
+              </h2>
+              <p className="mb-5">
+                Access your surveying projects and tools for accurate leveling and
+                precision measurements.
+              </p>
+              <div className="flex space-x-2">
+                <div className="h-2 w-2 rounded-full bg-white" />
+                <div className="h-2 w-2 rounded-full bg-white/50" />
+                <div className="h-2 w-2 rounded-full bg-white/50" />
               </div>
             </div>
-
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold text-white">{title}</h2>
-              {subtitle && <p className="mt-1 text-sm text-slate-200/90">{subtitle}</p>}
-            </div>
-
-            {children}
-
-            {footer && <div className="mt-4 text-sm text-slate-100/90">{footer}</div>}
           </div>
         </div>
       </div>

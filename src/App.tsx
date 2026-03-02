@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/context/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import AdminRoute from "@/components/AdminRoute";
@@ -30,20 +30,22 @@ const App = () => (
           <Toaster />
           <Sonner />
           <Routes>
+            {/* GCES Platform */}
             <Route path="/" element={<Index />} />
             <Route path="/industries" element={<Industries />} />
-            <Route path="/geoshop" element={<Geoshop />} />
             <Route path="/products" element={<Products />} />
             <Route path="/support" element={<Support />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/services" element={<Services />} />
 
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            {/* GEOSHOP Application */}
+            <Route path="/geoshop" element={<Geoshop />} />
+            <Route path="/geoshop/login" element={<Login />} />
+            <Route path="/geoshop/register" element={<Register />} />
 
             <Route
-              path="/checkout"
+              path="/geoshop/checkout"
               element={
                 <ProtectedRoute>
                   <Geoshop />
@@ -51,13 +53,19 @@ const App = () => (
               }
             />
             <Route
-              path="/admin"
+              path="/geoshop/admin"
               element={
                 <AdminRoute>
                   <AdminDashboard />
                 </AdminRoute>
               }
             />
+
+            {/* Backward-compatible route redirects */}
+            <Route path="/login" element={<Navigate to="/geoshop/login" replace />} />
+            <Route path="/register" element={<Navigate to="/geoshop/register" replace />} />
+            <Route path="/checkout" element={<Navigate to="/geoshop/checkout" replace />} />
+            <Route path="/admin" element={<Navigate to="/geoshop/admin" replace />} />
 
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

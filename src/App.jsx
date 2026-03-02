@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/context/AuthContext";
 
 import Geoshop from "@/pages/Geoshop";
@@ -14,12 +14,12 @@ function App() {
     <BrowserRouter>
       <AuthProvider>
         <Routes>
-          <Route path="/" element={<Geoshop />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="/geoshop" element={<Geoshop />} />
+          <Route path="/geoshop/login" element={<Login />} />
+          <Route path="/geoshop/register" element={<Register />} />
 
           <Route
-            path="/admin"
+            path="/geoshop/admin"
             element={
               <AdminRoute>
                 <AdminDashboard />
@@ -28,13 +28,19 @@ function App() {
           />
 
           <Route
-            path="/checkout"
+            path="/geoshop/checkout"
             element={
               <ProtectedRoute>
                 <div>Checkout Page</div>
               </ProtectedRoute>
             }
           />
+
+          <Route path="/" element={<Navigate to="/geoshop" replace />} />
+          <Route path="/login" element={<Navigate to="/geoshop/login" replace />} />
+          <Route path="/register" element={<Navigate to="/geoshop/register" replace />} />
+          <Route path="/checkout" element={<Navigate to="/geoshop/checkout" replace />} />
+          <Route path="/admin" element={<Navigate to="/geoshop/admin" replace />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

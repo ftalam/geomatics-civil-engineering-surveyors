@@ -19,13 +19,243 @@ const PRODUCT_IMAGES_BUCKET =
   import.meta.env.VITE_SUPABASE_PRODUCT_IMAGES_BUCKET || "product-images";
 const CATALOGUE_PATH = "/catalogue/Geoshop%20Products-Catalog.pdf";
 const SUPABASE_PROJECT_ID = import.meta.env.VITE_SUPABASE_PROJECT_ID || null;
+const DETAILS_TAB_SPECIFICATIONS = "specifications";
+const DETAILS_TAB_RESOURCES = "resources";
 
-const getProductImage = (product) => {
-  if (Array.isArray(product?.images) && product.images.length > 0) {
-    return product.images[0];
+const parseJsonIfNeeded = (value) => {
+  if (typeof value !== "string") return value;
+
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+
+  if (trimmed.startsWith("{") || trimmed.startsWith("[")) {
+    try {
+      return JSON.parse(trimmed);
+    } catch {
+      return value;
+    }
   }
 
-  return product?.image_url || product?.image || "/placeholder.svg";
+  return value;
+};
+
+const normalizeStringList = (value) => {
+  if (Array.isArray(value)) {
+    return value
+      .map((item) => String(item ?? "").trim())
+      .filter(Boolean);
+  }
+
+  if (typeof value === "string") {
+    const parsedValue = parseJsonIfNeeded(value);
+    if (Array.isArray(parsedValue)) {
+      return normalizeStringList(parsedValue);
+    }
+
+    return value
+      .split(/\r?\n|,/)
+      .map((item) => item.trim())
+      .filter(Boolean);
+  }
+
+  return [];
+};
+
+const toSpecItemText = (item) => {
+  if (typeof item === "string") return item.trim();
+  if (!item || typeof item !== "object") return "";
+
+  const label = String(item.label ?? item.name ?? item.key ?? "").trim();
+  const value = String(item.value ?? item.text ?? item.detail ?? "").trim();
+
+  if (label && value) return `${label} : ${value}`;
+  if (label) return label;
+  if (value) return value;
+  return "";
+};
+
+const normalizeSpecItems = (value) => {
+  const parsed = parseJsonIfNeeded(value);
+
+  if (Array.isArray(parsed)) {
+    return parsed.map((item) => toSpecItemText(item)).filter(Boolean);
+  }
+
+  if (parsed && typeof parsed === "object") {
+    return Object.entries(parsed)
+      .map(([label, itemValue]) => `${label} : ${String(itemValue ?? "").trim()}`)
+      .filter(Boolean);
+  }
+
+  return normalizeStringList(parsed);
+};
+
+const getProductSpecificationSections = (product) => {
+  const raw =
+    parseJsonIfNeeded(product?.specifications) ??
+    parseJsonIfNeeded(product?.spec_sections) ??
+    parseJsonIfNeeded(product?.specs);
+
+  if (!raw) return [];
+
+  if (Array.isArray(raw)) {
+    const normalizedSections = raw
+      .map((section, index) => {
+        if (!section || typeof section !== "object" || Array.isArray(section)) {
+          return null;
+        }
+
+        const title = String(
+          section.title ?? section.heading ?? section.name ?? `Section ${index + 1}`,
+        ).trim();
+        const items = normalizeSpecItems(
+          section.items ??
+            section.attributes ??
+            section.values ??
+            section.points ??
+            section.details,
+        );
+
+        if (!items.length) return null;
+        return { title, items };
+      })
+      .filter(Boolean);
+
+    if (normalizedSections.length) return normalizedSections;
+
+    const fallbackItems = normalizeSpecItems(raw);
+    if (!fallbackItems.length) return [];
+    return [{ title: "Specifications", items: fallbackItems }];
+  }
+
+  if (raw && typeof raw === "object") {
+    return Object.entries(raw)
+      .map(([title, items]) => ({
+        title,
+        items: normalizeSpecItems(items),
+      }))
+      .filter((section) => section.items.length > 0);
+  }
+
+  const fallbackItems = normalizeSpecItems(raw);
+  if (!fallbackItems.length) return [];
+  return [{ title: "Specifications", items: fallbackItems }];
+};
+
+const getProductImages = (product) => {
+  const rawImages = parseJsonIfNeeded(product?.images);
+  const images = [];
+
+  if (Array.isArray(rawImages)) {
+    rawImages.forEach((item) => {
+      if (typeof item === "string" && item.trim()) {
+        images.push(item.trim());
+      }
+    });
+  } else if (typeof rawImages === "string" && rawImages.trim()) {
+    normalizeStringList(rawImages).forEach((item) => images.push(item));
+  }
+
+  if (typeof product?.image_url === "string" && product.image_url.trim()) {
+    images.push(product.image_url.trim());
+  }
+
+  if (typeof product?.image === "string" && product.image.trim()) {
+    images.push(product.image.trim());
+  }
+
+  const uniqueImages = Array.from(new Set(images));
+  return uniqueImages.length ? uniqueImages : ["/placeholder.svg"];
+};
+
+const normalizeResource = (resource, fallbackLanguage = "en") => {
+  const parsed = parseJsonIfNeeded(resource);
+
+  if (!parsed) return null;
+
+  if (typeof parsed === "string") {
+    return {
+      language: fallbackLanguage,
+      name: parsed,
+      size: "",
+      url: "",
+    };
+  }
+
+  if (typeof parsed !== "object" || Array.isArray(parsed)) return null;
+
+  const language = String(
+    parsed.language ?? parsed.lang ?? parsed.locale ?? fallbackLanguage,
+  )
+    .trim()
+    .toLowerCase();
+  const name = String(
+    parsed.name ?? parsed.title ?? parsed.file ?? parsed.filename ?? parsed.label ?? "",
+  ).trim();
+  const size = String(parsed.size ?? parsed.file_size ?? "").trim();
+  const url = String(
+    parsed.url ?? parsed.href ?? parsed.link ?? parsed.path ?? parsed.download_url ?? "",
+  ).trim();
+
+  if (!name && !url) return null;
+
+  return {
+    language: language || "en",
+    name: name || url.split("/").pop() || "Resource",
+    size,
+    url,
+  };
+};
+
+const getProductResources = (product) => {
+  const raw =
+    parseJsonIfNeeded(product?.resources) ??
+    parseJsonIfNeeded(product?.documents) ??
+    parseJsonIfNeeded(product?.resource_files);
+
+  if (!raw) return [];
+
+  if (Array.isArray(raw)) {
+    return raw.map((item) => normalizeResource(item)).filter(Boolean);
+  }
+
+  if (raw && typeof raw === "object") {
+    const directResource = normalizeResource(raw);
+    if (directResource) return [directResource];
+
+    return Object.entries(raw).flatMap(([language, value]) => {
+      const parsedValue = parseJsonIfNeeded(value);
+
+      if (Array.isArray(parsedValue)) {
+        return parsedValue
+          .map((item) =>
+            normalizeResource(
+              typeof item === "object" && item !== null
+                ? { ...item, language: item.language ?? language }
+                : item,
+              language,
+            ),
+          )
+          .filter(Boolean);
+      }
+
+      const resource = normalizeResource(parsedValue, language);
+      return resource ? [resource] : [];
+    });
+  }
+
+  return [];
+};
+
+const getLanguageLabel = (language) => {
+  const normalized = String(language ?? "").trim();
+  if (!normalized) return "Unknown";
+  if (normalized.length <= 3) return normalized.toUpperCase();
+  return normalized.charAt(0).toUpperCase() + normalized.slice(1);
+};
+
+const getProductImage = (product) => {
+  return getProductImages(product)[0];
 };
 
 const getProductPriceLabel = (product) => {
@@ -56,6 +286,9 @@ const AdminUploadPanel = ({ userId, productColumns, onUpload }) => {
     price: "",
     rating: "4.5",
     reviews: "0",
+    specificationsJson: "",
+    resourcesJson: "",
+    extraImageUrls: "",
   });
   const [imageFile, setImageFile] = useState(null);
   const [uploading, setUploading] = useState(false);
@@ -70,7 +303,35 @@ const AdminUploadPanel = ({ userId, productColumns, onUpload }) => {
     return Number.isFinite(parsed) ? parsed : null;
   };
 
-  const buildInsertPayload = (imageUrl) => {
+  const parseJsonInput = (value, fieldLabel) => {
+    const trimmed = value.trim();
+    if (!trimmed) return { value: null, error: null };
+
+    try {
+      return { value: JSON.parse(trimmed), error: null };
+    } catch {
+      return {
+        value: null,
+        error: `${fieldLabel} must be valid JSON.`,
+      };
+    }
+  };
+
+  const parseAdditionalImageUrls = (value) => {
+    return value
+      .split(/\r?\n|,/)
+      .map((item) => item.trim())
+      .filter(Boolean);
+  };
+
+  const buildInsertPayload = (
+    imageUrl,
+    specifications,
+    resources,
+    additionalImageUrls,
+  ) => {
+    const allImages = [imageUrl, ...additionalImageUrls].filter(Boolean);
+
     const base = {
       name: form.name.trim(),
       category: form.category.trim(),
@@ -78,13 +339,18 @@ const AdminUploadPanel = ({ userId, productColumns, onUpload }) => {
       price: toNumberOrNull(form.price),
       rating: toNumberOrNull(form.rating),
       reviews: toNumberOrNull(form.reviews),
-      images: [imageUrl],
+      images: allImages.length ? allImages : [imageUrl],
       image_url: imageUrl,
       image: imageUrl,
+      specifications,
+      spec_sections: specifications,
+      specs: specifications,
+      resources,
+      documents: resources,
     };
 
     if (!productColumns.length) {
-      return {
+      const payload = {
         name: base.name,
         category: base.category,
         description: base.description,
@@ -93,6 +359,10 @@ const AdminUploadPanel = ({ userId, productColumns, onUpload }) => {
         reviews: base.reviews,
         images: base.images,
       };
+
+      if (specifications !== null) payload.specifications = specifications;
+      if (resources !== null) payload.resources = resources;
+      return payload;
     }
 
     const payload = {};
@@ -138,6 +408,23 @@ const AdminUploadPanel = ({ userId, productColumns, onUpload }) => {
       return;
     }
 
+    const specificationsResult = parseJsonInput(
+      form.specificationsJson,
+      "Specifications JSON",
+    );
+    if (specificationsResult.error) {
+      setMessage(specificationsResult.error);
+      return;
+    }
+
+    const resourcesResult = parseJsonInput(form.resourcesJson, "Resources JSON");
+    if (resourcesResult.error) {
+      setMessage(resourcesResult.error);
+      return;
+    }
+
+    const additionalImageUrls = parseAdditionalImageUrls(form.extraImageUrls);
+
     setUploading(true);
     setMessage("");
 
@@ -159,7 +446,12 @@ const AdminUploadPanel = ({ userId, productColumns, onUpload }) => {
       .getPublicUrl(filePath);
 
     const imageUrl = publicData?.publicUrl;
-    const payload = buildInsertPayload(imageUrl);
+    const payload = buildInsertPayload(
+      imageUrl,
+      specificationsResult.value,
+      resourcesResult.value,
+      additionalImageUrls,
+    );
 
     if (payload.price === null) delete payload.price;
     if (payload.rating === null) delete payload.rating;
@@ -193,6 +485,9 @@ const AdminUploadPanel = ({ userId, productColumns, onUpload }) => {
       price: "",
       rating: "4.5",
       reviews: "0",
+      specificationsJson: "",
+      resourcesJson: "",
+      extraImageUrls: "",
     });
     setImageFile(null);
     onUpload();
@@ -249,6 +544,30 @@ const AdminUploadPanel = ({ userId, productColumns, onUpload }) => {
               className="border rounded-lg p-3 md:col-span-2 min-h-24"
               placeholder="Product description"
             />
+            <textarea
+              value={form.specificationsJson}
+              onChange={(event) =>
+                handleInput("specificationsJson", event.target.value)
+              }
+              className="border rounded-lg p-3 md:col-span-2 min-h-24"
+              placeholder='Specifications JSON (e.g. [{"title":"Measurements","items":["Angular accuracy : 2\""]}])'
+            />
+            <textarea
+              value={form.resourcesJson}
+              onChange={(event) => handleInput("resourcesJson", event.target.value)}
+              className="border rounded-lg p-3 md:col-span-2 min-h-24"
+              placeholder='Resources JSON (e.g. [{"language":"en","name":"Datasheet.pdf","size":"4.1 MB","url":"https://..."}])'
+            />
+            <textarea
+              value={form.extraImageUrls}
+              onChange={(event) => handleInput("extraImageUrls", event.target.value)}
+              className="border rounded-lg p-3 md:col-span-2 min-h-20"
+              placeholder="Additional image URLs (comma-separated or one per line)"
+            />
+            <p className="text-xs text-muted-foreground md:col-span-2">
+              If your `products` table has `specifications` and `resources` columns
+              (JSONB), these values are stored and shown in View Details.
+            </p>
             <Button
               type="submit"
               className="md:col-span-2"
@@ -273,6 +592,9 @@ const Geoshop = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [detailsTab, setDetailsTab] = useState(DETAILS_TAB_SPECIFICATIONS);
+  const [resourceLanguage, setResourceLanguage] = useState("all");
+  const [activeDetailImageIndex, setActiveDetailImageIndex] = useState(0);
   const [cart, setCart] = useState([]);
   const [cartOpen, setCartOpen] = useState(false);
   const [loadingProducts, setLoadingProducts] = useState(true);
@@ -413,10 +735,43 @@ const Geoshop = () => {
     return Object.keys(products[0]);
   }, [products]);
 
+  const selectedProductImages = useMemo(
+    () => getProductImages(selectedProduct),
+    [selectedProduct],
+  );
+
+  const selectedProductSpecifications = useMemo(
+    () => getProductSpecificationSections(selectedProduct),
+    [selectedProduct],
+  );
+
+  const selectedProductResources = useMemo(
+    () => getProductResources(selectedProduct),
+    [selectedProduct],
+  );
+
+  const resourceLanguages = useMemo(() => {
+    return Array.from(
+      new Set(
+        selectedProductResources.map((resource) =>
+          String(resource.language || "en").toLowerCase(),
+        ),
+      ),
+    );
+  }, [selectedProductResources]);
+
+  const visibleResources = useMemo(() => {
+    if (resourceLanguage === "all") return selectedProductResources;
+
+    return selectedProductResources.filter(
+      (resource) => String(resource.language || "en").toLowerCase() === resourceLanguage,
+    );
+  }, [resourceLanguage, selectedProductResources]);
+
   const cartCount = getCartCount(cart);
 
   const requireLogin = () => {
-    navigate("/login", { state: { from: "/geoshop" } });
+    navigate("/geoshop/login", { state: { from: "/geoshop" } });
   };
 
   const handleAddToCart = (product) => {
@@ -490,17 +845,31 @@ const Geoshop = () => {
     setCartOpen(true);
   };
 
+  const openProductDetails = (product) => {
+    setSelectedProduct(product);
+    setDetailsTab(DETAILS_TAB_SPECIFICATIONS);
+    setActiveDetailImageIndex(0);
+
+    const defaultLanguage =
+      getProductResources(product)?.[0]?.language?.toLowerCase() || "all";
+    setResourceLanguage(defaultLanguage);
+  };
+
   return (
     <div className="products-theme">
       <section className="py-20 bg-gradient-card">
         <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between gap-6 items-center">
           <div>
-            <h1 className="text-4xl font-bold mb-3">GEOSHOP</h1>
-            <p className="text-sm text-cyan-600 font-italic">A GCES Ltd. Company</p>
-            <p className="text-muted-foreground">
+            <h1 className="text-4xl font-bold mb-3">GEOSHOP Ltd.</h1>
+              <p className="text-muted-foreground">
               Premium surveying instruments and accessories provider.
             </p>
-
+              <Link
+                to="/"
+                className="bg-muted border px-5 py-1 rounded-2xl hover:bg-muted/80 transition-colors"
+              >
+               A GCES Ltd Company
+              </Link>
             <div className="flex gap-3 mt-4">
               <a
                 href={CATALOGUE_PATH}
@@ -524,7 +893,7 @@ const Geoshop = () => {
           <div className="flex flex-col gap-3 items-end">
             {!user && (
               <Button variant="hero" size="lg" asChild>
-                <Link to="/login" className="flex gap-2">
+                <Link to="/geoshop/login" className="flex gap-2">
                   <LogIn className="w-5 h-5" />
                   Login to Shop
                 </Link>
@@ -537,7 +906,7 @@ const Geoshop = () => {
                 <div className="flex justify-end gap-2 mt-2">
                   {role === "admin" && (
                     <Button variant="outline" size="sm" asChild>
-                      <Link to="/admin">Admin Dashboard</Link>
+                      <Link to="/geoshop/admin">Admin Dashboard</Link>
                     </Button>
                   )}
                   <Button
@@ -679,9 +1048,9 @@ const Geoshop = () => {
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => setSelectedProduct(product)}
+                      onClick={() => openProductDetails(product)}
                     >
-                      View
+                      View Details
                     </Button>
                   </div>
                 </div>
@@ -693,36 +1062,195 @@ const Geoshop = () => {
 
       {selectedProduct && (
         <div className="fixed inset-0 bg-black/60 flex justify-center items-center z-50 p-4">
-          <div className="bg-card max-w-3xl w-full p-6 rounded-2xl">
-            <div className="flex justify-end">
-              <button onClick={() => setSelectedProduct(null)}>Close x</button>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-6">
+          <div className="bg-card max-w-6xl w-full p-6 rounded-2xl max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-start gap-4 mb-6">
               <div>
-                <img
-                  src={getProductImage(selectedProduct)}
-                  alt={selectedProduct.name}
-                  className="w-full h-64 object-cover rounded-xl"
-                />
+                <h2 className="text-3xl font-bold">Detailed Specifications</h2>
+                <p className="text-muted-foreground mt-1">{selectedProduct.name}</p>
               </div>
 
-              <div>
-                <h2 className="text-2xl font-bold mb-2">{selectedProduct.name}</h2>
-                <p className="text-muted-foreground mb-4">
-                  {selectedProduct.description || "No description provided."}
-                </p>
+              <Button variant="ghost" size="sm" onClick={() => setSelectedProduct(null)}>
+                Close
+              </Button>
+            </div>
 
-                <div className="flex gap-3">
-                  <Button onClick={() => handleAddToCart(selectedProduct)}>
-                    Add to Cart
-                  </Button>
-                  <Button variant="outline" asChild>
-                    <Link to="/contact">Request Quote</Link>
-                  </Button>
+            <div className="border-b mb-6">
+              <div className="flex gap-8 text-lg">
+                <button
+                  type="button"
+                  onClick={() => setDetailsTab(DETAILS_TAB_SPECIFICATIONS)}
+                  className={`pb-2 border-b-2 transition-colors ${
+                    detailsTab === DETAILS_TAB_SPECIFICATIONS
+                      ? "border-primary text-primary"
+                      : "border-transparent text-foreground/80"
+                  }`}
+                >
+                  Specifications
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDetailsTab(DETAILS_TAB_RESOURCES)}
+                  className={`pb-2 border-b-2 transition-colors ${
+                    detailsTab === DETAILS_TAB_RESOURCES
+                      ? "border-primary text-primary"
+                      : "border-transparent text-foreground/80"
+                  }`}
+                >
+                  Resources
+                </button>
+              </div>
+            </div>
+
+            {detailsTab === DETAILS_TAB_SPECIFICATIONS ? (
+              <div className="grid lg:grid-cols-[minmax(280px,1fr)_1.35fr] gap-8">
+                <figure className="bg-muted/30 rounded-2xl p-6">
+                  <img
+                    src={
+                      selectedProductImages[activeDetailImageIndex] ||
+                      selectedProductImages[0]
+                    }
+                    alt={selectedProduct.name}
+                    className="w-full h-72 object-contain bg-background rounded-xl"
+                  />
+
+                  {selectedProductImages.length > 1 && (
+                    <div className="grid grid-cols-4 gap-2 mt-3">
+                      {selectedProductImages.map((image, index) => (
+                        <button
+                          key={`${selectedProduct.id || selectedProduct.name}_${index}`}
+                          type="button"
+                          onClick={() => setActiveDetailImageIndex(index)}
+                          className={`border rounded-lg overflow-hidden ${
+                            index === activeDetailImageIndex
+                              ? "ring-2 ring-primary border-primary"
+                              : "border-border"
+                          }`}
+                        >
+                          <img
+                            src={image}
+                            alt={`${selectedProduct.name} view ${index + 1}`}
+                            className="w-full h-16 object-cover"
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="mt-6 text-center">
+                    <h3 className="text-4xl font-bold tracking-tight">{selectedProduct.name}</h3>
+                    <p className="text-muted-foreground mt-3">
+                      {selectedProduct.description || "No description provided."}
+                    </p>
+                    {getProductPriceLabel(selectedProduct) && (
+                      <p className="font-semibold mt-4">{getProductPriceLabel(selectedProduct)}</p>
+                    )}
+                  </div>
+
+                  <div className="flex flex-wrap justify-center gap-3 mt-6">
+                    <Button onClick={() => handleAddToCart(selectedProduct)}>
+                      Add to Cart
+                    </Button>
+                    <Button variant="outline" asChild>
+                      <Link to="/contact">Request Quote</Link>
+                    </Button>
+                  </div>
+                </figure>
+
+                <aside className="space-y-7">
+                  {selectedProductSpecifications.length > 0 ? (
+                    selectedProductSpecifications.map((section, sectionIndex) => (
+                      <div
+                        key={`${section.title}_${sectionIndex}`}
+                        className="border-b pb-5 last:border-b-0"
+                      >
+                        <h4 className="text-3xl font-semibold mb-3">{section.title}</h4>
+                        <ul className="space-y-2">
+                          {section.items.map((item, itemIndex) => (
+                            <li
+                              key={`${section.title}_${itemIndex}`}
+                              className="flex items-start gap-3"
+                            >
+                              <span className="mt-2 h-2 w-2 rounded-full bg-primary shrink-0" />
+                              <span className="text-lg">{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-muted-foreground">
+                      No detailed specifications available for this product yet.
+                    </p>
+                  )}
+                </aside>
+              </div>
+            ) : (
+              <div>
+                <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
+                  <p className="text-muted-foreground text-sm">
+                    Download brochures, datasheets and manuals for this product.
+                  </p>
+
+                  {resourceLanguages.length > 1 && (
+                    <label className="flex items-center gap-2 text-sm">
+                      <span>Language</span>
+                      <select
+                        value={resourceLanguage}
+                        onChange={(event) => setResourceLanguage(event.target.value)}
+                        className="border rounded-lg px-3 py-2 bg-card"
+                      >
+                        <option value="all">All</option>
+                        {resourceLanguages.map((language) => (
+                          <option key={language} value={language}>
+                            {getLanguageLabel(language)}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                  )}
+                </div>
+
+                <div className="mt-5 space-y-3">
+                  {visibleResources.length > 0 ? (
+                    visibleResources.map((resource, index) => (
+                      <div
+                        key={`${resource.name}_${index}`}
+                        className="border rounded-xl p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+                      >
+                        <div>
+                          <p className="font-semibold">{resource.name}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {resource.size || "File size not provided"}
+                            {resource.language
+                              ? `  |  ${getLanguageLabel(resource.language)}`
+                              : ""}
+                          </p>
+                        </div>
+
+                        {resource.url ? (
+                          <a
+                            className="inline-flex items-center justify-center rounded-lg border px-4 py-2 text-sm font-medium hover:bg-muted transition-colors"
+                            href={resource.url}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            Download
+                          </a>
+                        ) : (
+                          <p className="text-sm text-muted-foreground">
+                            No download URL in database.
+                          </p>
+                        )}
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-muted-foreground">
+                      No resources available for this product yet.
+                    </p>
+                  )}
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       )}

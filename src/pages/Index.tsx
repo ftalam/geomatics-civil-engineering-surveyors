@@ -163,14 +163,14 @@ const Index = () => {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="relative min-h-[20vh] md:min-h-[24vh] flex items-center py-8">
+      <section className="relative min-h-[24vh] md:min-h-[24vh] flex items-center py-8">
         <div className="absolute inset-0">
           <img
             src={heroImage}
             alt="Surveying equipment"
             className="w-full h-full object-cover object-center max-h-full"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/90 to-background/50" />
+          <div className="absolute inset-0 hero-overlay" />
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
@@ -184,10 +184,10 @@ const Index = () => {
                 Welcome to Geomatics Civil Engineering Limited
               </span>
               <h1 className="font-display font-bold text-3xl md:text-4xl lg:text-5xl text-foreground mb-4 leading-tight">
-                Precision-Based{" "}
+                <span className="text-emerald-500">Precision-Based</span>{" "}
                 <span className="text-gradient">Decision Making</span>
               </h1>
-              <p className="text-muted-foreground text-base md:text-lg mb-6 leading-relaxed">
+              <p className="text-black text-base md:text-lg mb-6 leading-relaxed">
                 Innovative surveying solutions for businesses that need precision. Delivering cutting-edge geomatics services since 2000.
               </p>
               <div className="flex flex-wrap gap-4">
@@ -250,7 +250,7 @@ const Index = () => {
               {visibleClients.map((client) => (
                 <div
                   key={client.name}
-                  className="h-21 flex items-center opacity-90 hover:opacity-100 transition-all"
+                  className="h-20 flex items-center opacity-90 hover:opacity-100 transition-all"
                 >
                   <img
                     src={client.logo}
@@ -265,7 +265,7 @@ const Index = () => {
       </section>
 
       {/* Why Choose Us */}
-      <section className="py-20">
+      <section className="py-10">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <motion.div
