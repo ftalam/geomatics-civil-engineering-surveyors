@@ -18,8 +18,7 @@ import {
 const PRODUCT_IMAGES_BUCKET =
   import.meta.env.VITE_SUPABASE_PRODUCT_IMAGES_BUCKET || "product-images";
 const CATALOGUE_URL =
-  import.meta.env.VITE_GEOSHOP_CATALOGUE_URL ||
-  "https://qovphbyowvbmcynhqfxa.supabase.co/storage/v1/object/public/product-docs/Geoshop%20Products%20Catalog.pdf";
+  import.meta.env.VITE_GEOSHOP_CATALOGUE_URL ||"geoshop-catalog";
 const SUPABASE_PROJECT_ID = import.meta.env.VITE_SUPABASE_PROJECT_ID || null;
 const DETAILS_TAB_SPECIFICATIONS = "specifications";
 const DETAILS_TAB_RESOURCES = "resources";
