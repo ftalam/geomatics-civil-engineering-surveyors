@@ -110,7 +110,7 @@ const Contact = () => {
                       type="email"
                       value={formData.email}
                       onChange={handleChange}
-                      placeholder="name@geomatics.com"
+                      placeholder="geomatics@gmail.com"
                       required
                       className="bg-card border-border"
                     />
@@ -244,7 +244,7 @@ const Contact = () => {
                     width="425"
                     height="350"
                     src="https://www.openstreetmap.org/export/embed.html?bbox=36.95646286010743%2C-1.1593754579321676%2C36.96710586547852%2C-1.1512339267489746&layer=mapnik&marker=-1.155297,36.960920"
-                    style={{ border: "1px solid black", width: "100%", height: "100%" }}
+                    style={{ width: "100%", height: "100%" }}
                     loading="lazy"
                   />
                 </div>

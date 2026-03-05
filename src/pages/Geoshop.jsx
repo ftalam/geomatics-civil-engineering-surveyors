@@ -17,7 +17,9 @@ import {
 
 const PRODUCT_IMAGES_BUCKET =
   import.meta.env.VITE_SUPABASE_PRODUCT_IMAGES_BUCKET || "product-images";
-const CATALOGUE_PATH = "/catalogue/Geoshop%20Products-Catalog.pdf";
+const CATALOGUE_URL =
+  import.meta.env.VITE_GEOSHOP_CATALOGUE_URL ||
+  "https://qovphbyowvbmcynhqfxa.supabase.co/storage/v1/object/public/product-docs/Geoshop%20Products%20Catalog.pdf";
 const SUPABASE_PROJECT_ID = import.meta.env.VITE_SUPABASE_PROJECT_ID || null;
 const DETAILS_TAB_SPECIFICATIONS = "specifications";
 const DETAILS_TAB_RESOURCES = "resources";
@@ -252,6 +254,22 @@ const getLanguageLabel = (language) => {
   if (!normalized) return "Unknown";
   if (normalized.length <= 3) return normalized.toUpperCase();
   return normalized.charAt(0).toUpperCase() + normalized.slice(1);
+};
+
+const toDownloadUrl = (url, fileName = "") => {
+  const rawUrl = String(url ?? "").trim();
+  if (!rawUrl) return "";
+
+  if (/([?&])download(=|&|$)/i.test(rawUrl)) return rawUrl;
+
+  const [base, hash] = rawUrl.split("#");
+  const separator = base.includes("?") ? "&" : "?";
+  const downloadValue = String(fileName ?? "").trim();
+  const downloadQuery = downloadValue
+    ? `download=${encodeURIComponent(downloadValue)}`
+    : "download";
+
+  return `${base}${separator}${downloadQuery}${hash ? `#${hash}` : ""}`;
 };
 
 const getProductImage = (product) => {
@@ -857,10 +875,10 @@ const Geoshop = () => {
 
   return (
     <div className="products-theme">
-      <section className="py-20 bg-gradient-card">
+      <section className="py-6 bg-gradient-card">
         <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between gap-6 items-center">
           <div>
-            <h1 className="text-4xl font-bold mb-3">GEOSHOP Ltd.</h1>
+            <h1 className="text-4xl font-bold mb-3">GEOSHOP</h1>
               <p className="text-muted-foreground">
               Premium surveying instruments and accessories provider.
             </p>
@@ -872,7 +890,7 @@ const Geoshop = () => {
               </Link>
             <div className="flex gap-3 mt-4">
               <a
-                href={CATALOGUE_PATH}
+                href={CATALOGUE_URL}
                 target="_blank"
                 rel="noreferrer"
                 className="bg-primary text-primary-foreground px-4 py-2 rounded-2xl"
@@ -881,8 +899,10 @@ const Geoshop = () => {
               </a>
 
               <a
-                href={CATALOGUE_PATH}
-                download
+                href={toDownloadUrl(CATALOGUE_URL, "Geoshop Products Catalog.pdf")}
+                target="_blank"
+                rel="noreferrer"
+                download="Geoshop Products Catalog.pdf"
                 className="bg-primary text-primary-foreground px-5 py-2 rounded-2xl"
               >
                 Download Catalogue
@@ -950,9 +970,9 @@ const Geoshop = () => {
         />
       )}
 
-      <section className="py-10">
+      <section className="py-2">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row gap-4 mb-8">
+          <div className="flex flex-col md:flex-row gap-4 mb-4">
             <div className="relative flex-1">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
               <input
@@ -1000,7 +1020,8 @@ const Geoshop = () => {
             <p className="text-muted-foreground">No products found.</p>
           )}
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* more columns so each card is narrower */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
             {filteredProducts.map((product, index) => (
               <motion.div
                 key={product.id || `${product.name}_${index}`}
@@ -1022,11 +1043,11 @@ const Geoshop = () => {
                   )}
                 </div>
 
-                <div className="p-5">
+                <div className="p-4">
                   <p className="text-xs text-primary">{product.category}</p>
                   <h3 className="font-bold text-lg">{product.name}</h3>
 
-                  <div className="flex items-center gap-2 text-sm mb-3">
+                  <div className="flex items-center gap-1 text-sm mb-2">
                     <Star className="w-4 h-4 fill-primary text-primary" />
                     {Number(product.rating) || 0} ({Number(product.reviews) || 0})
                   </div>
@@ -1061,20 +1082,18 @@ const Geoshop = () => {
       </section>
 
       {selectedProduct && (
-        <div className="fixed inset-0 bg-black/60 flex justify-center items-center z-50 p-4">
-          <div className="bg-card max-w-6xl w-full p-6 rounded-2xl max-h-[90vh] overflow-y-auto">
-            <div className="flex justify-between items-start gap-4 mb-6">
+        <div className="fixed inset-0 bg-black/60 flex justify-center items-center z-10 p-4">
+          <div className="bg-card max-w-6xl w-full p-4 rounded-2xl max-h-screen overflow-y-auto">
+            <div className="flex justify-between items-start gap-4 mb-1">
               <div>
-                <h2 className="text-3xl font-bold">Detailed Specifications</h2>
                 <p className="text-muted-foreground mt-1">{selectedProduct.name}</p>
               </div>
-
               <Button variant="ghost" size="sm" onClick={() => setSelectedProduct(null)}>
                 Close
               </Button>
             </div>
 
-            <div className="border-b mb-6">
+            <div className="border-b mb-1">
               <div className="flex gap-8 text-lg">
                 <button
                   type="button"
@@ -1102,87 +1121,98 @@ const Geoshop = () => {
             </div>
 
             {detailsTab === DETAILS_TAB_SPECIFICATIONS ? (
-              <div className="grid lg:grid-cols-[minmax(280px,1fr)_1.35fr] gap-8">
-                <figure className="bg-muted/30 rounded-2xl p-6">
-                  <img
-                    src={
-                      selectedProductImages[activeDetailImageIndex] ||
-                      selectedProductImages[0]
-                    }
-                    alt={selectedProduct.name}
-                    className="w-full h-72 object-contain bg-background rounded-xl"
-                  />
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+                {/*LEFT SIDE*/}
+                <aside className="space-y-6">
+                  <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-semibold">
+                    Specifications
+                  </span>
 
-                  {selectedProductImages.length > 1 && (
-                    <div className="grid grid-cols-4 gap-2 mt-3">
-                      {selectedProductImages.map((image, index) => (
-                        <button
-                          key={`${selectedProduct.id || selectedProduct.name}_${index}`}
-                          type="button"
-                          onClick={() => setActiveDetailImageIndex(index)}
-                          className={`border rounded-lg overflow-hidden ${
-                            index === activeDetailImageIndex
-                              ? "ring-2 ring-primary border-primary"
-                              : "border-border"
-                          }`}
+                  <div className="space-y-10">
+                    {selectedProductSpecifications.length > 0 ? (
+                      selectedProductSpecifications.map((section, sectionIndex) => (
+                        <div
+                          key={`${section.title}_${sectionIndex}`}
+                          className="border-b pb-3 last:border-b-0"
                         >
-                          <img
-                            src={image}
-                            alt={`${selectedProduct.name} view ${index + 1}`}
-                            className="w-full h-16 object-cover"
-                          />
-                        </button>
-                      ))}
-                    </div>
-                  )}
-
-                  <div className="mt-6 text-center">
-                    <h3 className="text-4xl font-bold tracking-tight">{selectedProduct.name}</h3>
-                    <p className="text-muted-foreground mt-3">
-                      {selectedProduct.description || "No description provided."}
-                    </p>
-                    {getProductPriceLabel(selectedProduct) && (
-                      <p className="font-semibold mt-4">{getProductPriceLabel(selectedProduct)}</p>
+                          <h4 className="text-xl font-semibold tracking-tight mb-2">
+                            {section.title}
+                          </h4>
+                          <ul className="space-y-2">
+                            {section.items.map((item, itemIndex) => (
+                              <li
+                                key={`${section.title}_${itemIndex}`}
+                                className="flex items-start gap-3"
+                              >
+                                <span className="mt-2 h-2 w-2 rounded-full bg-primary shrink-0" />
+                                <span className="text-sm">{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-muted-foreground">
+                        No detailed specifications available for this product yet.
+                      </p>
                     )}
                   </div>
-
-                  <div className="flex flex-wrap justify-center gap-3 mt-6">
-                    <Button onClick={() => handleAddToCart(selectedProduct)}>
-                      Add to Cart
-                    </Button>
-                    <Button variant="outline" asChild>
-                      <Link to="/contact">Request Quote</Link>
-                    </Button>
-                  </div>
-                </figure>
-
-                <aside className="space-y-7">
-                  {selectedProductSpecifications.length > 0 ? (
-                    selectedProductSpecifications.map((section, sectionIndex) => (
-                      <div
-                        key={`${section.title}_${sectionIndex}`}
-                        className="border-b pb-5 last:border-b-0"
-                      >
-                        <h4 className="text-3xl font-semibold mb-3">{section.title}</h4>
-                        <ul className="space-y-2">
-                          {section.items.map((item, itemIndex) => (
-                            <li
-                              key={`${section.title}_${itemIndex}`}
-                              className="flex items-start gap-3"
-                            >
-                              <span className="mt-2 h-2 w-2 rounded-full bg-primary shrink-0" />
-                              <span className="text-lg">{item}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    ))
-                  ) : (
-                    <p className="text-muted-foreground">
-                      No detailed specifications available for this product yet.
-                    </p>
-                  )}
                 </aside>
+
+                {/*RIGHT SIDE*/}
+                <div className="relative w-full lg:max-w-xl">
+                  <div className="bg-muted/30 rounded-2xl p-6 border border-border/50 backdrop-blur shadow-card">
+                    <figure className="rounded-xl overflow-hidden bg-card/30">
+                      <img
+                        src={
+                          selectedProductImages[activeDetailImageIndex] ||
+                          selectedProductImages[0]
+                        }
+                        alt={selectedProduct.name}
+                        className="w-full aspect-square object-contain p-4 transition-transform duration-500 ease-out hover:scale-105"
+                      />
+                    </figure>
+
+                    {selectedProductImages.length > 1 && (
+                      <div className="grid grid-cols-4 gap-2 mt-3">
+                        {selectedProductImages.map((image, index) => (
+                          <button
+                            key={`${selectedProduct.id || selectedProduct.name}_${index}`}
+                            type="button"
+                            onClick={() => setActiveDetailImageIndex(index)}
+                            className={`border rounded-lg overflow-hidden ${
+                              index === activeDetailImageIndex
+                                ? "ring-2 ring-primary border-primary"
+                                : "border-border"
+                            }`}
+                          >
+                            <img
+                              src={image}
+                              alt={`${selectedProduct.name} view ${index + 1}`}
+                              className="w-full h-16 object-cover"
+                            />
+                          </button>
+                        ))}
+                      </div>
+                    )}
+
+                    <div className="mt-6 text-center">
+                      <h3 className="text-3xl font-bold tracking-tight">{selectedProduct.name}</h3>
+                      <p className="text-muted-foreground mt-3">
+                        {selectedProduct.description || "No description provided."}
+                      </p>
+                    </div>
+                    <div className="flex justify-center mt-6">
+                      <Button variant="outline" asChild>
+                        <a
+                          href={`mailto:sales@geomatics.co.ke?subject=Quotation Request - ${selectedProduct.name}&body=Hello Geomatics Team,%0D%0A%0D%0AI would like to request a quotation for:%0D%0A%0D%0AProduct: ${selectedProduct.name}%0D%0A%0D%0APlease provide pricing, availability, and delivery timelines.%0D%0A%0D%0AThank you.`}
+                        >
+                          Request Quote
+                        </a>
+                      </Button>
+                    </div>
+                  </div>
+                </div>
               </div>
             ) : (
               <div>
@@ -1228,14 +1258,25 @@ const Geoshop = () => {
                         </div>
 
                         {resource.url ? (
-                          <a
-                            className="inline-flex items-center justify-center rounded-lg border px-4 py-2 text-sm font-medium hover:bg-muted transition-colors"
-                            href={resource.url}
-                            target="_blank"
-                            rel="noreferrer"
-                          >
-                            Download
-                          </a>
+                          <div className="flex flex-wrap gap-2">
+                            <a
+                              className="inline-flex items-center justify-center rounded-lg border px-4 py-2 text-sm font-medium hover:bg-muted transition-colors"
+                              href={resource.url}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              View
+                            </a>
+                            <a
+                              className="inline-flex items-center justify-center rounded-lg border px-4 py-2 text-sm font-medium hover:bg-muted transition-colors"
+                              href={toDownloadUrl(resource.url, resource.name)}
+                              target="_blank"
+                              rel="noreferrer"
+                              download={resource.name || true}
+                            >
+                              Download
+                            </a>
+                          </div>
                         ) : (
                           <p className="text-sm text-muted-foreground">
                             No download URL in database.

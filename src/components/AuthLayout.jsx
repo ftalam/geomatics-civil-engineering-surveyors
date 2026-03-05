@@ -4,7 +4,7 @@ export default function AuthLayout({ title, subtitle, children, footer }) {
   const isLogin = title.toLowerCase().includes("login");
 
   return (
-    <div className="min-h-screen bg-slate-100 px-4 py-20">
+    <div className="min-h-50vh bg-slate-100 px-4 py-4">
       <div className="mx-auto flex min-h-[calc(100vh-6rem)] max-w-6xl items-center">
         <div className="w-full overflow-hidden rounded-3xl bg-white shadow-lg lg:flex">
           <div className="relative w-full p-8 md:p-10 lg:w-1/2">
@@ -21,18 +21,7 @@ export default function AuthLayout({ title, subtitle, children, footer }) {
             )}
 
             <div className="relative z-10">
-              <div className="mb-8 min-h-[132px]">
-                <div className="flex flex-col">
-                  <div className="flex items-center">
-                    <div className="relative">
-                      <div className="absolute -right-1 -top-2 h-3 w-3 rounded-full bg-cyan-500" />
-                      <div className="absolute bottom-0 left-1 h-0.5 w-5 bg-cyan-500" />
-                    </div>
-                    <div className="relative ml-2">
-                    </div>
-                  </div>
-                </div>
-              </div>
+              
 
               <div className="mb-8 mt-6">
                 <h1 className="text-2xl font-semibold text-gray-800">
@@ -51,7 +40,7 @@ export default function AuthLayout({ title, subtitle, children, footer }) {
             <img
               src={cardBackground}
               alt="Geoshop layout"
-              className="absolute inset-0 h-full w-full object-cover"
+              className="absolute inset-0 h-full w-full object-fit-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 to-transparent" />
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-10 text-white">

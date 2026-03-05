@@ -77,7 +77,7 @@ const Support = () => {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-card">
+      <section className="py-12 bg-gradient-card">
         <div className="container mx-auto px-4">
           <SectionHeader
             badge="Support Center"

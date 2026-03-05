@@ -16,7 +16,7 @@ const ServiceCard = ({ title, description, icon: Icon, index }: ServiceCardProps
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       viewport={{ once: true }}
-      className="group rounded-2xl bg-gradient-card border border-border/60 p-6 hover:border-accent hover:shadow-glow transition-all"
+      className="group rounded-2xl bg-gradient-card border border-border/60 p-4 hover:border-accent hover:shadow-glow transition-all"
     >
       <div className="flex flex-col items-center text-center">
         <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">

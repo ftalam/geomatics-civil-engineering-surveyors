@@ -163,17 +163,17 @@ const Index = () => {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="relative min-h-[24vh] md:min-h-[24vh] flex items-center py-8">
+      <section className="relative min-h-[30vh] md:min-h-[30vh] flex items-center py-8">
         <div className="absolute inset-0">
           <img
             src={heroImage}
-            alt="Surveying equipment"
-            className="w-full h-full object-cover object-center max-h-full"
+            alt="GCES Ltd."
+            className="w-full h-full object-cover object-center max-h-screen"
           />
           <div className="absolute inset-0 hero-overlay" />
         </div>
 
-        <div className="container mx-auto px-4 relative z-10">
+        <div className="container mx-auto px-4 relative z-12">
           <div className="max-w-2xl">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -211,7 +211,7 @@ const Index = () => {
       </section>
 
       {/* Services Section*/}
-      <section id="services" className="py-5 bg-card/30">
+      <section id="services" className="py-3 bg-card/30">
         <div className="container mx-auto px-2">
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {services.slice(0, 5).map((service, index) => (
@@ -226,7 +226,7 @@ const Index = () => {
           <div className="text-center mt-8">
             <Link to="/services">
               <Button variant="outline" size="lg">
-                View All Services <ArrowRight className="w-5 h-5" />
+                View All Services <ArrowRight className="w-5 h-4" />
               </Button>
             </Link>
           </div>
@@ -367,7 +367,7 @@ const Index = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-card">
+      <section className="py-12 bg-gradient-card">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 30 }}

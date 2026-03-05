@@ -123,9 +123,10 @@ const Products = () => {
     <Layout>
       <div className="products-theme">
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-card">
+      <section className="py-12 bg-gradient-card">
         <div className="container mx-auto px-4">
           <SectionHeader
+          
             badge="GEOSHOP"
             title="Premium Surveying Equipment"
             description="Browse our curated selection of high-quality surveying instruments and accessories from trusted manufacturers."

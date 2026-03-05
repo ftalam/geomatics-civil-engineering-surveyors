@@ -4,8 +4,8 @@ import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Instagram } from "luc
 const Footer = () => {
   return (
     <footer className="bg-black border-t border-white/10">
-      <div className="container mx-auto px-4 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+      <div className="container mx-auto px-2.5 py-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1">
           {/* Company Info */}
           <div>
             <div className="flex items-center gap-3 mb-6">
@@ -37,10 +37,10 @@ const Footer = () => {
           </div>
 
           {/* Quick Links */}
-          <div>
-            <h4 className="font-display font-semibold text-foreground mb-6">Quick Links</h4>
-            <ul className="space-y-3">
-              {["Home", "Industries", "Products", "Support", "About", "Contact"].map((link) => (
+          <div >
+            <h4 className="font-display font-semibold text-foreground mb-4">Quick Links</h4>
+            <ul className="grid grid-cols-2 gap-1">
+              {["Home", "Industries", "Products", "Support", "About", "Services"].map((link) => (
                 <li key={link}>
                   <Link
                     to={link === "Home" ? "/" : `/${link.toLowerCase()}`}
@@ -53,22 +53,48 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Industries */}
-          <div>
-            <h4 className="font-display font-semibold text-foreground mb-6">Industries</h4>
-            <ul className="space-y-3">
-              {["Architecture & Construction", "Civil Works", "Geospatial", "Mining & Quarry", "Renewable Energy"].map((industry) => (
-                <li key={industry}>
-                  <Link
-                    to="/industries"
-                    className="text-muted-foreground hover:text-primary transition-colors text-sm"
-                  >
-                    {industry}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* News */}
+            <div >
+              <h4 className="font-display font-semibold text-foreground mb-6">Latest News</h4>
+
+              <div className="space-y-4">
+                {/* News Item */}
+                <div className="flex gap-3">
+                  <img
+                    src="/assets/GCES-Logo.jpg"
+                    alt="GCES Ltd."
+                    className="w-18 h-18 object-cover rounded-md"
+                  />
+
+                  <div>
+                    <p className="text-sm font-medium text-foreground">
+                      New Geomatics Engineering Surveyors webpage
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      Our organization recently setup a company's website.
+                    </p>
+                  </div>
+                </div>
+
+          {/* News Item */}
+            <div className="flex gap-3">
+              <img
+                src="@/assets/geoshop-layout.png"
+                alt="Geoshop Launch"
+                className="w-18 h-18 object-cover rounded-md"
+              />
+
+              <div>
+                <p className="text-sm font-medium text-foreground">
+                  Geoshop
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Advancing infrastructure planning through precise surveying methods.
+                </p>
+              </div>
+            </div>
+            </div>
+            </div>
 
           {/* Contact Info */}
           <div>
@@ -77,7 +103,7 @@ const Footer = () => {
               <li className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <span className="text-muted-foreground text-sm">
-                  Phileo Arcade, Ruiru, next to Wonders Church, Opposite Plainsview Hospital  P.O. BOX. 7726-00100, NAIROBI KENYA
+                  Phileo Arcade, Ruiru. <br/>  P.O. BOX. 7726-00100, NAIROBI KENYA
                 </span>
               </li>
               <li className="flex items-center gap-3">

@@ -86,11 +86,11 @@ export default function Login() {
         </p>
       }
     >
-      <form onSubmit={handleLogin} className="space-y-5">
+      <form onSubmit={handleLogin} className="space-y-1">
         <div>
           <label className="mb-1 block text-sm text-gray-500">Email</label>
           <input
-            className="h-12 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 text-base text-gray-800 placeholder:text-gray-500 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
+            className="h-12 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 text-base text-black placeholder:text-gray-500 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
             placeholder="your.email@example.com"
             type="email"
             value={email}
@@ -103,7 +103,7 @@ export default function Login() {
           <label className="mb-1 block text-sm text-gray-500">Password</label>
           <div className="relative">
             <input
-              className="h-12 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 pr-10 text-base text-gray-800 placeholder:text-gray-500 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
+              className="h-12 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 pr-10 text-base text-black placeholder:text-gray-500 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
               placeholder="Enter your password"
               type={showPassword ? "text" : "password"}
               value={password}
