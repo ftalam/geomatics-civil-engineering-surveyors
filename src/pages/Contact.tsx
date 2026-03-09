@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import Layout from "@/components/Layout";
+import Layout from "@/components/Layout.jsx";
 import SectionHeader from "@/components/SectionHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

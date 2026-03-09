@@ -1,14 +1,10 @@
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 
-interface LayoutProps {
-  children: ReactNode;
-}
-
-const Layout = ({ children }: LayoutProps) => {
-  const [contentTheme, setContentTheme] = useState<"dark" | "light">(() => {
+const Layout = ({ children }) => {
+  const [contentTheme, setContentTheme] = useState(() => {
     if (typeof window === "undefined") return "dark";
     return window.localStorage.getItem("content-theme") === "light"
       ? "light"

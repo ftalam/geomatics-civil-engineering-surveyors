@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import Layout from "@/components/Layout";
+import Layout from "@/components/Layout.jsx";
 import SectionHeader from "@/components/SectionHeader";
 import { Building2, HardHat, Globe, Mountain, Sun, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";

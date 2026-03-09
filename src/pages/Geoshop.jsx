@@ -1123,10 +1123,6 @@ const Geoshop = () => {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
                 {/*LEFT SIDE*/}
                 <aside className="space-y-6">
-                  <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-semibold">
-                    Specifications
-                  </span>
-
                   <div className="space-y-10">
                     {selectedProductSpecifications.length > 0 ? (
                       selectedProductSpecifications.map((section, sectionIndex) => (

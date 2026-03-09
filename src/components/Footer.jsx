@@ -127,12 +127,12 @@ const Footer = () => {
             © {new Date().getFullYear()} Geomatics Civil Engineering Surveyors. All rights reserved.
           </p>
           <div className="flex gap-6">
-            <a href="#" className="text-muted-foreground hover:text-primary transition-colors text-sm">
+            <Link to="/privacy" className="text-muted-foreground hover:text-primary transition-colors text-sm">
               Privacy Policy
-            </a>
-            <a href="#" className="text-muted-foreground hover:text-primary transition-colors text-sm">
+            </Link>
+            <Link to="/terms" className="text-muted-foreground hover:text-primary transition-colors text-sm">
               Terms of Service
-            </a>
+            </Link>
           </div>
         </div>
       </div>

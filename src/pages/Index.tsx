@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import Layout from "@/components/Layout";
+import Layout from "@/components/Layout.jsx";
 import SectionHeader from "@/components/SectionHeader";
 import IndustryCard from "@/components/IndustryCard";
 import ServiceCard from "@/components/ServiceCard";

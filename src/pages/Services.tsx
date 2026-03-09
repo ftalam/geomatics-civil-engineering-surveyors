@@ -1,4 +1,4 @@
-import Layout from "@/components/Layout";
+import Layout from "@/components/Layout.jsx";
 import SectionHeader from "@/components/SectionHeader";
 import { Mountain, MapPinned, HardHat, Satellite, Plane, Globe, LayoutGrid, Trees, Building2, Wrench } from "lucide-react";
 
