@@ -824,34 +824,45 @@ const Geoshop = () => {
 
     setSendingOrder(true);
 
-    const orderItems = cart.map((item) => ({
-      product_id: item.product_id,
-      name: item.name,
-      category: item.category,
-      quantity: item.quantity,
-      price: item.price,
-      image: item.image,
-    }));
+    try {
+      // Ensure user profile exists
+      await supabase.from("profiles").upsert({
+        id: user.id,
+        email: user.email,
+        role: "user"
+      });
 
-    const { error } = await supabase.from("orders").insert([
-      {
-        user_id: user.id,
-        items: orderItems,
-        status: "pending",
-      },
-    ]);
+      // Create order
+      const orderItems = cart.map((item) => ({
+        product_id: item.product_id,
+        name: item.name,
+        category: item.category,
+        quantity: item.quantity,
+        price: item.price,
+        image: item.image,
+      }));
 
-    setSendingOrder(false);
+      const { error } = await supabase.from("orders").insert([
+        {
+          user_id: user.id,
+          items: orderItems,
+          status: "pending",
+        },
+      ]);
 
-    if (error) {
+      if (error) {
+        throw error;
+      }
+
+      setCart([]);
+      saveCart(user.id, []);
+      setCartOpen(false);
+      setOrderNotice("Order submitted. Waiting for admin approval.");
+    } catch (error) {
       alert(error.message);
-      return;
+    } finally {
+      setSendingOrder(false);
     }
-
-    setCart([]);
-    saveCart(user.id, []);
-    setCartOpen(false);
-    setOrderNotice("Order submitted. Waiting for admin approval.");
   };
 
   const openCart = () => {
