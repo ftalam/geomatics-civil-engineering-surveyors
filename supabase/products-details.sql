@@ -1,6 +1,9 @@
 -- Run this in Supabase SQL Editor.
 -- Purpose: allow Geoshop "View Details" modal to load Specifications, Resources, and multiple Images from DB.
 
+alter table public.orders
+  add column if not exists rejection_reason text;
+
 alter table public.products
   add column if not exists specifications jsonb,
   add column if not exists resources jsonb;

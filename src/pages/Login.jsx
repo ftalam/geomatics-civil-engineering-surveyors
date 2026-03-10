@@ -44,9 +44,6 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate();
-  const location = useLocation();
-
   const redirectPath = location.state?.from ?? "/geoshop";
 
   const handleLogin = async (event) => {

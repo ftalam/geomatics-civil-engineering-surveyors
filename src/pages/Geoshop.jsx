@@ -899,24 +899,32 @@ const Geoshop = () => {
                A GCES Ltd Company
               </Link>
             <div className="flex gap-3 mt-4">
-              <a
-                href={CATALOGUE_URL}
-                target="_blank"
-                rel="noreferrer"
-                className="bg-primary text-primary-foreground px-4 py-2 rounded-2xl"
-              >
-                View Catalogue
-              </a>
+              {CATALOGUE_URL && CATALOGUE_URL !== "geoshop-catalog" ? (
+                <>
+                  <a
+                    href={CATALOGUE_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="bg-primary text-primary-foreground px-4 py-2 rounded-2xl hover:bg-primary/90 transition-colors"
+                  >
+                    View Catalogue
+                  </a>
 
-              <a
-                href={toDownloadUrl(CATALOGUE_URL, "Geoshop Products Catalog.pdf")}
-                target="_blank"
-                rel="noreferrer"
-                download="Geoshop Products Catalog.pdf"
-                className="bg-primary text-primary-foreground px-5 py-2 rounded-2xl"
-              >
-                Download Catalogue
-              </a>
+                  <a
+                    href={toDownloadUrl(CATALOGUE_URL, "Geoshop Products Catalog.pdf")}
+                    target="_blank"
+                    rel="noreferrer"
+                    download="Geoshop Products Catalog.pdf"
+                    className="bg-primary text-primary-foreground px-5 py-2 rounded-2xl hover:bg-primary/90 transition-colors"
+                  >
+                    Download Catalogue
+                  </a>
+                </>
+              ) : (
+                <p className="text-sm text-muted-foreground">
+                  Catalogue not available - please contact admin to upload catalogue file
+                </p>
+              )}
             </div>
           </div>
 
