@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import logoImg from "@/assets/GCES.jpg";
 import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Instagram } from "lucide-react";
 
 const Footer = () => {
@@ -9,28 +10,29 @@ const Footer = () => {
           {/* Company Info */}
           <div>
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-11 h-10 rounded-lg bg-gradient-primary flex items-center justify-center">
-                <span className="font-display font-bold text-l text-primary-foreground">GCES</span>
-              </div>
-              <div>
-                <span className="font-display font-bold text-lg text-foreground">GEOMATICS</span>
-                <p className="text-xs text-muted-foreground -mt-1">Civil Engineering Surveyors Ltd.</p>
-              </div>
+         {/* Logo */}
+          <Link to="/" className="flex items-center gap-3">
+            <img
+              src={logoImg}
+              alt="Geomatics Civil Engineering Surveyors logo"
+              className="h-10 w-auto object-contain"
+            />
+          </Link>
             </div>
             <p className="text-muted-foreground text-sm mb-6">
               Delivering precision geomatics solutions since 2000. Your trusted partner for surveying excellence.
             </p>
             <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:bg-primary hover:text-primary-foreground transition-colors">
+              <a href="#" className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:bg-green-950 hover:text-primary-foreground transition-colors">
                 <Facebook className="w-5 h-5" />
               </a>
-              <a href="#" className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:bg-primary hover:text-primary-foreground transition-colors">
+              <a href="#" className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:bg-green-950 hover:text-primary-foreground transition-colors">
                 <Twitter className="w-5 h-5" />
               </a>
-              <a href="#" className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:bg-primary hover:text-primary-foreground transition-colors">
+              <a href="#" className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:bg-green-950 hover:text-primary-foreground transition-colors">
                 <Linkedin className="w-5 h-5" />
               </a>
-              <a href="#" className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:bg-primary hover:text-primary-foreground transition-colors">
+              <a href="#" className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:bg-green-950 hover:text-primary-foreground transition-colors">
                 <Instagram className="w-5 h-5" />
               </a>
             </div>
@@ -60,11 +62,9 @@ const Footer = () => {
               <div className="space-y-4">
                 {/* News Item */}
                 <div className="flex gap-3">
-                  <img
-                    src="/assets/GCES-Logo.jpg"
-                    alt="GCES Ltd."
-                    className="w-18 h-18 object-cover rounded-md"
-                  />
+                 <div className="w-12 h-10 rounded-lg bg-gradient-primary flex items-center justify-center">
+                 <span className="font-display font-bold text-l text-primary-foreground">GCES</span>
+                </div>
 
                   <div>
                     <p className="text-sm font-medium text-foreground">
@@ -79,9 +79,9 @@ const Footer = () => {
           {/* News Item */}
             <div className="flex gap-3">
               <img
-                src="@/assets/geoshop-layout.png"
+                src="src/assets/g-logo.png"
                 alt="Geoshop Launch"
-                className="w-18 h-18 object-cover rounded-md"
+                className="w-12 h-12 object-cover rounded-md"
               />
 
               <div>
@@ -89,7 +89,7 @@ const Footer = () => {
                   Geoshop
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  Advancing infrastructure planning through precise surveying methods.
+                  Providing high-quality surveying instruments.
                 </p>
               </div>
             </div>
@@ -101,20 +101,20 @@ const Footer = () => {
             <h4 className="font-display font-semibold text-foreground mb-6">Contact Us</h4>
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                <MapPin className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
                 <span className="text-muted-foreground text-sm">
                   Phileo Arcade, Ruiru. <br/>  P.O. BOX. 7726-00100, NAIROBI KENYA
                 </span>
               </li>
               <li className="flex items-center gap-3">
-                <Phone className="w-5 h-5 text-primary flex-shrink-0" />
-                <a href="tel:+254712345678" className="text-muted-foreground hover:text-primary transition-colors text-sm">
+                <Phone className="w-5 h-5 text-green-500 flex-shrink-0" />
+                <a href="tel:+254712345678" className="text-muted-foreground hover:text-green-500 transition-colors text-sm">
                   +254 712 345 678
                 </a>
               </li>
               <li className="flex items-center gap-3">
-                <Mail className="w-5 h-5 text-primary flex-shrink-0" />
-                <a href="mailto:info@geomatics.co.ke" className="text-muted-foreground hover:text-primary transition-colors text-sm">
+                <Mail className="w-5 h-5 text-green-500 flex-shrink-0" />
+                <a href="mailto:info@geomatics.co.ke" className="text-muted-foreground hover:text-green-500 transition-colors text-sm">
                   info@geomatics.co.ke
                 </a>
               </li>

@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { LogIn, LogOut, Search, ShoppingCart, Star } from "lucide-react";
+import { LogIn, LogOut, Search, ShoppingCart, Star, Phone, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import CartDrawer from "@/components/CartDrawer";
 import { useAuth } from "@/context/AuthContext";
@@ -888,6 +888,13 @@ const Geoshop = () => {
       <section className="py-6 bg-gradient-card">
         <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between gap-6 items-center">
           <div>
+            <div className="flex gap-6">
+              <Link to="/geoshop/about" className="text-muted-foreground hover:text-primary transition-colors text-sm">
+                About Us
+              </Link>   
+             </div>
+            <div className="border-t border-border mt-8 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+            </div>
             <h1 className="text-4xl font-bold mb-3">GEOSHOP</h1>
               <p className="text-muted-foreground">
               Premium surveying instruments and accessories provider.
@@ -897,8 +904,8 @@ const Geoshop = () => {
                 className="bg-muted border px-5 py-1 rounded-2xl hover:bg-muted/80 transition-colors"
               >
                A GCES Ltd Company
-              </Link>
-            <div className="flex gap-3 mt-4">
+              </Link
+>            <div className="flex gap-3 mt-4">
               {CATALOGUE_URL && CATALOGUE_URL !== "geoshop-catalog" ? (
                 <>
                   <a
@@ -1321,6 +1328,53 @@ const Geoshop = () => {
         onRemove={handleRemoveFromCart}
         onCheckout={handleCheckout}
       />
+
+      {/* Footer */}
+      <footer className="bg-card border-t">
+        <div className="container mx-auto px-4 py-6">
+          <div className="grid md:grid-cols-2 gap-8">
+            <div>
+              <h3 className="text-2xl text-primary mb-4"> <b>GET IN TOUCH</b> <br/> WITH US </h3>
+              <div className="space-y-3 grid grid-cols-2">
+                <div className="flex items-center gap-3">
+                  <Phone className="w-5 h-5 text-primary flex-shrink-0" />
+                  <div>
+                    <p className="text-sm text-muted-foreground">+254 768922891</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <Mail className="w-5 h-5 text-primary flex-shrink-0" />
+                  <div>
+                    <p className="text-sm text-muted-foreground">sales@geomatics.co.ke</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-xl font-bold mb-4">Quick Links</h3>
+              <div className=" grid grid-cols-2 gap-2">
+                <Link to="/geoshop" className="block text-muted-foreground hover:text-primary transition-colors">
+                  Shop
+                </Link>
+                <Link to="/geoshop/about" className="block text-muted-foreground hover:text-primary transition-colors">
+                  About Us
+                </Link>
+                <Link to="/contact" className="block text-muted-foreground hover:text-primary transition-colors">
+                  Contact
+                </Link>
+                <Link to="/services" className="block text-muted-foreground hover:text-primary transition-colors">
+                  Services
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+         <div>
+             <p className="text-sm text-center text-muted-foreground"> © 2024 Geoshop. All rights reserved. </p>
+         </div>
+      </footer>
     </div>
   );
 };

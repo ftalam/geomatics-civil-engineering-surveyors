@@ -14,6 +14,7 @@ import Products from "./pages/Products";
 import Geoshop from "./pages/Geoshop";
 import Support from "./pages/Support";
 import About from "./pages/About";
+import AboutUs from "./pages/AboutUs";
 import Contact from "./pages/Contact";
 import Services from "./pages/Services";
 import Privacy from "./pages/Privacy";
@@ -46,6 +47,7 @@ const App = () => (
 
             {/* GEOSHOP Application */}
             <Route path="/geoshop" element={<Geoshop />} />
+            <Route path="/geoshop/about" element={<AboutUs />} />
             <Route path="/geoshop/login" element={<Login />} />
             <Route path="/geoshop/register" element={<Register />} />
 
