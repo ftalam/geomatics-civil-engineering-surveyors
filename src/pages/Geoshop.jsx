@@ -3,8 +3,10 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { LogIn, LogOut, Search, ShoppingCart, Star, Phone, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import CartDrawer from "@/components/CartDrawer";
 import { useAuth } from "@/context/AuthContext";
+import { useOrderHistory } from "@/hooks/useOrderHistory";
 import { supabase } from "@/lib/supabaseClient";
 import {
   addItemToCart,
@@ -617,6 +619,16 @@ const Geoshop = () => {
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [sendingOrder, setSendingOrder] = useState(false);
   const [orderNotice, setOrderNotice] = useState("");
+  const [pendingOrdersCount, setPendingOrdersCount] = useState(0);
+  const [trackingOrderId, setTrackingOrderId] = useState("");
+  const [trackingResult, setTrackingResult] = useState("");
+
+  const {
+    orders: orderHistory,
+    loading: orderHistoryLoading,
+    error: orderHistoryError,
+    refresh: refreshOrderHistory,
+  } = useOrderHistory(user?.id);
 
   const fetchProducts = useCallback(async () => {
     setLoadingProducts(true);
@@ -636,10 +648,43 @@ const Geoshop = () => {
     setLoadingProducts(false);
   }, []);
 
+  const fetchPendingOrdersCount = useCallback(async () => {
+    if (role !== "admin") return;
+
+    const { count, error } = await supabase
+      .from("orders")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "pending");
+
+    if (!error) {
+      setPendingOrdersCount(count || 0);
+    }
+  }, [role]);
+
   useEffect(() => {
     if (authLoading) return;
     fetchProducts();
   }, [authLoading, user?.id, fetchProducts]);
+
+  useEffect(() => {
+    if (authLoading || role !== "admin") return;
+    fetchPendingOrdersCount();
+
+    const ordersChannel = supabase
+      .channel("geoshop-orders-realtime")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "orders" },
+        () => {
+          fetchPendingOrdersCount();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(ordersChannel);
+    };
+  }, [authLoading, role, fetchPendingOrdersCount]);
 
   useEffect(() => {
     const channel = supabase
@@ -678,13 +723,14 @@ const Geoshop = () => {
     const fetchLatestOrderStatus = async () => {
       const { data, error } = await supabase
         .from("orders")
-        .select("id, status")
+        .select("id, order_number, status")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false })
         .limit(1);
 
       if (!error && data?.length && data[0].status !== "pending") {
-        setOrderNotice(`Order ${data[0].id} status: ${data[0].status}.`);
+        const label = data[0].order_number ? `#${data[0].order_number}` : data[0].id;
+        setOrderNotice(`Order ${label} status: ${data[0].status}.`);
       }
     };
 
@@ -705,7 +751,8 @@ const Geoshop = () => {
           const previousStatus = payload.old?.status;
 
           if (nextStatus && nextStatus !== previousStatus) {
-            setOrderNotice(`Order ${payload.new.id} status: ${nextStatus}.`);
+            const label = payload.new?.order_number ? `#${payload.new.order_number}` : payload.new.id;
+            setOrderNotice(`Order ${label} status: ${nextStatus}.`);
           }
         },
       )
@@ -798,6 +845,9 @@ const Geoshop = () => {
     }
 
     setCart((prev) => addItemToCart(prev, product));
+    toast.success(`${product.name} Added to cart!`, {
+      duration: 2000,
+    });
   };
 
   const changeQuantity = (productId, delta) => {
@@ -829,7 +879,6 @@ const Geoshop = () => {
       await supabase.from("profiles").upsert({
         id: user.id,
         email: user.email,
-        role: "user"
       });
 
       // Create order
@@ -842,13 +891,16 @@ const Geoshop = () => {
         image: item.image,
       }));
 
-      const { error } = await supabase.from("orders").insert([
+      const { data: inserted, error } = await supabase
+        .from("orders")
+        .insert([
         {
           user_id: user.id,
           items: orderItems,
           status: "pending",
         },
-      ]);
+      ])
+        .select("id, order_number");
 
       if (error) {
         throw error;
@@ -858,6 +910,11 @@ const Geoshop = () => {
       saveCart(user.id, []);
       setCartOpen(false);
       setOrderNotice("Order submitted. Waiting for admin approval.");
+      if (inserted?.[0]?.id) {
+        const label = inserted[0].order_number ? `#${inserted[0].order_number}` : inserted[0].id;
+        setTrackingResult(`Order ${label} created and pending.`);
+      }
+      await refreshOrderHistory();
     } catch (error) {
       alert(error.message);
     } finally {
@@ -873,6 +930,59 @@ const Geoshop = () => {
     setCartOpen(true);
   };
 
+  const handleTrackOrder = async () => {
+    const rawOrderId = trackingOrderId.trim();
+
+    if (!rawOrderId) {
+      setTrackingResult("Please enter order ID to track.");
+      return;
+    }
+
+    const isNumericId = /^\d+$/.test(rawOrderId);
+    const numericValue = isNumericId ? Number(rawOrderId) : null;
+
+    const baseSelect = "id, order_number, status, created_at, items";
+
+    let result = null;
+
+    if (isNumericId) {
+      result = await supabase
+        .from("orders")
+        .select(baseSelect)
+        .eq("order_number", numericValue);
+
+      if (!result.error && !result.data?.length) {
+        result = await supabase
+          .from("orders")
+          .select(baseSelect)
+          .eq("id", numericValue);
+      }
+    } else {
+      result = await supabase
+        .from("orders")
+        .select(baseSelect)
+        .eq("id", rawOrderId);
+    }
+
+    const { data, error } = result;
+
+    if (error) {
+      setTrackingResult("Could not track order. Please try again.");
+      return;
+    }
+
+    if (!data?.length) {
+      setTrackingResult("No order found for that ID.");
+      return;
+    }
+
+    const order = data[0];
+    const orderLabel = order.order_number ? `#${order.order_number}` : order.id;
+    setTrackingResult(
+      `Order ${orderLabel}: ${order.status} (created ${new Date(order.created_at).toLocaleString()})`,
+    );
+  };
+
   const openProductDetails = (product) => {
     setSelectedProduct(product);
     setDetailsTab(DETAILS_TAB_SPECIFICATIONS);
@@ -885,6 +995,14 @@ const Geoshop = () => {
 
   return (
     <div className="products-theme">
+      <div id="flash-container" className="fixed top-20 right-4 z-50 space-y-3 max-w-sm w-full pointer-events-none">
+        {orderNotice && (
+          <div className="flash-notification bg-green-50 border border-green-200 text-green-800 px-3 py-2 rounded-lg shadow-md animate-slide-in">
+            {orderNotice}
+          </div>
+        )}
+      </div>
+
       <section className="py-6 bg-gradient-card">
         <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between gap-6 items-center">
           <div>
@@ -904,8 +1022,8 @@ const Geoshop = () => {
                 className="bg-muted border px-5 py-1 rounded-2xl hover:bg-muted/80 transition-colors"
               >
                A GCES Ltd Company
-              </Link
->            <div className="flex gap-3 mt-4">
+              </Link>
+            <div className="flex gap-3 mt-4">
               {CATALOGUE_URL && CATALOGUE_URL !== "geoshop-catalog" ? (
                 <>
                   <a
@@ -950,8 +1068,15 @@ const Geoshop = () => {
                 <p>{user.email}</p>
                 <div className="flex justify-end gap-2 mt-2">
                   {role === "admin" && (
-                    <Button variant="outline" size="sm" asChild>
-                      <Link to="/geoshop/admin">Admin Dashboard</Link>
+                    <Button variant="outline" size="sm" asChild className="relative">
+                      <Link to="/geoshop/admin">
+                        Admin Dashboard
+                        {pendingOrdersCount > 0 && (
+                          <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                            {pendingOrdersCount > 9 ? '9+' : pendingOrdersCount}
+                          </span>
+                        )}
+                      </Link>
                     </Button>
                   )}
                   <Button
@@ -1327,6 +1452,14 @@ const Geoshop = () => {
         onDecrease={(productId) => changeQuantity(productId, -1)}
         onRemove={handleRemoveFromCart}
         onCheckout={handleCheckout}
+        orderHistory={orderHistory}
+        orderHistoryLoading={orderHistoryLoading}
+        orderHistoryError={orderHistoryError}
+        onRefreshOrderHistory={refreshOrderHistory}
+        trackingOrderId={trackingOrderId}
+        setTrackingOrderId={setTrackingOrderId}
+        trackingResult={trackingResult}
+        onTrackOrder={handleTrackOrder}
       />
 
       {/* Footer */}

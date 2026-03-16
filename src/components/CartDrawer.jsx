@@ -1,4 +1,21 @@
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Link } from "react-router-dom";
+
+const computeOrderTotal = (order) => {
+  const items = Array.isArray(order?.items) ? order.items : [];
+  return items.reduce(
+    (sum, item) => sum + (item?.price || 0) * (item?.quantity || 1),
+    0,
+  );
+};
 
 export default function CartDrawer({
   open,
@@ -10,72 +27,282 @@ export default function CartDrawer({
   onDecrease,
   onRemove,
   onCheckout,
+  orderHistory,
+  orderHistoryLoading,
+  orderHistoryError,
+  onRefreshOrderHistory,
+  trackingOrderId,
+  setTrackingOrderId,
+  trackingResult,
+  onTrackOrder,
 }) {
   if (!open) return null;
 
+  const subtotal = (Array.isArray(cart) ? cart : []).reduce(
+    (sum, item) => sum + (item.price || 0) * (item.quantity || 1),
+    0,
+  );
+
+  const recentOrders = Array.isArray(orderHistory) ? orderHistory.slice(0, 6) : [];
+
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex justify-end">
-      <div className="w-full max-w-md bg-card h-full p-6 overflow-y-auto">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold">Your Cart ({itemCount})</h2>
-          <button onClick={onClose} className="text-sm text-muted-foreground">
-            Close x
-          </button>
+    <div className="fixed inset-0 bg-black/50 z-50 flex justify-center items-start overflow-y-auto p-4">
+      <div className="max-w-3xl w-full bg-white rounded-2xl p-4 md:p-6 shadow-2xl relative">
+        <div className="mb-8">
+          <Link
+            to="/geoshop"
+            onClick={onClose}
+            className="inline-flex items-center gap-2 text-gray-600 hover:text-[#99ED47] mb-4 transition-colors"
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            <span className="text-sm font-semibold">Continue Shopping</span>
+          </Link>
+
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-4xl font-black text-gray-900">Shopping Cart</h1>
+              <p className="text-sm text-gray-600 mt-1">
+                <span className="font-semibold">{itemCount}</span> items in your cart
+              </p>
+            </div>
+
+            <button
+              onClick={onClose}
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 rounded-lg transition-all duration-200"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+              Close
+            </button>
+          </div>
         </div>
 
-        {cart.length === 0 && <p className="text-muted-foreground">Cart is empty.</p>}
+        <div data-cart-page-target="cartContent">
+          <div className="space-y-4 mb-6">
+            {(Array.isArray(cart) ? cart : []).map((item) => (
+              <div
+                key={item.product_id}
+                className="bg-white rounded-2xl p-4 border-2 border-white/60 shadow-[0_4px_16px_rgba(0,0,0,0.08)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.12)] transition-shadow"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="w-20 h-20 bg-gradient-to-br from-pink-100 to-red-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <span className="text-3xl">📦</span>
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-bold text-gray-900 text-lg">{item.name}</h3>
+                    <p className="text-sm text-gray-600">{item.variant || item.category || "Item"}</p>
+                    <p className="text-lg font-bold text-[#F23045] mt-2">
+                      KES {((item.price || 0) * (item.quantity || 1)).toFixed(2)}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => onRemove(item.product_id)}
+                    className="text-gray-400 hover:text-red-500 transition-colors"
+                    aria-label="Remove item"
+                  >
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
 
-        <div className="space-y-4">
-          {cart.map((item) => (
-            <div key={item.product_id} className="border rounded-xl p-3">
-              <div className="flex gap-3">
-                {item.image ? (
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="w-14 h-14 object-cover rounded-lg"
-                  />
-                ) : (
-                  <div className="w-14 h-14 bg-muted rounded-lg" />
-                )}
-
-                <div className="flex-1">
-                  <p className="font-semibold">{item.name}</p>
-                  <p className="text-xs text-muted-foreground">{item.category}</p>
-
-                  <div className="flex items-center gap-2 mt-2">
+                <div className="flex items-center justify-between mt-4">
+                  <div className="inline-flex items-center gap-3 bg-gray-100 rounded-lg px-4 py-2">
                     <button
-                      className="border rounded px-2"
                       onClick={() => onDecrease(item.product_id)}
+                      className="text-gray-600 hover:text-[#99ED47] font-bold text-lg transition-colors"
+                      aria-label="Decrease quantity"
                     >
-                      -
+                      −
                     </button>
-                    <span className="min-w-5 text-center">{item.quantity}</span>
+                    <span className="font-semibold min-w-[2rem] text-center">{item.quantity}</span>
                     <button
-                      className="border rounded px-2"
                       onClick={() => onIncrease(item.product_id)}
+                      className="text-gray-600 hover:text-[#99ED47] font-bold text-lg transition-colors"
+                      aria-label="Increase quantity"
                     >
                       +
                     </button>
-
-                    <button
-                      className="text-red-500 text-sm ml-auto"
-                      onClick={() => onRemove(item.product_id)}
-                    >
-                      Remove
-                    </button>
                   </div>
+                  <span className="text-xl font-bold text-gray-900">
+                    KES {(item.price || 0) * (item.quantity || 1)}
+                  </span>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
 
-        {cart.length > 0 && (
-          <Button className="w-full mt-6" onClick={onCheckout} disabled={isSubmitting}>
-            {isSubmitting ? "Sending order..." : "Send Order"}
-          </Button>
-        )}
+          <div className="bg-white rounded-2xl p-6 border-2 border-[#99ED47]/30 shadow-[0_8px_24px_rgba(153,237,71,0.2)]">
+            <h2 className="text-xl font-bold text-gray-900 mb-4">Order Summary</h2>
+            <div className="space-y-3 mb-6">
+              <div className="flex justify-between text-gray-600">
+                <span>Subtotal</span>
+                <span className="font-semibold">KES {subtotal.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between text-gray-600">
+                <span>Delivery</span>
+                <span className="font-semibold text-green-600 text-xs">Will be communicated</span>
+              </div>
+              <div className="border-t-2 border-gray-200 pt-3 flex justify-between">
+                <span className="text-xl font-bold text-gray-900">Total</span>
+                <span className="text-2xl font-black text-[#F23045]">KES {subtotal.toFixed(2)}</span>
+              </div>
+            </div>
+
+            <button
+              onClick={onCheckout}
+              disabled={isSubmitting}
+              className="w-full bg-[#99ED47] hover:bg-[#8ddc3a] text-gray-900 font-bold py-4 rounded-full shadow-[0_4px_16px_rgba(153,237,71,0.4)] hover:shadow-[0_8px_24px_rgba(153,237,71,0.5)] hover:scale-105 transition-all duration-200 text-lg"
+            >
+              {isSubmitting ? "Sending order..." : "Send Order →"}
+            </button>
+            <p className="text-center text-xs text-gray-500 mt-4">
+              Your order is submitted to our admin for confirmation and processing.
+            </p>
+            <p className="text-center text-xs text-gray-500 mt-2">
+              🔒 Secure order • Delivery across Nairobi available
+            </p>
+          </div>
+
+          <div className="mt-3">
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="outline" className="w-full">
+                  My Orders
+                </Button>
+              </DialogTrigger>
+            <DialogContent className="max-w-2xl">
+                <div className="flex items-start justify-between gap-3">
+                  <DialogHeader>
+                    <DialogTitle>My Orders</DialogTitle>
+                  </DialogHeader>
+
+                  {onRefreshOrderHistory && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => onRefreshOrderHistory()}
+                      disabled={orderHistoryLoading}
+                    >
+                      Refresh
+                    </Button>
+                  )}
+                </div>
+
+                {orderHistoryError && (
+                  <div className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+                    {orderHistoryError}
+                  </div>
+                )}
+
+                {orderHistoryLoading && (
+                  <p className="text-sm text-muted-foreground">Loading orders...</p>
+                )}
+
+                {!orderHistoryLoading && !recentOrders.length && (
+                  <p className="text-sm text-muted-foreground">No orders yet.</p>
+                )}
+
+                <div className="space-y-3">
+                  {recentOrders.map((order) => (
+                    <div
+                      key={order.id}
+                      className="rounded-xl border bg-white p-3 flex items-center justify-between gap-3"
+                    >
+                      <div className="min-w-0">
+                        <p className="text-sm text-muted-foreground">
+                          {order.order_number ? "Order #" : "Order ID"}
+                        </p>
+                        <p className="font-semibold truncate">
+                          {order.order_number ? `#${order.order_number}` : order.id}
+                        </p>
+                        {order.order_number && (
+                          <p className="text-xs text-muted-foreground">
+                            Ref: {order.id}
+                          </p>
+                        )}
+                        <p className="text-xs text-muted-foreground">
+                          {order.created_at ? new Date(order.created_at).toLocaleString() : "—"}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-xs text-muted-foreground">Status</p>
+                        <p className="text-sm font-semibold">{order.status || "—"}</p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          KES {computeOrderTotal(order).toFixed(2)}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex items-center justify-end gap-2 pt-2">
+                  <DialogClose asChild>
+                    <Link
+                      to="/geoshop/orders"
+                      onClick={onClose}
+                      className="inline-flex items-center justify-center rounded-md border px-4 py-2 text-sm font-semibold hover:bg-muted transition-colors"
+                    >
+                      View all
+                    </Link>
+                  </DialogClose>
+                  <DialogClose asChild>
+                    <button className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary/90 transition-colors">
+                      Close
+                    </button>
+                  </DialogClose>
+                </div>
+              </DialogContent>
+            </Dialog>
+          </div>
+
+          <div className="bg-white rounded-2xl p-3 border border-slate-200 mt-3 text-xs">
+            <div className="flex items-center justify-between gap-2">
+              <div>
+                <p className="font-semibold text-slate-700">Track Order</p>
+                <p className="text-slate-500">Enter order # or reference ID and click track.</p>
+              </div>
+            </div>
+            <div className="mt-2 flex gap-2">
+              <input
+                type="text"
+                value={trackingOrderId}
+                onChange={(e) => setTrackingOrderId(e.target.value)}
+                placeholder="Order # or ID"
+                className="border rounded-md px-2 py-1 text-xs w-full"
+              />
+              <button
+                onClick={onTrackOrder}
+                className="bg-primary text-white rounded-md px-2 py-1 text-xs font-semibold"
+              >
+                Track
+              </button>
+            </div>
+            {trackingResult && <p className="text-xs text-slate-600 mt-2">{trackingResult}</p>}
+          </div>
+
+          {Array.isArray(cart) && cart.length === 0 && (
+            <div className="bg-white rounded-2xl p-12 text-center border-2 border-gray-200 mt-4">
+              <div className="w-32 h-32 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-6">
+                <svg className="w-16 h-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                </svg>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">Your cart is empty</h3>
+              <p className="text-gray-600 mb-6">Add equipment to get started!</p>
+              <Link
+                to="/geoshop"
+                onClick={onClose}
+                className="inline-block bg-[#f97316] hover:bg-[#db5621ec] text-gray-900 font-bold px-8 py-3 rounded-full transition-all"
+              >
+                Browse Products
+              </Link>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

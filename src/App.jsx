@@ -21,6 +21,7 @@ import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import MyOrders from "./pages/MyOrders";
 import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 
@@ -50,6 +51,14 @@ const App = () => (
             <Route path="/geoshop/about" element={<AboutUs />} />
             <Route path="/geoshop/login" element={<Login />} />
             <Route path="/geoshop/register" element={<Register />} />
+            <Route
+              path="/geoshop/orders"
+              element={
+                <ProtectedRoute>
+                  <MyOrders />
+                </ProtectedRoute>
+              }
+            />
 
             <Route
               path="/geoshop/checkout"

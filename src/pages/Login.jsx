@@ -40,6 +40,8 @@ const FacebookIcon = () => (
 );
 
 export default function Login() {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);

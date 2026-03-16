@@ -234,31 +234,26 @@ const Index = () => {
       </section>
       
        {/* Clients Section*/}
-      <section className="py-2 border-y border-border bg-card/50 w-full sticky bottom-0 z-10">
+      <section className="py-2 border-y border-border bg-card/50 w-full sticky top-0 z-10 overflow-hidden">
         <div className="w-full">
           <p className="text-center text-muted-foreground text-L mb-3">
             Our Clients
           </p>
-          <div className="w-full h-full flex items-center">
-            <motion.div
-           key={clientSlideIndex}
-              initial={{  x: 40 }}
-              animate={{  x: 0 }}
-              transition={{ duration: 0.4 }}
-              className="w-full flex items-center justify-between gap-2 px-12"
-            >
-              {visibleClients.map((client) => (
-                <div
-                  key={client.name}
-                  className="h-20 flex items-center opacity-90 hover:opacity-100 transition-all"
-                >
-                  <img
-                    src={client.logo}
-                    alt={client.name}
-                    className="h-full w-full object-contain"
-                  />
+          <div className="w-full flex items-center overflow-hidden">
+            <motion.div key={clientSlideIndex} 
+              initial={{ x: 40 }} 
+              animate={{ x: 0 }} 
+              transition={{duration: 0.4}}
+              className="w-full flex items-center justify-between gap-2 px-12" > 
+              {visibleClients.map((client) => ( 
+                <div key={client.name} 
+                  className=" h-20 flex items-center opacity-90 hover:opacity-100 transition-all" >
+                  <img 
+                    src={client.logo} 
+                    alt={client.name} 
+                    className="h-full w-full object-contain" /> 
                 </div>
-              ))}
+              ))} 
             </motion.div>
           </div>
         </div>

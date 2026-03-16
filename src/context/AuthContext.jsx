@@ -10,6 +10,21 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const hydrationVersionRef = useRef(0);
 
+  const ensureProfile = async (nextUser) => {
+    if (!nextUser?.id) return;
+
+    const payload = { id: nextUser.id };
+    if (nextUser.email) payload.email = nextUser.email;
+
+    const { error } = await supabase.from("profiles").upsert(payload, {
+      onConflict: "id",
+    });
+
+    if (error) {
+      console.warn("Failed to ensure profile row:", error);
+    }
+  };
+
   const fetchRole = async (userId) => {
     const { data, error } = await supabase
       .from("profiles")
@@ -32,6 +47,7 @@ export function AuthProvider({ children }) {
       setUser(nextUser);
 
       if (nextUser) {
+        await ensureProfile(nextUser);
         const nextRole = await fetchRole(nextUser.id);
         if (!active || hydrationVersion !== hydrationVersionRef.current) return;
         setRole(nextRole);
