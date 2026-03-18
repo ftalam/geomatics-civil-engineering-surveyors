@@ -213,24 +213,25 @@ export default function CartDrawer({
                       className="rounded-xl border bg-white p-3 flex items-center justify-between gap-3"
                     >
                       <div className="min-w-0">
-                        <p className="text-sm text-muted-foreground">
-                          {order.order_number ? "Order #" : "Order ID"}
-                        </p>
-                        <p className="font-semibold truncate">
-                          {order.order_number ? `#${order.order_number}` : order.id}
+    
+                        <p className="font-semibold truncate text-gray-600">
+                          Order {order.order_number ? `#${order.order_number}` : order.id}
                         </p>
                         {order.order_number && (
                           <p className="text-xs text-muted-foreground">
                             Ref: {order.id}
                           </p>
                         )}
+                       
                         <p className="text-xs text-muted-foreground">
                           {order.created_at ? new Date(order.created_at).toLocaleString() : "—"}
                         </p>
                       </div>
                       <div className="text-right">
                         <p className="text-xs text-muted-foreground">Status</p>
-                        <p className="text-sm font-semibold">{order.status || "—"}</p>
+                        <p className="text-sm font-semibold text-gray-600">
+                          {order.status === "approved" ? "approved" : "pending"}
+                        </p>
                         <p className="text-xs text-muted-foreground mt-1">
                           KES {computeOrderTotal(order).toFixed(2)}
                         </p>

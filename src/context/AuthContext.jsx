@@ -14,14 +14,38 @@ export function AuthProvider({ children }) {
     if (!nextUser?.id) return;
 
     const payload = { id: nextUser.id };
-    if (nextUser.email) payload.email = nextUser.email;
 
-    const { error } = await supabase.from("profiles").upsert(payload, {
-      onConflict: "id",
-    });
+    const emailFromAuth = nextUser.email || nextUser.user_metadata?.email || undefined;
+    const phoneFromAuth = nextUser.phone || nextUser.user_metadata?.phone || undefined;
+
+    if (emailFromAuth) payload.email = emailFromAuth;
+    if (phoneFromAuth) payload.phone = phoneFromAuth;
+
+    const { error } = await withSupabaseRetry(() =>
+      supabase.from("profiles").upsert(payload, {
+        onConflict: "id",
+      }),
+    );
 
     if (error) {
-      console.warn("Failed to ensure profile row:", error);
+      const message = (error.message || "").toLowerCase();
+      console.warn("Failed to ensure profile row:", {
+        message: error.message,
+        code: error.code,
+        details: error.details,
+        hint: error.hint,
+        status: error.status,
+      });
+
+      if (message.includes("row-level security") || message.includes("rls")) {
+        console.warn(
+          "profiles upsert blocked by RLS. Ensure RLS policies exist for public.profiles (see supabase/reconcile-orders-profiles.sql).",
+        );
+      } else if (message.includes("does not exist") || message.includes("column")) {
+        console.warn(
+          "profiles table/columns may be missing. Ensure public.profiles exists and has (id, email, phone) (see supabase/reconcile-orders-profiles.sql).",
+        );
+      }
     }
   };
 

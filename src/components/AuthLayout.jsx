@@ -4,7 +4,7 @@ export default function AuthLayout({ title, subtitle, children, footer }) {
   const isLogin = title.toLowerCase().includes("login");
 
   return (
-    <div className="min-h-50vh bg-slate-100 px-4 py-4">
+    <div className="max-h-screen bg-slate-100 px-4 py-4">
       <div className="mx-auto flex min-h-[calc(100vh-6rem)] max-w-6xl items-center">
         <div className="w-full overflow-hidden rounded-3xl bg-white shadow-lg lg:flex">
           <div className="relative w-full p-8 md:p-10 lg:w-1/2">

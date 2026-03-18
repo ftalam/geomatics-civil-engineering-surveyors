@@ -1,39 +1,119 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Eye, EyeOff } from "lucide-react";
 import AuthLayout from "@/components/AuthLayout";
 import { supabase } from "../lib/supabaseClient";
 import { withSupabaseRetry } from "@/lib/supabaseRetry";
 
 export default function Register() {
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [otp, setOtp] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+  const [step, setStep] = useState("request_otp"); // request_otp | verify_otp
   const navigate = useNavigate();
 
-  const handleRegister = async (event) => {
-    event.preventDefault();
-    setSubmitting(true);
-
-    const { error } = await withSupabaseRetry(() =>
-      supabase.auth.signUp({ email, password }),
-    );
-    setSubmitting(false);
-
-    if (!error) {
-      alert("Registration successful. Check your email to confirm.");
-      navigate("/geoshop/login");
+  const handleResendEmailOtp = async () => {
+    if (!email.trim()) {
+      alert("Email is required.");
       return;
     }
 
-    alert(error.message);
+    setSubmitting(true);
+    const { error } = await withSupabaseRetry(() =>
+      supabase.auth.resend({
+        type: "signup",
+        email,
+      }),
+    );
+    setSubmitting(false);
+
+    if (error) {
+      alert(error.message);
+      return;
+    }
+
+    alert("OTP resent to your email.");
+  };
+
+  const handleRegister = async (event) => {
+    event.preventDefault();
+
+    if (!email.trim() || !password.trim() || !phone.trim()) {
+      alert("Email, phone, and password are required.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      alert("Passwords do not match.");
+      return;
+    }
+
+    setSubmitting(true);
+
+    const { data: signUpData, error: signUpError } = await withSupabaseRetry(() =>
+      supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            phone,
+          },
+        },
+      }),
+    );
+
+    if (signUpError) {
+      setSubmitting(false);
+      if ((signUpError.message || "").toLowerCase().includes("database error saving new user")) {
+        alert(
+          "Signup failed due to a database trigger/policy issue (commonly profiles auto-create). Check your Supabase SQL setup and run supabase/reconcile-orders-profiles.sql in the same project as your VITE_SUPABASE_URL.",
+        );
+        return;
+      }
+
+      alert(signUpError.message);
+      return;
+    }
+
+    setSubmitting(false);
+    alert("OTP sent to your email. Enter it to verify your account.");
+    setStep("verify_otp");
+  };
+
+  const handleVerifyOtp = async (event) => {
+    event.preventDefault();
+    setSubmitting(true);
+
+    const { data, error } = await withSupabaseRetry(() =>
+      supabase.auth.verifyOtp({
+        email,
+        token: otp,
+        type: "signup",
+      }),
+    );
+
+    setSubmitting(false);
+
+    if (error) {
+      alert(error.message);
+      return;
+    }
+
+    if (data?.session) {
+      navigate("/geoshop", { replace: true });
+      return;
+    }
+
+    alert("Verification succeeded, but no session was created. Try logging in.");
+    navigate("/geoshop/login");
   };
 
   return (
     <AuthLayout
       title="Create Account"
-      subtitle="Create your geoshop account"
+      subtitle="Verify your email to create your geoshop account"
       footer={
         <p>
           <span className="text-gray-500">Already have an account? </span>
@@ -46,49 +126,122 @@ export default function Register() {
         </p>
       }
     >
-      <form onSubmit={handleRegister} className="space-y-5">
-        <div>
-          <label className="mb-1 block text-sm text-gray-500">Email</label>
-          <input
-            className="h-12 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 text-base text-gray-800 placeholder:text-gray-500 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
-            placeholder="your.email@example.com"
-            type="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            required
-          />
-        </div>
-
-        <div className="relative">
-          <label className="mb-1 block text-sm text-gray-500">Password</label>
-          <div className="relative">
+      {step === "request_otp" ? (
+        <form onSubmit={handleRegister} className="space-y-5">
+          <div>
+            <label className="mb-1 block text-sm text-gray-500">Phone number</label>
             <input
-              className="h-12 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 pr-10 text-base text-gray-800 placeholder:text-gray-500 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
-              placeholder="Create a strong password"
-              type={showPassword ? "text" : "password"}
+              className="h-12 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 text-base text-gray-800 placeholder:text-gray-500 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
+              placeholder="+254712345678"
+              type="tel"
+              value={phone}
+              onChange={(event) => setPhone(event.target.value)}
+              required
+            />
+            <p className="mt-1 text-xs text-gray-500">
+              Use international format (example: +254712345678).
+            </p>
+          </div>
+
+          <div>
+            <label className="mb-1 block text-sm text-gray-500">Email</label>
+            <input
+              className="h-12 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 text-base text-gray-800 placeholder:text-gray-500 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
+              placeholder="your.email@example.com"
+              type="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              required
+            />
+          </div>
+
+          <div>
+            <label className="mb-1 block text-sm text-gray-500">Password</label>
+            <input
+              className="h-12 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 text-base text-gray-800 placeholder:text-gray-500 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
+              placeholder="Create a password"
+              type="password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               required
             />
-            <button
-              type="button"
-              onClick={() => setShowPassword((prev) => !prev)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-              aria-label={showPassword ? "Hide password" : "Show password"}
-            >
-              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-            </button>
           </div>
-        </div>
 
-        <button
-          type="submit"
-          className="h-12 w-full rounded-xl bg-cyan-600 px-4 py-2 font-medium text-white transition-colors hover:bg-cyan-700 disabled:cursor-not-allowed disabled:opacity-60"
-          disabled={submitting}
-        >
-          {submitting ? "Creating Account..." : "Create account"}
-        </button>
-      </form>
+          <div>
+            <label className="mb-1 block text-sm text-gray-500">Confirm password</label>
+            <input
+              className="h-12 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 text-base text-gray-800 placeholder:text-gray-500 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
+              placeholder="Re-enter password"
+              type="password"
+              value={confirmPassword}
+              onChange={(event) => setConfirmPassword(event.target.value)}
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="h-12 w-full rounded-xl bg-cyan-600 px-4 py-2 font-medium text-white transition-colors hover:bg-cyan-700 disabled:cursor-not-allowed disabled:opacity-60"
+            disabled={submitting}
+          >
+            {submitting ? "Sending OTP..." : "Send OTP"}
+          </button>
+        </form>
+      ) : (
+        <form onSubmit={handleVerifyOtp} className="space-y-5">
+          <div>
+            <label className="mb-1 block text-sm text-gray-500">Email</label>
+            <input
+              className="h-12 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 text-base text-gray-800 placeholder:text-gray-500 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
+              type="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              required
+            />
+          </div>
+
+          <div>
+            <label className="mb-1 block text-sm text-gray-500">OTP code</label>
+            <input
+              className="h-12 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 text-base text-gray-800 placeholder:text-gray-500 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
+              placeholder="123456"
+              inputMode="numeric"
+              value={otp}
+              onChange={(event) => setOtp(event.target.value)}
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="h-12 w-full rounded-xl bg-cyan-600 px-4 py-2 font-medium text-white transition-colors hover:bg-cyan-700 disabled:cursor-not-allowed disabled:opacity-60"
+            disabled={submitting}
+          >
+            {submitting ? "Verifying..." : "Verify & Continue"}
+          </button>
+
+          <button
+            type="button"
+            className="h-12 w-full rounded-xl border border-gray-200 bg-white px-4 py-2 font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60"
+            onClick={handleResendEmailOtp}
+            disabled={submitting}
+          >
+            Resend OTP
+          </button>
+
+          <button
+            type="button"
+            className="h-12 w-full rounded-xl border border-gray-200 bg-white px-4 py-2 font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60"
+            onClick={() => {
+              setStep("request_otp");
+              setOtp("");
+            }}
+            disabled={submitting}
+          >
+            Back
+          </button>
+        </form>
+      )}
     </AuthLayout>
   );
 }

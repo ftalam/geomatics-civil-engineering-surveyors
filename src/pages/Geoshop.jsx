@@ -1,10 +1,11 @@
 import { motion } from "framer-motion";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { LogIn, LogOut, Search, ShoppingCart, Star, Phone, Mail } from "lucide-react";
+import { LogIn, LogOut, Search, ShoppingCart, Star, Phone, Mail, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import CartDrawer from "@/components/CartDrawer";
+import ProfileSheet from "@/components/ProfileSheet";
 import { useAuth } from "@/context/AuthContext";
 import { useOrderHistory } from "@/hooks/useOrderHistory";
 import { supabase } from "@/lib/supabaseClient";
@@ -616,6 +617,7 @@ const Geoshop = () => {
   const [activeDetailImageIndex, setActiveDetailImageIndex] = useState(0);
   const [cart, setCart] = useState([]);
   const [cartOpen, setCartOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [sendingOrder, setSendingOrder] = useState(false);
   const [orderNotice, setOrderNotice] = useState("");
@@ -1065,7 +1067,14 @@ const Geoshop = () => {
 
             {user && (
               <div className="text-sm text-muted-foreground text-right">
-                <p>{user.email}</p>
+                <button
+                  type="button"
+                  onClick={() => setProfileOpen(true)}
+                  className="inline-flex items-center justify-end gap-2 font-medium text-cyan-700 hover:text-cyan-800 hover:underline"
+                >
+                  <User className="h-4 w-4" />
+                  <span className="max-w-[260px] truncate">{user.email}</span>
+                </button>
                 <div className="flex justify-end gap-2 mt-2">
                   {role === "admin" && (
                     <Button variant="outline" size="sm" asChild className="relative">
@@ -1441,6 +1450,16 @@ const Geoshop = () => {
           </div>
         </div>
       )}
+
+      <ProfileSheet
+        open={profileOpen}
+        onOpenChange={setProfileOpen}
+        user={user}
+        orders={orderHistory}
+        ordersLoading={orderHistoryLoading}
+        ordersError={orderHistoryError}
+        onRefreshOrders={refreshOrderHistory}
+      />
 
       <CartDrawer
         open={cartOpen}

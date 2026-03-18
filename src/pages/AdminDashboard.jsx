@@ -4,7 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabaseClient";
 
-const ORDER_STATUSES = ["pending", "approved", "rejected"];
+const ORDER_STATUSES = ["pending", "approved"];
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -16,10 +16,6 @@ const AdminDashboard = () => {
 
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
-
-  const [showRejectDialog, setShowRejectDialog] = useState(false);
-  const [rejectReason, setRejectReason] = useState("");
-  const [pendingRejectOrderId, setPendingRejectOrderId] = useState(null);
   const [lastUpdate, setLastUpdate] = useState(new Date());
 
   /*
@@ -88,14 +84,12 @@ const AdminDashboard = () => {
       total: orders.length,
       pending: 0,
       approved: 0,
-      rejected: 0,
       revenue: 0
     };
 
     orders.forEach((order) => {
       if (order.status === "pending") stats.pending++;
       if (order.status === "approved") stats.approved++;
-      if (order.status === "rejected") stats.rejected++;
 
       if (order.status === "approved" && Array.isArray(order.items)) {
         order.items.forEach((item) => {
@@ -109,49 +103,31 @@ const AdminDashboard = () => {
 
   /*
   =============================
-  SMART ORDER GROUPING
-  (Checkout session grouping)
+  ORDERS (1 UI card per row)
   =============================
   */
 
   const groupedOrders = useMemo(() => {
-    const groups = {};
-
-    orders.forEach((order) => {
-
-      const sessionKey =
-        order.checkout_session_id || `${order.user_id}_${order.created_at}`;
-
-      if (!groups[sessionKey]) {
-        groups[sessionKey] = {
-          id: sessionKey,
-          userId: order.user_id,
-          userEmail: order.profiles?.email || order.user_id,
-          createdAt: order.created_at,
-          items: [],
-          orderIds: [],
-          orderNumbers: []
-        };
-      }
-
+    return orders.map((order) => {
       const orderItems = Array.isArray(order.items) ? order.items : [];
 
-      groups[sessionKey].items.push(
-        ...orderItems.map((item) => ({
+      return {
+        id: `order_${order.id}`,
+        orderId: order.id,
+        userId: order.user_id,
+        userEmail: order.profiles?.email || order.user_id,
+        createdAt: order.created_at,
+        status: order.status,
+        items: orderItems.map((item) => ({
           ...item,
           orderId: order.id,
           orderNumber: order.order_number,
           status: order.status
-        }))
-      );
-
-      groups[sessionKey].orderIds.push(order.id);
-      if (order.order_number) {
-        groups[sessionKey].orderNumbers.push(order.order_number);
-      }
+        })),
+        orderIds: [order.id],
+        orderNumbers: order.order_number ? [order.order_number] : []
+      };
     });
-
-    return Object.values(groups);
   }, [orders]);
 
   /*
@@ -161,15 +137,19 @@ const AdminDashboard = () => {
   */
 
   const getStatusBadge = (status) => {
+    const normalizedStatus = ORDER_STATUSES.includes(status) ? status : "pending";
     const styles = {
       pending: "bg-yellow-100 text-yellow-700",
       approved: "bg-green-100 text-green-700",
-      rejected: "bg-red-100 text-red-700"
     };
 
     return (
-      <span className={`px-2 py-1 text-xs rounded-full font-medium ${styles[status]}`}>
-        {status}
+      <span
+        className={`px-2 py-1 text-xs rounded-full font-medium ${
+          styles[normalizedStatus] || "bg-gray-100 text-gray-700"
+        }`}
+      >
+        {normalizedStatus}
       </span>
     );
   };
@@ -180,18 +160,37 @@ const AdminDashboard = () => {
   =============================
   */
 
-  const updateOrderStatus = async (orderId, status, rejectReason = "") => {
-    setUpdatingOrderId(orderId);
+  const normalizeOrderId = (value) => {
+    if (!value) return null;
+    if (typeof value === "string" && value.startsWith("order_")) {
+      return value.slice("order_".length);
+    }
+    return value;
+  };
+
+  const updateOrderStatus = async (orderId, status) => {
+    const normalizedOrderId = normalizeOrderId(orderId);
+
+    if (!normalizedOrderId) {
+      toast.error("Invalid order id.");
+      return;
+    }
+
+    if (!ORDER_STATUSES.includes(status)) {
+      toast.error("Invalid status.");
+      return;
+    }
+
+    setUpdatingOrderId(normalizedOrderId);
 
     const { data, error } = await supabase
       .from("orders")
       .update({
         status,
-        ...(status === "rejected" && rejectReason && { rejection_reason: rejectReason })
       })
-      .eq("id", orderId)
-      .select("id, order_number, status, rejection_reason")
-      .single();
+      .eq("id", normalizedOrderId)
+      .select("id, order_number, status")
+      .maybeSingle();
 
     setUpdatingOrderId(null);
 
@@ -200,30 +199,44 @@ const AdminDashboard = () => {
       return;
     }
 
+    if (!data) {
+      const { data: existingOrder, error: existingOrderError } = await supabase
+        .from("orders")
+        .select("id")
+        .eq("id", normalizedOrderId)
+        .maybeSingle();
+
+      if (existingOrderError) {
+        toast.error(
+          `Order update failed and existence check failed: ${existingOrderError.message}`,
+        );
+      } else if (existingOrder) {
+        toast.error(
+          "You can see this order but cannot update it. Check the orders UPDATE RLS policy for admins.",
+        );
+      } else {
+        toast.error("Order not found (it may have been deleted).");
+      }
+
+      fetchOrders();
+      return;
+    }
+
     setOrders((prev) =>
       prev.map((order) =>
-        order.id === orderId ? { ...order, ...data } : order
+        order.id === normalizedOrderId ? { ...order, ...data } : order
       )
     );
 
-    const label = data?.order_number ? `#${data.order_number}` : String(orderId);
+    const label = data?.order_number
+      ? `#${data.order_number}`
+      : String(normalizedOrderId);
     toast.success(`Order ${label} updated to ${status}`);
     fetchOrders();
   };
 
   const handleStatusChange = (orderId, newStatus) => {
-    if (newStatus === "rejected") {
-      setPendingRejectOrderId(orderId);
-      setRejectReason("");
-      setShowRejectDialog(true);
-    } else {
-      updateOrderStatus(orderId, newStatus);
-    }
-  };
-
-  const confirmReject = () => {
-    updateOrderStatus(pendingRejectOrderId, "rejected", rejectReason);
-    setShowRejectDialog(false);
+    updateOrderStatus(orderId, newStatus);
   };
 
   /*
@@ -244,7 +257,7 @@ const AdminDashboard = () => {
           console.log('New order received:', payload.new);
           toast.success("New order received");
           // Fetch the order with profile info
-          const { data: newOrder } = await supabase
+          const { data: newOrders } = await supabase
             .from("orders")
             .select(`
               *,
@@ -253,7 +266,9 @@ const AdminDashboard = () => {
               )
             `)
             .eq("id", payload.new.id)
-            .single();
+            .limit(1);
+
+          const newOrder = Array.isArray(newOrders) ? newOrders[0] : null;
 
           if (newOrder) {
             setOrders((prev) => [newOrder, ...prev]);
@@ -371,7 +386,7 @@ const AdminDashboard = () => {
 
       {/* ORDER STATS */}
 
-      <div className="grid grid-cols-5 gap-4 mb-6">
+      <div className="grid grid-cols-4 gap-4 mb-6">
 
         <div className="p-4 bg-gray-100 rounded">
           <p className="text-black">Total Orders</p>
@@ -386,11 +401,6 @@ const AdminDashboard = () => {
         <div className="p-4 bg-green-100 rounded">
           <p  className="text-black">Approved</p>
           <p className="text-xl text-orange font-bold">{orderStats.approved}</p>
-        </div>
-
-        <div className="p-4 bg-red-100 rounded">
-          <p className="text-black">Rejected</p>
-          <p className="text-xl text-red font-bold">{orderStats.rejected}</p>
         </div>
 
         <div className="p-4 bg-orange-500 rounded">
@@ -440,23 +450,35 @@ const AdminDashboard = () => {
                   </p>
                 </div>
 
-                <div className="flex items-center gap-2 text-black">
+                <div className="flex items-center gap-3 text-black">
+                  <div className="flex items-center gap-2">
+                    {getStatusBadge(group.status)}
 
-                  {getStatusBadge(item.status)}
+                    <select
+                      value={
+                        ORDER_STATUSES.includes(group.status)
+                          ? group.status
+                          : "pending"
+                      }
+                      disabled={updatingOrderId === group.orderId}
+                      onChange={(e) =>
+                        handleStatusChange(group.orderId, e.target.value)
+                      }
+                      className="border rounded px-2 py-1 text-sm"
+                    >
+                      {ORDER_STATUSES.map((status) => (
+                        <option key={status} value={status}>
+                          {status}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
-                  <select
-                    value={item.status}
-                    disabled={updatingOrderId === item.orderId}
-                    onChange={(e) =>
-                      handleStatusChange(item.orderId, e.target.value)
-                    }
-                    className="border rounded px-2 py-1 text-sm"
-                  >
-                    {ORDER_STATUSES.map((status) => (
-                      <option key={status}>{status}</option>
-                    ))}
-                  </select>
-
+                  <div className="text-sm text-gray-700">
+                    {typeof item.price === "number"
+                      ? `$${(item.price * (item.quantity || 1)).toFixed(2)}`
+                      : ""}
+                  </div>
                 </div>
 
               </div>
@@ -469,44 +491,6 @@ const AdminDashboard = () => {
 
       ))}
 
-      {/* REJECT DIALOG */}
-
-      {showRejectDialog && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
-
-          <div className="bg-white p-6 rounded-lg w-96">
-
-            <h3 className="font-semibold mb-3">Reject Order</h3>
-
-            <textarea
-              value={rejectReason}
-              onChange={(e) => setRejectReason(e.target.value)}
-              placeholder="Reason..."
-              className="w-full border p-2 rounded mb-3"
-            />
-
-            <div className="flex justify-end gap-2">
-
-              <button
-                onClick={() => setShowRejectDialog(false)}
-                className="border px-4 py-2 rounded"
-              >
-                Cancel
-              </button>
-
-              <button
-                onClick={confirmReject}
-                className="bg-red-600 text-white px-4 py-2 rounded"
-              >
-                Reject
-              </button>
-
-            </div>
-
-          </div>
-
-        </div>
-      )}
     </div>
   );
 };

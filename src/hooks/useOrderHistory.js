@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { toast } from "sonner";
 import { supabase } from "@/lib/supabaseClient";
 
 const normalizeOrders = (data) => (Array.isArray(data) ? data : []);
@@ -7,6 +8,9 @@ export function useOrderHistory(userId) {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const previousOrdersRef = useRef([]);
+  const hasHydratedRef = useRef(false);
 
   const isEnabled = useMemo(() => Boolean(userId), [userId]);
 
@@ -36,10 +40,42 @@ export function useOrderHistory(userId) {
   }, [userId]);
 
   useEffect(() => {
+    if (!isEnabled) return;
+
+    if (!hasHydratedRef.current) {
+      hasHydratedRef.current = true;
+      previousOrdersRef.current = normalizeOrders(orders);
+      return;
+    }
+
+    const previous = normalizeOrders(previousOrdersRef.current);
+    const previousById = new Map(previous.map((order) => [order.id, order]));
+
+    normalizeOrders(orders).forEach((nextOrder) => {
+      const prevOrder = previousById.get(nextOrder.id);
+      if (!prevOrder) return;
+
+      if (prevOrder.status === nextOrder.status) return;
+
+      const label = nextOrder.order_number
+        ? `#${nextOrder.order_number}`
+        : String(nextOrder.id);
+
+      if (nextOrder.status === "approved") {
+        toast.success(`Order ${label} approved`);
+      }
+    });
+
+    previousOrdersRef.current = normalizeOrders(orders);
+  }, [isEnabled, orders]);
+
+  useEffect(() => {
     if (!isEnabled) {
       setOrders([]);
       setError("");
       setLoading(false);
+      previousOrdersRef.current = [];
+      hasHydratedRef.current = false;
       return undefined;
     }
 

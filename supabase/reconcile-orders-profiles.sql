@@ -19,6 +19,7 @@ language sql
 stable
 security definer
 set search_path = public
+set row_security = off
 as $$
   select exists (
     select 1
@@ -31,17 +32,36 @@ $$;
 -- -------------------------
 -- Profiles: auto-create on signup
 -- -------------------------
+create table if not exists public.profiles (
+  id uuid primary key references auth.users (id) on delete cascade,
+  email text,
+  phone text,
+  role text default 'user',
+  created_at timestamptz default now()
+);
+
+alter table public.profiles
+  add column if not exists email text,
+  add column if not exists phone text;
+
 create or replace function public.handle_new_user()
 returns trigger
 language plpgsql
 security definer
 set search_path = public
+set row_security = off
 as $$
 begin
-  insert into public.profiles (id, email)
-  values (new.id, new.email)
+  insert into public.profiles (id, email, phone)
+  values (
+    new.id,
+    coalesce(new.email, new.raw_user_meta_data->>'email'),
+    coalesce(new.phone, new.raw_user_meta_data->>'phone')
+  )
   on conflict (id) do update
-    set email = excluded.email;
+    set
+      email = coalesce(excluded.email, profiles.email),
+      phone = coalesce(excluded.phone, profiles.phone);
 
   return new;
 end;
@@ -53,13 +73,18 @@ create trigger on_auth_user_created
   for each row execute procedure public.handle_new_user();
 
 -- Backfill profiles for existing auth users (safe to run multiple times).
-insert into public.profiles (id, email)
-select u.id, u.email
+insert into public.profiles (id, email, phone)
+select
+  u.id,
+  coalesce(u.email, u.raw_user_meta_data->>'email'),
+  coalesce(u.phone, u.raw_user_meta_data->>'phone')
 from auth.users u
 left join public.profiles p on p.id = u.id
 where p.id is null
 on conflict (id) do update
-  set email = excluded.email;
+  set
+    email = coalesce(excluded.email, profiles.email),
+    phone = coalesce(excluded.phone, profiles.phone);
 
 -- -------------------------
 -- Orders: numeric order_number
@@ -73,15 +98,21 @@ alter table public.orders
   alter column order_number set default nextval('public.orders_order_number_seq');
 
 -- Backfill existing orders that have no order_number, preserving arrival order.
-with ordered as (
-  select
-    id,
-    row_number() over (order by created_at asc, id asc) as rn
+with offset as (
+  select coalesce(max(order_number), 0) as max_order_number
   from public.orders
-  where order_number is null
+  where order_number is not null
+),
+ordered as (
+  select
+    o.id,
+    (select max_order_number from offset)
+      + row_number() over (order by o.created_at asc, o.id asc) as next_order_number
+  from public.orders o
+  where o.order_number is null
 )
 update public.orders o
-set order_number = ordered.rn
+set order_number = ordered.next_order_number
 from ordered
 where o.id = ordered.id;
 
