@@ -23,6 +23,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import MyOrders from "./pages/MyOrders";
 import AdminDashboard from "./pages/AdminDashboard";
+import TopographicSurvey from "@/pages/TopographicSurvey";  
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -45,6 +46,7 @@ const App = () => (
             <Route path="/services" element={<Services />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
+            <Route path="/services/topographic-surveys" element={<TopographicSurvey />} />    
 
             {/* GEOSHOP Application */}
             <Route path="/geoshop" element={<Geoshop />} />

@@ -25,7 +25,7 @@ const ServiceCard = ({ title, description, icon: Icon, index }: ServiceCardProps
         <h3 className="font-display font-semibold text-lg text-foreground mb-2">{title}</h3>
         <p className="text-muted-foreground text-sm line-clamp-3">{description}</p>
         <Link
-          to="/services"
+          to="/services/topographic-surveys"
           className="mt-4 inline-flex items-center gap-2 text-primary font-semibold text-sm group-hover:gap-3 transition-all"
         >
           Learn More <ArrowRight className="w-4 h-4" />
