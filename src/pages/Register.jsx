@@ -14,29 +14,6 @@ export default function Register() {
   const [step, setStep] = useState("request_otp"); // request_otp | verify_otp
   const navigate = useNavigate();
 
-  const handleResendEmailOtp = async () => {
-    if (!email.trim()) {
-      alert("Email is required.");
-      return;
-    }
-
-    setSubmitting(true);
-    const { error } = await withSupabaseRetry(() =>
-      supabase.auth.resend({
-        type: "signup",
-        email,
-      }),
-    );
-    setSubmitting(false);
-
-    if (error) {
-      alert(error.message);
-      return;
-    }
-
-    alert("OTP resent to your email.");
-  };
-
   const handleRegister = async (event) => {
     event.preventDefault();
 
@@ -77,7 +54,20 @@ export default function Register() {
       return;
     }
 
+    const { error: otpError } = await withSupabaseRetry(() =>
+      supabase.auth.signInWithOtp({
+        email,
+        options: { shouldCreateUser: false },
+      }),
+    );
+
     setSubmitting(false);
+
+    if (otpError) {
+      alert(otpError.message);
+      return;
+    }
+
     alert("OTP sent to your email. Enter it to verify your account.");
     setStep("verify_otp");
   };
@@ -88,9 +78,9 @@ export default function Register() {
 
     const { data, error } = await withSupabaseRetry(() =>
       supabase.auth.verifyOtp({
-        email,
+        phone,
         token: otp,
-        type: "signup",
+        type: "sms",
       }),
     );
 
@@ -113,7 +103,7 @@ export default function Register() {
   return (
     <AuthLayout
       title="Create Account"
-      subtitle="Verify your email to create your geoshop account"
+      subtitle="Verify your phone number to create your geoshop account"
       footer={
         <p>
           <span className="text-gray-500">Already have an account? </span>
@@ -190,12 +180,12 @@ export default function Register() {
       ) : (
         <form onSubmit={handleVerifyOtp} className="space-y-5">
           <div>
-            <label className="mb-1 block text-sm text-gray-500">Email</label>
+            <label className="mb-1 block text-sm text-gray-500">Phone number</label>
             <input
               className="h-12 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 text-base text-gray-800 placeholder:text-gray-500 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
-              type="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              type="tel"
+              value={phone}
+              onChange={(event) => setPhone(event.target.value)}
               required
             />
           </div>
@@ -223,7 +213,7 @@ export default function Register() {
           <button
             type="button"
             className="h-12 w-full rounded-xl border border-gray-200 bg-white px-4 py-2 font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60"
-            onClick={handleResendEmailOtp}
+            onClick={handleRegister}
             disabled={submitting}
           >
             Resend OTP
@@ -232,10 +222,7 @@ export default function Register() {
           <button
             type="button"
             className="h-12 w-full rounded-xl border border-gray-200 bg-white px-4 py-2 font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60"
-            onClick={() => {
-              setStep("request_otp");
-              setOtp("");
-            }}
+            onClick={() => setStep("request_otp")}
             disabled={submitting}
           >
             Back

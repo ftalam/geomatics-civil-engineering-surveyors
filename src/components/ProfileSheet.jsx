@@ -104,7 +104,7 @@ export default function ProfileSheet({
         className="h-full w-[360px] max-w-[90vw] overflow-y-auto border-r border-gray-200 bg-white p-6 text-gray-900"
       >
         <SheetHeader>
-          <SheetTitle>Profile</SheetTitle>
+          <SheetTitle className="text-m font-bold">Profile</SheetTitle>
           <SheetDescription className="text-gray-600">
             Manage your settings and review your order summary.
           </SheetDescription>

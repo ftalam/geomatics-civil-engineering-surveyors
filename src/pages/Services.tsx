@@ -1,8 +1,13 @@
 import Layout from "@/components/Layout.jsx";
 import SectionHeader from "@/components/SectionHeader";
-import { Mountain, MapPinned, HardHat, Satellite, Plane, Globe, LayoutGrid, Trees, Building2, Wrench } from "lucide-react";
+import { Mountain, MapPinned, HardHat, Plane, Globe, LayoutGrid, Trees, Building2, Wrench } from "lucide-react";
 
 const services = [
+    {
+    title: "UAV-Based Mapping",
+    description: "Drone-powered aerial surveys for rapid and accurate terrain mapping.",
+    icon: Plane,
+  },
   {
     title: "Topographic Surveys",
     description: "Detailed terrain mapping and elevation data for project planning and design.",
@@ -10,7 +15,7 @@ const services = [
   },
   {
     title: "Land (Cadastral) Surveys",
-    description: "Boundary determination, subdivision, and land ownership documentation.",
+    description: "Boundary determination, subdivision and land ownership documentation.",
     icon: MapPinned,
   },
   {
@@ -19,14 +24,9 @@ const services = [
     icon: HardHat,
   },
   {
-    title: "Geodetic GPS Control",
-    description: "CORS Network-based geodetic control surveys for large-scale projects.",
-    icon: Satellite,
-  },
-  {
-    title: "UAV-Based Mapping",
-    description: "Drone-powered aerial surveys for rapid and accurate terrain mapping.",
-    icon: Plane,
+    title: "Geotechnical Surveys",
+    description: "Subsurface investigations and soil analysis for construction structures",
+    icon: Globe,
   },
   {
     title: "GIS & Remote Sensing",

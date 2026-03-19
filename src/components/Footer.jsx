@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import logoImg from "@/assets/GCES.jpg";
+import Glogo from "@/assets/g-logo.png";
 import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Instagram } from "lucide-react";
 
 const Footer = () => {
@@ -79,7 +80,7 @@ const Footer = () => {
           {/* News Item */}
             <div className="flex gap-3">
               <img
-                src="src/assets/g-logo.png"
+                src={Glogo}
                 alt="Geoshop Launch"
                 className="w-12 h-12 object-cover rounded-md"
               />

@@ -2,8 +2,24 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowLeft, MapPin, Phone, Mail, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import marvin from "@/assets/CHCNAV-marketing.jpeg";
+import layout from "@/assets/geoshop-layout.png";
+import { useState, useEffect } from "react";
+
+
 
 const AboutUs = () => {
+  const images = [layout, marvin]; // add your images here
+
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+  const interval = setInterval(() => {
+     setCurrent((prev) => (prev + 1) % images.length);
+   }, 4000); // 4s
+
+   return () => clearInterval(interval);
+  }, []);
   return (
     <div className="products-theme">
       {/* Header */}
@@ -36,37 +52,59 @@ const AboutUs = () => {
               <h2 className="text-3xl font-bold mb-6">Who We Are</h2>
               <p className="text-muted-foreground mb-4">
                GeoShop limited is a trusted supplier of innovative measurement and positioning products, offering cutting edge geospatial
-    technology solutions to meet your surveying and mapping needs. Our product range include advanced GNSS receivers,
-    Total stations, Echosounders, Level machines and other precision instruments. These products are tailored to professionals across
-    industries such as construction, agriculture, mining, marine and more. We are also the country’s leading distributor of CHCNAV,
-    a developer and manufacturer of measuring and positioning products.
+              technology solutions to meet your surveying and mapping needs. Our product range include advanced GNSS receivers,
+              Total stations, Echosounders, Level machines and other precision instruments. These products are tailored to professionals across
+              industries such as construction, agriculture, mining, marine and more. We are also the country’s leading distributor of CHCNAV,
+              a developer and manufacturer of measuring and positioning products.
               </p>
               <p className="text-muted-foreground mb-4">
                 Beyond sales, GeoShop offers flexible equipment hiring services, ensuring that you have access to the latest technology without
-long-term commitments. Additionally, we provide robust CORS (Continuous Operating Reference Station) Services, delivering
-reliable data for high accuracy positioning and surveying. Our commitment to excellence, precision, and customer satisfaction has made us a
+                long-term commitments. Additionally, we provide robust CORS (Continuous Operating Reference Station) Services, delivering
+                reliable data for high accuracy positioning and surveying. Our commitment to excellence, precision, and customer satisfaction has made us a
                 trusted partner for surveyors, engineers, construction companies, and geospatial
                 professionals across East Africa.
               </p>
               <p className="text-muted-foreground">
-              We pride ourselves on offering a comprehensive range of products from world-renowned
-                manufacturers, backed by expert technical support and after-sales service.
+               We pride ourselves on offering a comprehensive range of products from world-renowned
+               manufacturers, backed by expert technical support and after-sales service.
               </p>
             </motion.div>
-
             <motion.div
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="relative"
+              className="relative h-screen overflow-hidden object-contain"
             >
-              <img
-                src="/api/placeholder/600/400"
-                alt="Surveying equipment and team"
-                className="rounded-lg shadow-lg w-full"
-              />
+              {images.map((img, index) => (
+                <img
+                  key={index}
+                  src={img}
+                  alt="Surveying equipment and team"
+                  className={`absolute inset-0 w-full h-full object-cover rounded-lg shadow-lg transition-opacity duration-1000 ${
+                    index === current ? "opacity-100" : "opacity-0"
+                  }`}
+                />
+              ))}
+
+              {/* Gradient overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-lg"></div>
+
+              {/* 🔵 Dot Indicators */}
+              <div className="absolute bottom-5 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
+                {images.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrent(index)}
+                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                      index === current
+                        ? "bg-white scale-125"
+                        : "bg-white/50 hover:bg-white"
+                    }`}
+                  />
+                ))}
+              </div>
             </motion.div>
+
           </div>
 
           {/* Services Section */}
