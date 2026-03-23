@@ -6,8 +6,8 @@ import Layout from "@/components/Layout.jsx";
 import SectionHeader from "@/components/SectionHeader";
 import IndustryCard from "@/components/IndustryCard";
 import ServiceCard from "@/components/ServiceCard";
-import { Star, Users, Award, Target, ArrowRight, CheckCircle, Mountain, MapPinned, HardHat, Satellite, Plane,
-  Globe, LayoutGrid, Trees, Building2, Wrench, } from "lucide-react";
+import { services } from "@/data/services";
+import { Star, Users, Award, Target, ArrowRight, CheckCircle } from "lucide-react";
 
 import heroImage from "@/assets/hero-surveying.jpg";
 import architectureImg from "@/assets/architecture.jpg";
@@ -26,59 +26,6 @@ import nibLogo from "@/assets/National-Irrigation-Board.png";
 import HHSGSLogo from "@/assets/HH-SGS.png";
 import konzaLogo from "@/assets/Konza_Techno_City_Logo.png";
 
-const services = [
-  {
-    title: "Topographic Surveys",
-    description: "Detailed terrain mapping and elevation data for project planning and design.",
-    icon: Mountain,
-  },
-  {
-    title: "Land (Cadastral) Surveys",
-    description: "Boundary determination, subdivision, and land ownership documentation.",
-    icon: MapPinned,
-  },
-  {
-    title: "Engineering Surveys",
-    description: "High-precision surveys for infrastructure and construction projects.",
-    icon: HardHat,
-  },
-  {
-    title: "Geodetic GPS Control",
-    description: "CORS Network-based geodetic control surveys for large-scale projects.",
-    icon: Satellite,
-  },
-  {
-    title: "UAV-Based Mapping",
-    description: "Drone-powered aerial surveys for rapid and accurate terrain mapping.",
-    icon: Plane,
-  },
-  {
-    title: "GIS & Remote Sensing",
-    description: "Spatial data analysis, management, and presentation using GIS technology.",
-    icon: Globe,
-  },
-  {
-    title: "Spatial Planning",
-    description: "Strategic spatial analysis and planning for sustainable development.",
-    icon: LayoutGrid,
-  },
-  {
-    title: "Land-Use Planning",
-    description: "Optimal land allocation and use strategies for communities and projects.",
-    icon: Trees,
-  },
-  {
-    title: "Urban & Regional Planning",
-    description: "Comprehensive planning solutions for urban and regional development.",
-    icon: Building2,
-  },
-  {
-    title: "Equipment Supply & Training",
-    description: "Sales, calibration, and training on professional surveying equipment.",
-    icon: Wrench,
-  },
-];
-
 const clientLogos = [
   { name: "KeNHA", logo: kenhaLogo },
   { name: "Ministry of Water Sanitation and Irrigation", logo: ministryLogo },
@@ -90,6 +37,7 @@ const clientLogos = [
   { name: "Howard Humphreys Consulting Engineers", logo: HHSGSLogo },
   { name: "Konza Technopolis", logo: konzaLogo },
 ];
+
 const industries = [
   {
     title: "Architecture & Construction",
@@ -215,12 +163,12 @@ const Index = () => {
         <div className="container mx-auto px-2">
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {services.slice(0, 5).map((service, index) => (
-              <ServiceCard key={service.title} {...service} index={index} />
+              <ServiceCard key={service.id} {...service} index={index} />
             ))}
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-4">
             {services.slice(5).map((service, index) => (
-              <ServiceCard key={service.title} {...service} index={index + 5} />
+              <ServiceCard key={service.id} {...service} index={index + 5} />
             ))}
           </div>
           <div className="text-center mt-8">

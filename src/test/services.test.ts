@@ -1,8 +1,7 @@
 import { describe, it, expect } from "vitest";
+import { services } from "@/data/services";
 
-// Import services from both pages to ensure consistency
-// Note: In a real scenario, services should be exported from a shared module
-const expectedServices = [
+const expectedServiceTitles = [
   "Topographic Surveys",
   "Land (Cadastral) Surveys",
   "Engineering Surveys",
@@ -17,31 +16,34 @@ const expectedServices = [
 
 describe("Services Validation", () => {
   it("should have all expected services defined", () => {
-    // This test ensures that all expected services are present
-    // In a real implementation, you would import the services array from a shared module
-    expect(expectedServices.length).toBeGreaterThan(0);
-    expect(expectedServices).toContain("Topographic Surveys");
-    expect(expectedServices).toContain("Land (Cadastral) Surveys");
-    expect(expectedServices).toContain("Engineering Surveys");
-    expect(expectedServices).toContain("UAV-Based Mapping");
-    expect(expectedServices).toContain("GIS & Remote Sensing");
+    const titles = services.map((s) => s.title);
+    expectedServiceTitles.forEach((title) => {
+      expect(titles).toContain(title);
+    });
   });
 
   it("should have exactly 10 services", () => {
-    expect(expectedServices.length).toBe(10);
+    expect(services.length).toBe(10);
   });
 
   it("should have required service properties", () => {
-    // Each service should have: title, description, icon
-    // This is a structural validation
-    expectedServices.forEach((service) => {
-      expect(typeof service).toBe("string");
-      expect(service.length).toBeGreaterThan(0);
+    services.forEach((service) => {
+      expect(typeof service.id).toBe("string");
+      expect(service.id.length).toBeGreaterThan(0);
+      expect(typeof service.title).toBe("string");
+      expect(service.title.length).toBeGreaterThan(0);
+      expect(typeof service.description).toBe("string");
+      expect(service.description.length).toBeGreaterThan(0);
+      expect(typeof service.details).toBe("string");
+      expect(service.details.length).toBeGreaterThan(0);
+      expect(typeof service.icon).toBe("function");
     });
   });
 
   it("should not have duplicate services", () => {
-    const uniqueServices = new Set(expectedServices);
-    expect(uniqueServices.size).toBe(expectedServices.length);
+    const uniqueTitles = new Set(services.map((s) => s.title));
+    const uniqueIds = new Set(services.map((s) => s.id));
+    expect(uniqueTitles.size).toBe(services.length);
+    expect(uniqueIds.size).toBe(services.length);
   });
 });

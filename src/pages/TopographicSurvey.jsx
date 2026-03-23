@@ -1,5 +1,10 @@
 import Layout from "@/components/Layout";
 import { Link } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
+import topoMapsImg from "@/assets/topo-maps.jpg";
+import aidroneImg from "@/assets/AIDRONE.jpg";
+import architectureImg from "@/assets/architecture.jpg";
+import civilWorksImg from "@/assets/civil-works.jpg";
 
 
 const TopographicSurvey = () => {
@@ -7,6 +12,14 @@ const TopographicSurvey = () => {
     <Layout>
       <section className="py-16">
         <div className="container mx-auto px-4 max-w-5xl">
+          <Link
+            to="/services"
+            className="inline-flex items-center gap-2 text-muted-background hover:text-foreground transition-colors"
+            aria-label="Back to Services"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to Services
+          </Link>
 
           {/* Title */}
           <h1 className="text-4xl font-bold mb-6">
@@ -22,7 +35,7 @@ const TopographicSurvey = () => {
 
           {/* HERO IMAGE */}
           <img
-            src="/images/topo-hero.jpg"
+            src={topoMapsImg}
             className="w-full h-[400px] object-cover rounded-xl mb-10"
             alt="Topographic survey"
           />
@@ -48,23 +61,23 @@ const TopographicSurvey = () => {
           </p>
 
           <img
-            src="/images/orthophoto.jpg"
+            src={aidroneImg}
             className="w-full rounded-xl mb-10"
             alt="Orthophoto example"
           />
 
-          {/* PLANS */}
+          {/* MAPS */}
           <h2 className="text-2xl font-semibold mb-4">
-            Survey Plans
+            Topographic maps
           </h2>
           <p className="mb-6 text-muted-foreground">
-            Survey plans show detailed layouts of land features including contours,
-            boundaries, and infrastructure. These are essential for engineers and
+            Topographic maps show detailed layouts of land features including contours,
+            boundaries and infrastructure. These are essential for engineers and
             architects during project design.
           </p>
 
           <img
-            src="/images/plan.jpg"
+            src={architectureImg}
             className="w-full rounded-xl mb-10"
             alt="Survey plan"
           />
@@ -79,21 +92,26 @@ const TopographicSurvey = () => {
           </p>
 
           <img
-            src="/images/profile.jpg"
+            src={civilWorksImg}
             className="w-full rounded-xl mb-10"
             alt="Profile section"
           />
 
           {/* PROCESS */}
           <h2 className="text-2xl font-semibold mb-4">
-            Our Process
+            The classical toppographic mapping process involves several key sequential steps
           </h2>
           <ul className="list-disc pl-6 text-muted-foreground mb-10 space-y-2">
-            <li>Field data collection using GNSS, total stations, and drones</li>
-            <li>Data processing and adjustment</li>
-            <li>Generation of orthophotos and terrain models</li>
-            <li>Production of plans, contours, and profiles</li>
+            <li>Project Specification: Define the specifications including the products to be generated, potential users needs, required accuracies, map content, delivery format, schedule and costing.</li>
+            <li>Establishment of control: For horizontal control, establish the CPs to determine coordinate positions using methods like triangulation, trilateration, traversing or GNSS.For vetical control, determine elevations using trigonometrical heighting, spirit levelling or GPS-geoid techniques. Also provision of photo controls; link aerial photographs to ground details using well-distributed CPs marked on the ground.</li>
+            <li>Aerial Photography: Calibrate the aerial camera to ensure proper adjustment then conduct aerial photography under suitable weather and lighting conditions, maintaining at least 60% overlap between successive photographs and 30% side overlap for adjacent strips.</li>
+            <li>Analytical Aero-Triangulation: Measure photographic coordinates of pre-marked control points, pass points, and tie points then, determine the position and orientation of the camera at the time of each exposure to compute coordinates of any point on the photograph.</li>
+            <li>Stereo data capture: Collect planimetric; features like buildings, rivers & topographic data i.e spot heights and profiles, using stereo plotter or by tracing directly from digitized orthophotos.</li>
+            <li>Verification: Check ambiguos features in the field using aerial photograps then verify place names & political boundaries by consulting historical records and local residents.</li>
+            <li>Map compilation: Process captured data into various products, such as fixed dimension maps, merged planimetric and topographic data, seamless digital files(DEM, DSM), orthophotos, hard copy maps, and spatial database files with attributes.</li>
+            <li>Quality review: Conduct a quality test to ensure adherence to specifications, consistency, and accuracy of both printed maps and digital data. Follow standards like the National Map Accuracy Standards used by the USGS, including field checking points on a sample of maps.</li>
           </ul>
+          <p>These steps ensure that large-scale topo maps are accurate, reliable and suitable for the various applications.</p>
 
           {/* CTA */}
           <div className="bg-card p-8 rounded-xl border text-center">
@@ -104,7 +122,7 @@ const TopographicSurvey = () => {
               Get in touch with our team for accurate and reliable surveying services.
             </p>
             <Link
-              href="/contact"
+              to="/contact"
               className="inline-block bg-primary text-white px-6 py-3 rounded-lg"
             >
               Request Service

@@ -17,13 +17,13 @@ import About from "./pages/About";
 import AboutUs from "./pages/AboutUs";
 import Contact from "./pages/Contact";
 import Services from "./pages/Services";
+import ServiceDetail from "./pages/ServiceDetail";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import MyOrders from "./pages/MyOrders";
 import AdminDashboard from "./pages/AdminDashboard";
-import TopographicSurvey from "@/pages/TopographicSurvey";  
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -44,9 +44,9 @@ const App = () => (
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/services" element={<Services />} />
+            <Route path="/services/:serviceId" element={<ServiceDetail />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
-            <Route path="/services/topographic-surveys" element={<TopographicSurvey />} />    
 
             {/* GEOSHOP Application */}
             <Route path="/geoshop" element={<Geoshop />} />
