@@ -1,14 +1,16 @@
 import { motion } from "framer-motion";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { LogIn, LogOut, Search, ShoppingCart, Star, Phone, Mail, User } from "lucide-react";
+import { LogIn, LogOut, Search, ShoppingCart, Star, Phone, Mail, User, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import GeoshopLogo from "@/assets/3.svg";
 import CartDrawer from "@/components/CartDrawer";
 import ProfileSheet from "@/components/ProfileSheet";
 import { useAuth } from "@/context/AuthContext";
 import { useOrderHistory } from "@/hooks/useOrderHistory";
 import { supabase } from "@/lib/supabaseClient";
+import GeoLtd from "@/assets/1.svg";
 import {
   addItemToCart,
   getCart,
@@ -1013,12 +1015,16 @@ const Geoshop = () => {
                 About Us
               </Link>   
              </div>
-            <div className="border-t border-border mt-8 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-            </div>
-            <h1 className="text-4xl font-bold mb-3">GEOSHOP</h1>
-              <p className="text-muted-foreground">
+             <div className="mt-4 mb-4 flex flex-col gap-2 items-start">
+                <img
+              src={GeoshopLogo}
+              alt="Geomatics Civil Engineering Surveyors logo"
+              className="h-10 w-auto object-contain"
+               /> 
+             <p className="text-muted-foreground">
               Premium surveying instruments and accessories provider.
             </p>
+            </div>
               <Link
                 to="/"
                 className="bg-muted border px-5 py-1 rounded-2xl hover:bg-muted/80 transition-colors"
@@ -1484,10 +1490,22 @@ const Geoshop = () => {
       {/* Footer */}
       <footer className="bg-card border-t">
         <div className="container mx-auto px-4 py-6">
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-3 gap-8">
             <div>
-              <h3 className="text-2xl text-primary mb-4"> <b>GET IN TOUCH</b> <br/> WITH US </h3>
-              <div className="space-y-3 grid grid-cols-2">
+              <img
+                src={GeoLtd}
+                alt="Geoshop limited"
+                className="h-20 w-auto "
+              /> 
+              </div>
+            <div>
+              <div className="space-y-3 mt-3">
+                 <div className="flex items-center gap-3">
+                  <MapPin className="w-5 h-5 text-primary flex-shrink-0" />
+                  <div>
+                    <p className="text-sm text-muted-foreground">1st Floor, Phileo Arcade <br/> Thika Rd. Ruiru</p>
+                  </div>
+                </div>
                 <div className="flex items-center gap-3">
                   <Phone className="w-5 h-5 text-primary flex-shrink-0" />
                   <div>
@@ -1505,18 +1523,15 @@ const Geoshop = () => {
             </div>
 
             <div>
-              <h3 className="text-xl font-bold mb-4">Quick Links</h3>
-              <div className=" grid grid-cols-2 gap-2">
-                <Link to="/geoshop" className="block text-muted-foreground hover:text-primary transition-colors">
-                  Shop
-                </Link>
+              <h3 className="text-2xl text-primary mb-4"> <b>GET IN TOUCH</b> <br/> WITH US </h3>
+              <div className=" grid grid-cols-3 gap-2">
                 <Link to="/geoshop/about" className="block text-muted-foreground hover:text-primary transition-colors">
                   About Us
                 </Link>
                 <Link to="/contact" className="block text-muted-foreground hover:text-primary transition-colors">
                   Contact
                 </Link>
-                <Link to="/services" className="block text-muted-foreground hover:text-primary transition-colors">
+                <Link to="/services/equipment-supply-training" className="block text-muted-foreground hover:text-primary transition-colors">
                   Services
                 </Link>
               </div>

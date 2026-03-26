@@ -268,7 +268,9 @@ const Index = () => {
       <section className="py-5 bg-card/30">
         <div className="container mx-auto px-2">
           <SectionHeader
-            badge="Diverse Industries Expertise"/>
+            badge="Industries"
+            title="Diverse Industries Expertise"
+          />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
             {industries.slice(0, 5).map((industry, index) => (
               <IndustryCard key={industry.title} {...industry} index={index} />

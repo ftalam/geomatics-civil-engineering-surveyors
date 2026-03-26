@@ -1,8 +1,9 @@
 import { motion } from "framer-motion";
+import type { ReactNode } from "react";
 
 interface SectionHeaderProps {
   badge?: string;
-  title: string;
+  title: ReactNode;
   description?: string;
   centered?: boolean;
 }

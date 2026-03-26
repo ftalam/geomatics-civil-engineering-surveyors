@@ -4,7 +4,9 @@ import SectionHeader from "@/components/SectionHeader";
 import { Button } from "@/components/ui/button";
 import { Search, Filter, ArrowRight } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
+import GeoLtdLogo from "@/assets/2.svg";
 import bestSellerImg from "@/assets/chcnav-vili-i100-visual-lidar-gnss-rtk-receiver-surveying.jpg";
 import totalStationImg from "@/assets/chcnav-Total-Station-cts-a100.jpg";
 import ctsM100Img from "@/assets/chcnav-cts-m100-total-station-surveying.jpg";
@@ -123,11 +125,18 @@ const Products = () => {
     <Layout>
       <div className="products-theme">
       {/* Hero Section */}
-      <section className="py-12 bg-gradient-card">
+      <section className="py-4 bg-gradient-card flex items-center justify-center">
+        <Link to="/geoshop/login" className="group">
+          <img
+            src={GeoLtdLogo}
+            alt="Geoshop limited"
+            className="h-8 w-auto object-contain hero-overlay"
+          /> 
+        </Link>
+      </section>
+      <section className="py-2 bg-gradient-card">
         <div className="container mx-auto px-4">
           <SectionHeader
-          
-            badge="GEOSHOP"
             title="Premium Surveying Equipment"
             description="Browse our curated selection of high-quality surveying instruments and accessories from trusted manufacturers."
           />
@@ -170,7 +179,7 @@ const Products = () => {
           </div>
 
           {/* Products Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-6">
             {filteredProducts.map((product, index) => (
               <motion.div
                 key={product.id}

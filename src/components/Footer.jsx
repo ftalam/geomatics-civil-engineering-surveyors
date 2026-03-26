@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import logoImg from "@/assets/GCES.jpg";
-import Glogo from "@/assets/g-logo.png";
+import Glogo from "@/assets/5.svg";
 import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Instagram } from "lucide-react";
 
 const Footer = () => {
@@ -63,7 +63,7 @@ const Footer = () => {
               <div className="space-y-4">
                 {/* News Item */}
                 <div className="flex gap-3">
-                 <div className="w-12 h-10 rounded-lg bg-gradient-primary flex items-center justify-center">
+                 <div className="w-14 h-10 rounded-lg bg-gradient-primary flex items-center justify-center">
                  <span className="font-display font-bold text-l text-primary-foreground">GCES</span>
                 </div>
 
@@ -82,7 +82,7 @@ const Footer = () => {
               <img
                 src={Glogo}
                 alt="Geoshop Launch"
-                className="w-12 h-12 object-cover rounded-md"
+                className="w-14 h-12 object-cover rounded-md"
               />
 
               <div>

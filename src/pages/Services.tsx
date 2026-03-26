@@ -11,7 +11,18 @@ const Services = () => {
         <div className="container mx-auto px-4">
           <SectionHeader
             badge="Our Services"
-            title="Professional Surveying & Consulting"
+             title={
+                <>
+                Professional{" "}
+                <Link
+                  to="/surveying"
+                  className="hover:text-primary decoration-primary/60"
+                >
+                  Surveying
+                </Link>{" "}
+                & Consulting
+                </>
+             }
             description="Comprehensive surveying and geomatics services tailored to your projects."
           />
 
