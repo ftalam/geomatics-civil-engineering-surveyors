@@ -1,7 +1,7 @@
 ﻿import ArticleLayout from "@/components/ArticleLayout";
 import ArticleGallery from "@/components/ArticleGallery";
 import { Link } from "react-router-dom";
-import architectureImg from "@/assets/architecture.jpg";
+import landuseImg from "@/assets/SubdivisionPlan.png";
 import civilWorksImg from "@/assets/civil-works.jpg";
 import geospatialImg from "@/assets/geospatial.jpg";
 import { useState } from "react";
@@ -28,11 +28,12 @@ const LandUsePlanning = () => {
         title: "Land-use plan",
         images: [
           {
-            src: architectureImg,
+            src: landuseImg,
             alt: "Land-use planning",
             caption: "Allocations, zoning, and development guidance",
           },
         ],
+
         items: [
           { label: "Focus", value: "Zoning + allocation" },
           { label: "Inputs", value: "Data + stakeholders" },
@@ -41,23 +42,24 @@ const LandUsePlanning = () => {
       }}
     >
       <p id="overview" className="text-lg text-muted-foreground leading-relaxed">
-        Land-use planning guides how land is allocated and developed over time. It
-        supports sustainable growth, environmental protection, and efficient
-        infrastructure investment.
+        Land-use planning guides how land is allocated and developed over time. Land use planning is defined as: the process by which optimum forms of land use and management are indicated, considering the biophysical, technological, social, economic and political conditions of a particular territory.
       </p>
 
       <ArticleGallery
         title="Examples"
         items={[
-          { src: architectureImg, alt: "Urban fabric", caption: "Development patterns" },
+          { src: landuseImg, alt: "Urban fabric", caption: "Development patterns" },
           { src: civilWorksImg, alt: "Infrastructure", caption: "Infrastructure integration" },
           { src: geospatialImg, alt: "Spatial data", caption: "GIS-driven decision support" },
         ]}
       />
 
+      <p> Land regulation goals often include environmental conservation, restraint of urban sprawl, minimization of transport costs, 
+        prevention of land use conflicts and a reduction in exposure to pollutants. </p>
       <h2 id="scope" className="text-2xl font-semibold mt-10 mb-4">
-        Scope
+        Planning process
       </h2>
+      
       <ul className="list-disc pl-6 text-muted-foreground space-y-2">
         <li>Existing land-use assessments and constraints mapping</li>
         <li>Zoning proposals and development guidance</li>
