@@ -4,7 +4,7 @@ import ArticleMediaFigure from "@/components/ArticleMediaFigure";
 export type ArticleStackItem = {
   src: string;
   alt: string;
-  caption?: string;
+  caption?: React.ReactNode;
   thumbImgClassName?: string;
 };
 
@@ -27,9 +27,9 @@ const ArticleStack = ({
   return (
     <div className={`my-2 w-full ${widthClassName} ${floatClass} md:mb-4`}>
       <div className="space-y-[2px]">
-        {items.map((item) => (
+        {items.map((item, index) => (
           <ArticleMediaFigure
-            key={`${item.src}-${item.caption ?? ""}`}
+            key={`${item.src}-${index}`}
             src={item.src}
             alt={item.alt}
             caption={item.caption}

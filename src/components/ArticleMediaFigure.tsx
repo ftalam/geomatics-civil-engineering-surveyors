@@ -4,7 +4,7 @@ import { Expand, X } from "lucide-react";
 type ArticleMediaFigureProps = {
   src: string;
   alt: string;
-  caption?: string;
+  caption?: React.ReactNode;
   figureClassName?: string;
   imgClassName?: string;
   thumbImgClassName?: string;
@@ -98,4 +98,3 @@ const ArticleMediaFigure = ({
 };
 
 export default ArticleMediaFigure;
-

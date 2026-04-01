@@ -3,6 +3,7 @@ import Layout from "@/components/Layout.jsx";
 import { ArrowLeft, List, PanelRightClose, PanelRightOpen, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import ArticleMediaFigure from "@/components/ArticleMediaFigure";
+import ArticleVideoFigure, { type ArticleVideoSource } from "@/components/ArticleVideoFigure";
 
 export type InfoboxItem = {
   label: string;
@@ -12,7 +13,16 @@ export type InfoboxItem = {
 export type InfoboxImage = {
   src: string;
   alt: string;
-  caption?: string;
+  caption?: React.ReactNode;
+};
+
+export type InfoboxVideo = {
+  src?: string;
+  sources?: ArticleVideoSource[];
+  poster: string;
+  title: string;
+  caption?: React.ReactNode;
+  durationLabel?: string;
 };
 
 export type TocItem = {
@@ -27,9 +37,13 @@ type ArticleLayoutProps = {
   backHref?: string;
   backLabel?: string;
   toc?: TocItem[];
+  heroImage?: string;
+  heroImageAlt?: string;
   infobox?: {
     title?: string;
+    videos?: InfoboxVideo[];
     images?: InfoboxImage[];
+    description?: string;
     items?: InfoboxItem[];
   };
   children: React.ReactNode;
@@ -42,6 +56,8 @@ const ArticleLayout = ({
   backHref = "/services",
   backLabel = "Back to Services",
   toc = [],
+  heroImage,
+  heroImageAlt,
   infobox,
   children,
 }: ArticleLayoutProps) => {
@@ -49,6 +65,7 @@ const ArticleLayout = ({
   const [tocCollapsed, setTocCollapsed] = useState(() => toc.length > 0);
   const [tocDrawerOpen, setTocDrawerOpen] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  const [infoboxCollapsed, setInfoboxCollapsed] = useState(false);
 
   const tocItems = useMemo(() => toc.filter((item) => item.id && item.label), [toc]);
 
@@ -80,8 +97,19 @@ const ArticleLayout = ({
                     {backLabel}
                   </Link>
 
-                  <header className="mt-6 border-b border-border/60 pb-4">
-                    <div className="flex items-start gap-3">
+                  <header className={`relative mt-6 ${heroImage ? "overflow-hidden rounded-3xl" : "border-b border-border/60 pb-4"}`}>
+                    {heroImage ? (
+                      <div className="absolute inset-0">
+                        <img
+                          src={heroImage}
+                          alt={heroImageAlt ?? title}
+                          className="h-full w-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/65 to-background/45" />
+                      </div>
+                    ) : null}
+                    <div className={`relative ${heroImage ? "z-10 px-6 py-10" : ""}`}>
+                      <div className="flex items-start gap-3">
                       {hasToc ? (
                         <button
                           type="button"
@@ -108,6 +136,7 @@ const ArticleLayout = ({
                         ) : null}
                       </div>
                     </div>
+                  </div>
                   </header>
 
                   <div className="mt-6">
@@ -116,58 +145,101 @@ const ArticleLayout = ({
                       style={{ fontFamily: '"Times New Roman", Times, serif' }}
                     >
                       {infobox ? (
-                        <aside className="w-full md:w-80 md:float-right md:ml-6 md:mb-4 rounded-md border border-border/50 bg-transparent overflow-hidden">
-                          {infobox.title ? (
-                            <div className="px-3 py-2 text-sm font-semibold border-b border-border/50">
+                        <aside
+                          className={`relative overflow-hidden rounded-md border border-border/50 bg-transparent transition-all duration-300 ${
+                            infoboxCollapsed
+                              ? "w-full md:w-16 md:float-right md:ml-6 md:mb-4"
+                              : "w-full md:w-80 md:float-right md:ml-6 md:mb-4"
+                          }`}
+                        >
+                          <div className="flex items-center justify-between px-3 py-2 border-b border-border/50">
+                            <div className={infoboxCollapsed ? "sr-only" : "text-sm font-semibold"}>
                               {infobox.title}
                             </div>
-                          ) : null}
-
-                          {infobox.images?.length ? (
-                            <div className="p-3 space-y-3">
-                              {infobox.images.map((img) => (
-                                <ArticleMediaFigure
-                                  key={`${img.src}-${img.caption ?? ""}`}
-                                  src={img.src}
-                                  alt={img.alt}
-                                  caption={img.caption}
-                                  thumbImgClassName="w-full h-44 object-cover"
-                                />
-                              ))}
-                            </div>
-                          ) : null}
-
-                          {infobox.description && (
-                            <div className="mt-3">
-                              <p className="text-sm text-gray-600 leading-relaxed">
-                                {expanded
-                                  ? infobox.description
-                                  : infobox.description.slice(0, 140) + "..."}
-                              </p>
-
-                              {infobox.description.length > 140 && (
-                                <button
-                                  onClick={() => setExpanded(!expanded)}
-                                  className="text-primary text-sm mt-1 hover:underline"
-                                >
-                                  {expanded ? "Read less" : "Read more"}
-                                </button>
+                            <button
+                              type="button"
+                              onClick={() => setInfoboxCollapsed((prev) => !prev)}
+                              className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-border/60 bg-card/40 text-muted-foreground hover:text-foreground transition-colors"
+                              aria-label={infoboxCollapsed ? "Expand info box" : "Collapse info box"}
+                              title={infoboxCollapsed ? "Expand info box" : "Collapse info box"}
+                            >
+                              {infoboxCollapsed ? (
+                                <PanelRightOpen className="h-4 w-4" />
+                              ) : (
+                                <PanelRightClose className="h-4 w-4" />
                               )}
-                            </div>
-                          )}  
+                            </button>
+                          </div>
 
-                          {infobox.items?.length ? (
-                            <dl className="px-3 pb-3 text-sm">
-                              {infobox.items.map((row) => (
-                                <div
-                                  key={row.label}
-                                  className="grid grid-cols-[110px_1fr] gap-3 py-2 border-t border-border/40"
-                                >
-                                  <dt className="text-muted-foreground">{row.label}</dt>
-                                  <dd className="text-foreground">{row.value}</dd>
+                          {!infoboxCollapsed ? (
+                            <div>
+                              {infobox.videos?.length ? (
+                                <div className="p-3 space-y-3">
+                                  {infobox.videos.map((video, index) => (
+                                    <ArticleVideoFigure
+                                      key={`${video.poster}-${index}`}
+                                      src={video.src}
+                                      sources={video.sources}
+                                      poster={video.poster}
+                                      title={video.title}
+                                      caption={video.caption}
+                                      durationLabel={video.durationLabel}
+                                      align="center"
+                                      widthClassName="w-full"
+                                      outerClassName="my-0"
+                                      thumbClassName="w-full aspect-video object-cover"
+                                    />
+                                  ))}
                                 </div>
-                              ))}
-                            </dl>
+                              ) : null}
+
+                              {infobox.images?.length ? (
+                                <div className="p-3 space-y-3">
+                                  {infobox.images.map((img, index) => (
+                                    <ArticleMediaFigure
+                                      key={`${img.src}-${index}`}
+                                      src={img.src}
+                                      alt={img.alt}
+                                      caption={img.caption}
+                                      thumbImgClassName="w-full h-44 object-cover"
+                                    />
+                                  ))}
+                                </div>
+                              ) : null}
+
+                              {infobox.description && (
+                                <div className="mt-3 px-3">
+                                  <p className="text-sm text-muted-foreground leading-relaxed">
+                                    {expanded
+                                      ? infobox.description
+                                      : infobox.description.slice(0, 140) + "..."}
+                                  </p>
+
+                                  {infobox.description.length > 140 && (
+                                    <button
+                                      onClick={() => setExpanded(!expanded)}
+                                      className="text-primary text-sm mt-1 hover:underline"
+                                    >
+                                      {expanded ? "Read less" : "Read more"}
+                                    </button>
+                                  )}
+                                </div>
+                              )}
+
+                              {infobox.items?.length ? (
+                                <dl className="px-3 pb-3 text-sm">
+                                  {infobox.items.map((row) => (
+                                    <div
+                                      key={row.label}
+                                      className="grid grid-cols-[110px_1fr] gap-3 py-2 border-t border-border/40"
+                                    >
+                                      <dt className="text-muted-foreground">{row.label}</dt>
+                                      <dd className="text-foreground">{row.value}</dd>
+                                    </div>
+                                  ))}
+                                </dl>
+                              ) : null}
+                            </div>
                           ) : null}
                         </aside>
                       ) : null}

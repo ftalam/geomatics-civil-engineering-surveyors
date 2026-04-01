@@ -4,11 +4,22 @@ import ArticleMediaFigure from "@/components/ArticleMediaFigure";
 type ArticleFigureProps = {
   src: string;
   alt: string;
-  caption?: string;
+  caption?: React.ReactNode;
   align?: "right" | "left" | "center";
+  widthClassName?: string;
+  figureClassName?: string;
+  thumbImgClassName?: string;
 };
 
-const ArticleFigure = ({ src, alt, caption, align = "right" }: ArticleFigureProps) => {
+const ArticleFigure = ({
+  src,
+  alt,
+  caption,
+  align = "right",
+  widthClassName = "md:w-80",
+  figureClassName = "",
+  thumbImgClassName = "w-full h-44 object-cover",
+}: ArticleFigureProps) => {
   const alignmentClass =
     align === "left"
       ? "md:float-left md:mr-6"
@@ -21,8 +32,8 @@ const ArticleFigure = ({ src, alt, caption, align = "right" }: ArticleFigureProp
       src={src}
       alt={alt}
       caption={caption}
-      figureClassName={`my-4 w-full md:w-80 ${alignmentClass} md:mb-4`}
-      thumbImgClassName="w-full h-44 object-cover"
+      figureClassName={`my-4 w-full ${widthClassName} ${alignmentClass} md:mb-4 ${figureClassName}`}
+      thumbImgClassName={thumbImgClassName}
     />
   );
 };
