@@ -11,8 +11,11 @@ import renewableImg from "@/assets/renewable-energy.jpg";
 const toc = [
   { id: "overview", label: "Overview" },
   { id: "RS", label: "Remote Sensing" },
+  { id: "data", label: "Data sources" },
   { id: "GIS", label: "Geographic Information Systems" },
+  { id: "workflow", label: "Workflow" },
   { id: "deliverables", label: "Deliverables" },
+  { id: "qa", label: "Quality & metadata" },
   { id: "applications", label: "Applications" },
 ];
 
@@ -192,6 +195,42 @@ const GisRemoteSensing = () => {
 
       <div className="clear-both" />
 
+      <h2 id="data" className="text-xl font-semibold mt-10 mb-4">
+        Data sources
+      </h2>
+      <ArticleFigure
+        src={geospatialImg}
+        alt="Spatial data layers"
+        caption="Most projects combine multiple datasets into a consistent spatial reference."
+        align="right"
+        widthClassName="md:w-[280px]"
+        thumbImgClassName="w-full h-40 object-cover"
+      />
+      <p className="text-muted-foreground leading-relaxed">
+        We work with a mix of existing and newly-captured datasets depending on your
+        objectives, time window, and required detail. Typical inputs include:
+      </p>
+      <ul className="list-disc pl-6 text-muted-foreground space-y-2">
+        <li>
+          <span className="text-foreground">Satellite imagery</span> (multispectral,
+          radar) for land cover, vegetation, water, and change detection.
+        </li>
+        <li>
+          <span className="text-foreground">UAV imagery</span> for high-detail
+          orthophotos, surfaces, and site monitoring.
+        </li>
+        <li>
+          <span className="text-foreground">Elevation models</span> (DEM/DTM/DSM) to
+          understand terrain, drainage, and visibility.
+        </li>
+        <li>
+          <span className="text-foreground">Existing GIS layers</span> (boundaries,
+          roads, utilities, soils, hazards) to provide context and constraints.
+        </li>
+      </ul>
+
+      <div className="clear-both" />
+
       <h2 id="GIS" className="text-xl font-semibold mt-10 mb-4">
         Geographic Information Systems
       </h2>
@@ -226,49 +265,26 @@ const GisRemoteSensing = () => {
         <li>Remote sensing classification, indices and change detection</li>
         <li>Dashboards and interactive maps (when required)</li>
       </ul>
-      
-      <ArticleVideoFigure
-        title="Mapping The Future With Landsat"
-        poster="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Mapping_The_Future_With_Landsat.ogv/330px--Mapping_The_Future_With_Landsat.ogv.jpg"
-        src="https://upload.wikimedia.org/wikipedia/commons/5/59/Mapping_The_Future_With_Landsat.ogv"
-        durationLabel="4:22"
-        align="right"
-        widthClassName="md:w-[330px]"
-        caption={
-          <>
-            This video shows how{" "}
-            <a
-              href="https://en.wikipedia.org/wiki/Landsat"
-              target="_blank"
-              rel="noreferrer"
-              className="text-primary hover:underline"
-            >
-              Landsat
-            </a>{" "}
-            imagery helps identify conservation areas in the{" "}
-            <a
-              href="https://en.wikipedia.org/wiki/Democratic_Republic_of_the_Congo"
-              target="_blank"
-              rel="noreferrer"
-              className="text-primary hover:underline"
-            >
-              Democratic Republic of the Congo
-            </a>{" "}
-            and map the{" "}
-            <a
-              href="https://en.wikipedia.org/wiki/Maringa-Lopori-Wamba_Landscape"
-              target="_blank"
-              rel="noreferrer"
-              className="text-primary hover:underline"
-            >
-              Maringa-Lopori-Wamba (MLW) Landscape
-            </a>
-            .
-          </>
-        }
-      />
 
       <div className="clear-both" />
+
+      <h2 id="workflow" className="text-2xl font-semibold mt-10 mb-4">
+        Workflow
+      </h2>
+      <p className="text-muted-foreground leading-relaxed">
+        We structure GIS/remote sensing work so results are repeatable and easy to
+        audit. A typical project includes:
+      </p>
+      <ol className="list-decimal pl-6 text-muted-foreground space-y-2">
+        <li>Define the area of interest, questions, and success criteria.</li>
+        <li>
+          Collect and prepare data (projection setup, mosaicking, cloud masking,
+          QA/QC).
+        </li>
+        <li>Run analysis (classification, indices, suitability, change detection).</li>
+        <li>Validate results using ground truth, checks, or independent datasets.</li>
+        <li>Compile outputs (maps, datasets, and short decision-ready summaries).</li>
+      </ol>
 
       <h2 id="deliverables" className="text-2xl font-semibold mt-10 mb-4">
         Deliverables
@@ -276,7 +292,26 @@ const GisRemoteSensing = () => {
       <ul className="list-disc pl-6 text-muted-foreground space-y-2">
         <li>Printable maps and presentation-ready layouts</li>
         <li>GIS layers (vector/raster) with metadata</li>
+        <li>
+          Common formats: GeoPackage/GeoJSON/Shapefile (vector), GeoTIFF (raster),
+          CSV/Excel (summaries)
+        </li>
         <li>Analysis reports and visualizations</li>
+      </ul>
+
+      <h2 id="qa" className="text-2xl font-semibold mt-10 mb-4">
+        Quality & metadata
+      </h2>
+      <p className="text-muted-foreground leading-relaxed">
+        Decisions are only as good as the data behind them. We document coordinate
+        systems, processing steps, assumptions, and limitations (e.g., cloud cover,
+        sensor resolution) so results can be interpreted correctly and reused later.
+      </p>
+      <ul className="list-disc pl-6 text-muted-foreground space-y-2">
+        <li>Coordinate reference system (CRS) and transformation notes</li>
+        <li>Data lineage (sources, dates, versions)</li>
+        <li>Checks for topology, completeness, and obvious anomalies</li>
+        <li>Clear map legends, scale/accuracy notes, and interpretation guidance</li>
       </ul>
 
       <h2 id="applications" className="text-2xl font-semibold mt-10 mb-4">
@@ -299,6 +334,13 @@ const GisRemoteSensing = () => {
         environmental monitoring, land management, project tracking, and decision
         support systems.
       </p>
+      <ul className="list-disc pl-6 text-muted-foreground space-y-2">
+        <li>Land cover mapping and change detection</li>
+        <li>Site selection and suitability modelling</li>
+        <li>Environmental monitoring and compliance mapping</li>
+        <li>Asset and utility mapping (where data is available)</li>
+        <li>Progress monitoring for construction and land development</li>
+      </ul>
 
       <div className="clear-both mt-10 bg-card p-8 rounded-xl border text-center">
         <h3 className="text-xl font-semibold mb-3">Need GIS Support?</h3>
