@@ -14,6 +14,8 @@ export type InfoboxImage = {
   src: string;
   alt: string;
   caption?: React.ReactNode;
+  thumbImgClassName?: string;
+  imgClassName?: string;
 };
 
 export type InfoboxVideo = {
@@ -201,7 +203,10 @@ const ArticleLayout = ({
                                       src={img.src}
                                       alt={img.alt}
                                       caption={img.caption}
-                                      thumbImgClassName="w-full h-44 object-cover"
+                                      thumbImgClassName={
+                                        img.thumbImgClassName ?? "w-full h-44 object-cover"
+                                      }
+                                      imgClassName={img.imgClassName}
                                     />
                                   ))}
                                 </div>

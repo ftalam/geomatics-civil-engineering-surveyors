@@ -6,6 +6,7 @@ import renewableImg from "@/assets/renewable-energy.jpg";
 import civilWorksImg from "@/assets/civil-works.jpg";
 import architectureImg from "@/assets/architecture.jpg";
 import geospatialImg from "@/assets/geospatial.jpg";
+import siteImg from "@/assets/Site-survey.png";
 
 const toc = [
   { id: "overview", label: "Overview" },
@@ -146,6 +147,55 @@ const SpatialPlanning = () => {
         <li>Options/scenarios with recommended strategies</li>
         <li>Implementation guidance, priorities, and monitoring indicators</li>
       </ul>
+   
+      <ul className="list-disc pl-6 text-muted-foreground space-y-2">
+        <li>Safety and risk (flooding, steep slopes, sensitive environments)</li>
+        <li>Access and service efficiency (roads, water, power, social services)</li>
+        <li>Cost and feasibility (terrain, network extensions, phasing)</li>
+        <li>Policy alignment and compliance (setbacks, buffers, reserved corridors)</li>
+      </ul>
+
+      <div className="clear-both" />
+
+      <h2 id="deliverables" className="text-xl font-semibold mt-10 mb-4">
+        Deliverables
+      </h2>
+      <ul className="list-disc pl-6 text-muted-foreground space-y-2">
+        <li>Suitability and constraints maps with clear assumptions</li>
+        <li>Ranked options and scenario comparisons</li>
+        <li>GIS layers (vector/raster) packaged for handover</li>
+        <li>Short decision brief with implementation notes and next steps</li>
+      </ul>
+
+      <h2 id="qa" className="text-xl font-semibold mt-10 mb-4">
+        Quality & metadata
+      </h2>
+      <ArticleFigure
+        src={siteImg}
+        alt="Planning and data QA"
+        caption="Clear assumptions and metadata make outputs usable and defensible."
+        align="right"
+        widthClassName="md:w-[280px]"
+        thumbImgClassName="w-full h-40 object-cover"
+      />
+      <ul className="list-disc pl-6 text-muted-foreground space-y-2">
+        <li>Coordinate reference system (CRS) checks and consistent units</li>
+        <li>Documented buffers, weights, thresholds, and exclusion rules</li>
+        <li>Versioned datasets and handover notes (sources, dates, limitations)</li>
+        <li>Optional field verification for sensitive or high-stakes locations</li>
+      </ul>
+
+      <div className="clear-both" />
+
+      <h2 id="applications" className="text-xl font-semibold mt-10 mb-4">
+        Applications
+      </h2>
+      <ul className="list-disc pl-6 text-muted-foreground space-y-2">
+        <li>Facility and utility siting (schools, health, water points, substations)</li>
+        <li>Service coverage and investment prioritisation</li>
+        <li>Risk-sensitive planning and environmental safeguarding</li>
+        <li>Growth management and corridor planning</li>
+      </ul>
 
       <div className="clear-both mt-10 bg-card p-8 rounded-xl border text-center">
         <h3 className="text-xl font-semibold mb-3">Need Spatial Planning?</h3>
@@ -161,4 +211,3 @@ const SpatialPlanning = () => {
 };
 
 export default SpatialPlanning;
-

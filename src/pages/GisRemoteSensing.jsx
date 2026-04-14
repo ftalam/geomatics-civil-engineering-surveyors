@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import LandingImg from "@/assets/img.jpeg";
 import RSImg from "@/assets/Remote_Sensing_Illustration.jpg";
 import geospatialImg from "@/assets/geospatial.jpg";
-import miningImg from "@/assets/mining.jpg";
+import siteImg from "@/assets/Site-survey.png";
 import renewableImg from "@/assets/renewable-energy.jpg";
 
 const toc = [
@@ -151,49 +151,8 @@ const GisRemoteSensing = () => {
         data collection) and radiometric resolution (sensitivity to energy
         differences).
       </p>
-      
-      <ArticleVideoFigure
-        title="Mapping The Future With Landsat"
-        poster="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Mapping_The_Future_With_Landsat.ogv/330px--Mapping_The_Future_With_Landsat.ogv.jpg"
-        src="https://upload.wikimedia.org/wikipedia/commons/5/59/Mapping_The_Future_With_Landsat.ogv"
-        durationLabel="4:22"
-        align="right"
-        widthClassName="md:w-[330px]"
-        caption={
-          <>
-            This video shows how{" "}
-            <a
-              href="https://en.wikipedia.org/wiki/Landsat"
-              target="_blank"
-              rel="noreferrer"
-              className="text-primary hover:underline"
-            >
-              Landsat
-            </a>{" "}
-            imagery helps identify conservation areas in the{" "}
-            <a
-              href="https://en.wikipedia.org/wiki/Democratic_Republic_of_the_Congo"
-              target="_blank"
-              rel="noreferrer"
-              className="text-primary hover:underline"
-            >
-              Democratic Republic of the Congo
-            </a>{" "}
-            and map the{" "}
-            <a
-              href="https://en.wikipedia.org/wiki/Maringa-Lopori-Wamba_Landscape"
-              target="_blank"
-              rel="noreferrer"
-              className="text-primary hover:underline"
-            >
-              Maringa-Lopori-Wamba (MLW) Landscape
-            </a>
-            .
-          </>
-        }
-      />
 
-      <div className="clear-both" />
+
 
       <h2 id="data" className="text-xl font-semibold mt-10 mb-4">
         Data sources
@@ -236,9 +195,9 @@ const GisRemoteSensing = () => {
       </h2>
 
       <ArticleFigure
-        src={miningImg}
-        alt="Mining site monitoring"
-        caption="Site monitoring & change detection"
+        src={siteImg}
+        alt="Site plan"
+        caption="Site planning and layout"
         align="right"
         widthClassName="md:w-[260px]"
         thumbImgClassName="w-full h-36 object-cover"

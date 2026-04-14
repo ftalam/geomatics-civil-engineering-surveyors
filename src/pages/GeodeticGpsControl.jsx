@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import gnssI93Img from "@/assets/gnss-smart-full-antennas-chcnav-i93.jpg";
 import gnssI76Img from "@/assets/gnss-smart-full-antennas-chcnav-i76.jpg";
 import gnssI89Img from "@/assets/gnss-smart-full-antennas-chcnav-i89.jpg";
+import stakeImg from "@/assets/monument.jpg";
 import topoMapsImg from "@/assets/topo-maps.jpg";
 
 const toc = [
@@ -62,7 +63,7 @@ const GeodeticGpsControl = () => {
         thumbImgClassName="w-full h-44 object-cover"
       />
 
-      <h2 id="datums" className="text-2xl font-semibold mt-10 mb-4">
+      <h2 id="datums" className="text-xl font-semibold mt-10 mb-4">
         Datums & coordinates
       </h2>
       <p className="text-muted-foreground leading-relaxed">
@@ -113,11 +114,23 @@ const GeodeticGpsControl = () => {
       <h2 id="monuments" className="text-2xl font-semibold mt-10 mb-4">
         Monumentation
       </h2>
+      <ArticleFigure
+        src={stakeImg}
+        alt="Monumentation"
+        caption="Proper monumentation ensures long-term stability and reusability of control points."
+        align="left"
+        widthClassName="md:w-[320px]"
+        thumbImgClassName="w-full h-40 object-contain"
+      />
       <p className="text-muted-foreground leading-relaxed">
-        Control is only useful if it can be recovered. We advise on station location (stability,
+        Control is only useful if it can be recovered. Control points are physically marked on the ground using durable monuments such as concrete pillars, metal rods, or survey nails.
+        Proper monumentation ensures long-term stability and reusability of control points.
+         We advise on station location (stability,
         sky visibility, access) and help document monuments/marks with clear descriptions and
         photos so teams can reuse the network reliably.
       </p>
+
+      <div className="clear-both" />
 
       <h2 id="deliverables" className="text-2xl font-semibold mt-10 mb-4">
         Deliverables

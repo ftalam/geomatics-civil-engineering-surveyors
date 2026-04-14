@@ -11,6 +11,8 @@ import UAVfieldwork from "@/assets/UAVfieldwork.jpg";
 import contoursImg from "@/assets/contours.png";
 import { useState } from "react"; 
 import DEM from "@/assets/sasumwaDEM.png";
+import profile from "@/assets/PLAN&PROFILE.png";
+import cs from "@/assets/CROSS-SECTION.png";
 
 const toc = [
   { id: "overview", label: "Overview" },
@@ -142,11 +144,12 @@ const TopographicSurvey = () => {
             In practice, surveyors first sample heights in an area, then use these to produce a Digital Land Surface Model in the form of a TIN. The DLSM can then be used to visualize terrain, drape remote sensing images, quantify ecological properties of a surface or extract land surface objects. The contour data or any other sampled elevation datasets are not a DLSM. A DLSM implies that elevation is available continuously at each location in the study area, i.e. that the map represents a complete surface.
             </p>
 
-      <div className="grid grid-cols-2">  
+      <div className="grid grid-cols-2 gap-3">  
           <div>
             <h2 className="font-semibold "> Raw Survey data</h2> 
             <p className="text-muted-foreground leading-relaxed"> Topographic survey information is historically based upon notes of surveyors. They may derive naming and cultural information from other local sources
-              (for example, boundary delineation may be derived from local cadastral mapping) together with field observations. This information is often captured in field books, which are then used to produce the final map. In modern practice, surveyors may also capture this information digitally using tablets or other devices in the field, which can then be directly integrated into the mapping process.
+              (for example, boundary delineation may be derived from local cadastral mapping) together with field observations. This information is often captured in field books, which are then used to produce the final map.
+               In modern practice, surveyors may also capture this information digitally using tablets or other devices in the field, which can then be directly integrated into the mapping process.
             </p> 
             <ArticleGallery
               items={[
@@ -179,7 +182,7 @@ const TopographicSurvey = () => {
            <div>
             <h2 className="font-semibold "> Digital Elevation Model</h2> 
             <p className="text-muted-foreground leading-relaxed"> The digital elevation model (DEM) is a raster-based digital dataset of the topography (hypsometry and/or bathymetry) of all or part of the Earth (or a telluric planet). 
-              The pixels of the dataset are each assigned an elevation value, and a header portion of the dataset defines the area of coverage, the units each pixel covers, and the units of elevation (and the zero-point). Other models typically  include the digital terrain model (DTM), which represents the bare earth surface and Digital Surface Model (DSM), which represents the elevation of the top of the canopy or built structures.
+               Other models typically  include the digital terrain model (DTM), which represents the bare earth surface and Digital Surface Model (DSM), which represents the elevation of the top of the canopy or built structures.
               <br/> These Models may be derived from existing paper maps and survey data, or they may be generated from new satellite or other remotely sensed radar or sonar data.  </p>
              <ArticleGallery
               items={[
@@ -190,9 +193,8 @@ const TopographicSurvey = () => {
           </div>
       </div> 
 
-      <h3 id="maps" className="font-semibold"> Topographic maps </h3>
       <ArticleFigure
-        src={architectureImg}
+        src={cs}
         alt="Survey plan"
         caption="Planimetric and topographic outputs used for design"
         align="right"
@@ -202,14 +204,14 @@ const TopographicSurvey = () => {
         Profiles & cross-sections
       </h2>
       <ArticleFigure
-        src={civilWorksImg}
+        src={profile}
         alt="Profile section"
         caption="Profiles and cross-sections support design and earthworks"
         align="right"
       />
       <p className="text-muted-foreground leading-relaxed">
         Profiles and cross-sections describe elevation changes along a line. They are
-        essential for corridor design (roads and pipelines), drainage planning, and
+        essential for corridor design (roads and pipelines), drainage planning and
         cut/fill computations.
       </p>
 

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450" role="img" aria-label="Spatial planning layers diagram">
+  <defs>
+    <style>
+      .bg { fill: #ffffff; }
+      .frame { fill: none; stroke: #e5e7eb; stroke-width: 2; }
+      .title { font: 700 22px/1.2 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; fill: #0f172a; }
+      .text { font: 500 14px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; fill: #334155; }
+      .muted { font: 500 12px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; fill: #64748b; }
+      .box { stroke-width: 2; }
+      .arrow { stroke: #475569; stroke-width: 3; fill: none; }
+      .chipText { font: 700 14px/1.2 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; fill: #0f172a; }
+    </style>
+    <marker id="arrowHead" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#475569" />
+    </marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="800" height="450" rx="18" />
+  <rect class="frame" x="18" y="18" width="764" height="414" rx="16" />
+
+  <text class="title" x="44" y="70">Layer-based analysis</text>
+  <text class="muted" x="44" y="96">Combine datasets into a transparent suitability / priority score</text>
+
+  <!-- Stack -->
+  <g transform="translate(44,130)">
+    <rect class="box" x="0" y="0" width="320" height="64" rx="14" fill="#fee2e2" stroke="#ef4444"/>
+    <text class="chipText" x="18" y="38">Constraints</text>
+    <text class="text" x="150" y="38">hazards, buffers, protected areas</text>
+
+    <rect class="box" x="0" y="78" width="320" height="64" rx="14" fill="#dcfce7" stroke="#22c55e"/>
+    <text class="chipText" x="18" y="116">Opportunities</text>
+    <text class="text" x="150" y="116">land potential, growth corridors</text>
+
+    <rect class="box" x="0" y="156" width="320" height="64" rx="14" fill="#dbeafe" stroke="#3b82f6"/>
+    <text class="chipText" x="18" y="194">Services</text>
+    <text class="text" x="150" y="194">roads, water, power, social services</text>
+
+    <rect class="box" x="0" y="234" width="320" height="64" rx="14" fill="#ede9fe" stroke="#8b5cf6"/>
+    <text class="chipText" x="18" y="272">Demand</text>
+    <text class="text" x="150" y="272">population, activity, project needs</text>
+  </g>
+
+  <!-- Arrow to outputs -->
+  <path class="arrow" d="M 392 260 C 440 260, 440 260, 488 260" marker-end="url(#arrowHead)" />
+
+  <!-- Outputs -->
+  <g transform="translate(510,168)">
+    <rect x="0" y="0" width="246" height="200" rx="18" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2" />
+    <text class="chipText" x="20" y="38">Decision outputs</text>
+
+    <g transform="translate(20,60)">
+      <circle cx="7" cy="7" r="5" fill="#0ea5e9" />
+      <text class="text" x="22" y="12">Suitability map</text>
+    </g>
+    <g transform="translate(20,92)">
+      <circle cx="7" cy="7" r="5" fill="#0ea5e9" />
+      <text class="text" x="22" y="12">Ranked options</text>
+    </g>
+    <g transform="translate(20,124)">
+      <circle cx="7" cy="7" r="5" fill="#0ea5e9" />
+      <text class="text" x="22" y="12">Scenario trade-offs</text>
+    </g>
+    <g transform="translate(20,156)">
+      <circle cx="7" cy="7" r="5" fill="#0ea5e9" />
+      <text class="text" x="22" y="12">Implementation notes</text>
+    </g>
+  </g>
+</svg>
+
