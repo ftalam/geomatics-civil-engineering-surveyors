@@ -132,41 +132,6 @@ const GeodeticGpsControl = () => {
 
       <div className="clear-both" />
 
-      <h2 id="deliverables" className="text-2xl font-semibold mt-10 mb-4">
-        Deliverables
-      </h2>
-      <ArticleFigure
-        src={topoMapsImg}
-        alt="Mapping tied to control"
-        caption="Accurate control underpins reliable mapping, models, and engineering outputs."
-        align="right"
-        widthClassName="md:w-[320px]"
-        thumbImgClassName="w-full h-44 object-cover"
-      />
-      <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-        <li>Coordinates and heights with quality statistics</li>
-        <li>Control diagrams and station descriptions</li>
-        <li>Observation logs and adjustment summaries</li>
-        <li>Control register (IDs, marks, photos, access notes)</li>
-      </ul>
-
-      <h2 id="qa" className="text-2xl font-semibold mt-10 mb-4">
-        Quality control
-      </h2>
-      <ArticleFigure
-        src={gnssI89Img}
-        alt="Field workflows"
-        caption="Checks include redundancy, closures, and consistency against required tolerances."
-        align="left"
-        widthClassName="md:w-[320px]"
-        thumbImgClassName="w-full h-44 object-cover"
-      />
-      <p className="text-muted-foreground leading-relaxed">
-        QA focuses on repeatability and traceability. We plan sessions, confirm antenna heights,
-        apply redundancy where required, and review adjustment results so the network is stable
-        and fit for downstream mapping and construction.
-      </p>
-
       <div className="clear-both mt-10 bg-card p-8 rounded-xl border text-center">
         <h3 className="text-xl font-semibold mb-3">Need Geodetic Control?</h3>
         <p className="text-muted-foreground mb-4">

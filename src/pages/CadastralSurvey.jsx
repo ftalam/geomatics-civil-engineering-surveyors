@@ -99,12 +99,6 @@ const CadastralSurvey = () => {
                   alt: "Orthophoto example",
                   caption: "Orthophoto example (geometrically corrected aerial imagery)",
                 },
-                {
-                  src: geospatialImg,
-                  alt: "Topographic map",
-                  caption: "A map sheet with terrain representation and contours",
-                },
-                
               ]}
               align="right"
               widthClassName="md:w-[340px] h-auto"
@@ -132,7 +126,7 @@ const CadastralSurvey = () => {
         <li>Infrastructure & Utility projects. For right-of-way definition, easement documentation and land acquisition surveys.</li>
       </ul>
 
-      <div className="clear-both" />
+   
 
 
       <h2 id="evidence" className="text-xl font-semibold mt-10 mb-4">
@@ -154,7 +148,7 @@ const CadastralSurvey = () => {
       </p>
       <div className="clear-both" />
 
-      <h2 id="qa" className="text-2xl font-semibold mt-10 mb-4">
+      <h2 id="qa" className="text-x font-semibold mt-10 mb-4">
         Checks & QA
       </h2>
       <p className="text-muted-foreground leading-relaxed">

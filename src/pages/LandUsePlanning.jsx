@@ -1,210 +1,272 @@
-import ArticleFigure from "@/components/ArticleFigure";
+import { useState, useRef } from "react";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import ArticleLayout from "@/components/ArticleLayout";
+import ArticleFigure from "@/components/ArticleFigure";
 import { Link } from "react-router-dom";
 
 import landuseImg from "@/assets/SubdivisionPlan.png";
 import civilWorksImg from "@/assets/civil-works.jpg";
 import geospatialImg from "@/assets/geospatial.jpg";
 
-const toc = [
+/* ---------------- BEFORE / AFTER SLIDER ---------------- */
+const BeforeAfterSlider = ({ beforeImg, afterImg }) => {
+  const [position, setPosition] = useState(50);
+  const ref = useRef(null);
+
+  const handleMove = (e) => {
+    const rect = ref.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const percent = (x / rect.width) * 100;
+    setPosition(Math.max(0, Math.min(100, percent)));
+  };
+
+  return (
+    <div
+      ref={ref}
+      onMouseMove={(e) => e.buttons === 1 && handleMove(e)}
+      onClick={handleMove}
+      className="relative w-full max-w-xl mx-auto h-56 rounded-xl overflow-hidden cursor-ew-resize"
+    >
+      <img src={afterImg} className="absolute inset-0 w-full h-full object-cover" />
+
+      <div className="absolute inset-0 overflow-hidden" style={{ width: `${position}%` }}>
+        <img src={beforeImg} className="w-full h-full object-cover" />
+      </div>
+
+      <div
+        className="absolute top-0 bottom-0 w-[2px] bg-white"
+        style={{ left: `${position}%` }}
+      />
+
+      <div className="absolute top-2 left-2 text-xs bg-black/60 text-white px-2 py-1 rounded">
+        Before
+      </div>
+      <div className="absolute top-2 right-2 text-xs bg-black/60 text-white px-2 py-1 rounded">
+        After
+      </div>
+    </div>
+  );
+};
+
+const tabs = [
   { id: "overview", label: "Overview" },
-  { id: "principles", label: "Principles" },
-  { id: "evidence", label: "Data & evidence" },
-  { id: "process", label: "Planning process" },
-  { id: "controls", label: "Development controls" },
-  { id: "deliverables", label: "Deliverables" },
-  { id: "inputs", label: "Project inputs" },
-  { id: "applications", label: "Applications" },
+  { id: "process", label: "Process" },
+  { id: "value", label: "Why Choose Us" },
 ];
 
 const LandUsePlanning = () => {
+  const [activeTab, setActiveTab] = useState("overview");
+  const [selectedImg, setSelectedImg] = useState(null);
+
+  /* Scroll animation */
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], [40, -40]);
+  const opacity = useTransform(scrollYProgress, [0, 0.3, 1], [0, 1, 1]);
+
   return (
     <ArticleLayout
       title="Land-Use Planning"
-      tagline="Optimal land allocation and use strategies for communities and projects."
-      hatnote={
-        <>
-          For broader frameworks, see{" "}
-          <Link to="/services/urban-regional-planning" className="text-primary hover:underline">
-            Urban & Regional Planning
-          </Link>
-          .
-        </>
-      }
-      toc={toc}
-      infobox={{
-        title: "Land-use plan",
-        images: [
-          {
-            src: landuseImg,
-            alt: "Land-use planning map",
-            caption: "Allocations, zoning, and development guidance",
-          },
-          {
-            src: geospatialImg,
-            alt: "GIS analysis",
-            caption: "Evidence-based planning with GIS",
-          },
-        ],
-        items: [
-          { label: "Focus", value: "Zoning + allocation" },
-          { label: "Inputs", value: "Data + stakeholders" },
-          { label: "Output", value: "Plan + controls" },
-        ],
-      }}
+      tagline="Smart, practical planning that balances development, infrastructure, and environment."
     >
-      <p id="overview" className="text-lg text-muted-foreground leading-relaxed">
-        Land-use planning guides how land is allocated and managed over time. It balances
-        competing needs (housing, infrastructure, livelihoods, environmental protection, and
-        economic activity) into a practical plan that can be implemented and monitored.
-      </p>
+      <div className="grid lg:grid-cols-[220px_1fr] gap-10">
 
-      <ArticleFigure
-        src={landuseImg}
-        alt="Land-use plan example"
-        caption="Land-use plans translate policy goals into mapped allocations and rules."
-        align="right"
-        widthClassName="md:w-[340px]"
-        thumbImgClassName="w-full h-44 object-cover"
-      />
+        {/* SIDEBAR */}
+        <aside className="hidden lg:block sticky top-24 h-fit">
+          <div className="space-y-2 border-l pl-4">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`block text-left text-sm ${
+                  activeTab === tab.id
+                    ? "text-primary font-semibold"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        </aside>
 
-      <p className="text-muted-foreground leading-relaxed">
-        A good land-use plan reduces uncertainty for investors and communities, helps prevent
-        incompatible land uses, and supports efficient delivery of roads, drainage, water,
-        power, and social services.
-      </p>
+        {/* MAIN */}
+        <div>
 
-      <h2 id="principles" className="text-2xl font-semibold mt-10 mb-4">
-        Principles
-      </h2>
-      <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-        <li>
-          <span className="text-foreground">Suitability first</span>: match proposed uses to
-          constraints and opportunities (slope, soils, hazards, access).
-        </li>
-        <li>
-          <span className="text-foreground">Conflict reduction</span>: manage incompatible uses
-          and protect sensitive areas.
-        </li>
-        <li>
-          <span className="text-foreground">Service efficiency</span>: plan for mobility,
-          utilities, and public services using realistic demand and standards.
-        </li>
-        <li>
-          <span className="text-foreground">Transparency</span>: align with regulations and
-          communicate rules clearly to stakeholders.
-        </li>
-      </ul>
+          {/* Mobile Tabs */}
+          <div className="flex gap-2 mb-6 lg:hidden">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`px-4 py-2 rounded-full text-sm ${
+                  activeTab === tab.id ? "bg-primary text-white" : "bg-muted"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
 
-      <div className="clear-both" />
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              ref={ref}
+              style={{ y, opacity }}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.4 }}
+              className="space-y-8 text-[17px] leading-relaxed"
+            >
 
-      <h2 id="evidence" className="text-2xl font-semibold mt-10 mb-4">
-        Data & evidence
-      </h2>
-      <p className="text-muted-foreground leading-relaxed">
-        Planning decisions are stronger when they are traceable to evidence. We help compile,
-        clean, and structure the datasets needed to justify allocations and reduce future
-        disputes.
-      </p>
-      <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-        <li>Administrative boundaries, parcels, and existing approvals</li>
-        <li>Terrain and drainage (slope, flood risk, buffers)</li>
-        <li>Access and infrastructure (roads, water, power, services)</li>
-        <li>Environmental constraints (wetlands, riparian zones, protected areas)</li>
-        <li>Existing land uses and growth pressures</li>
-      </ul>
+              {/* OVERVIEW */}
+              {activeTab === "overview" && (
+                <>
+                  <ArticleFigure
+                    src={landuseImg}
+                    alt="Land-use"
+                    caption="Planning transforms policy into land allocation."
+                    align="right"
+                    widthClassName="md:w-[340px]"
+                    thumbImgClassName="w-full h-44 object-cover cursor-pointer"
+                    onClick={() => setSelectedImg(landuseImg)}
+                  />
 
-      <div className="clear-both" />
+                  <p className="text-muted-foreground">
+                    <strong>Land-use planning</strong> ensures that land is used efficiently by aligning
+                    <strong> development, infrastructure, and environmental considerations</strong>.
+                    It reduces conflicts and creates a clear path for sustainable growth.
+                  </p>
 
-      <h2 id="process" className="text-2xl font-semibold mt-10 mb-4">
-        Planning process
-      </h2>
+                  <p className="text-muted-foreground">
+                    A strong plan improves decision-making, supports investment, and ensures that
+                    <strong> the right developments happen in the right locations</strong>.
+                  </p>
 
-      <ArticleFigure
-        src={geospatialImg}
-        alt="Spatial analysis for planning"
-        caption="Constraints + opportunities mapping supports defensible decisions."
-        align="left"
-        widthClassName="md:w-[320px]"
-        thumbImgClassName="w-full h-40 object-cover"
-      />
+                  {/* SLIDER */}
+                  <BeforeAfterSlider
+                    beforeImg={landuseImg}
+                    afterImg={geospatialImg}
+                  />
 
-      <ol className="list-decimal pl-6 text-muted-foreground space-y-2">
-        <li>Baseline: compile existing plans, legal constraints, and stakeholder needs.</li>
-        <li>
-          Analysis: map constraints and opportunities (hazards, access, services, environmental
-          buffers).
-        </li>
-        <li>Options: develop alternative allocations/zoning scenarios and test impacts.</li>
-        <li>Preferred plan: refine boundaries, densities, and standards.</li>
-        <li>Implementation: define phasing, responsibilities, conditions, and indicators.</li>
-      </ol>
+                  <div className="clear-both" />
+                </>
+              )}
 
-      <div className="clear-both" />
+              {/* PROCESS */}
+              {activeTab === "process" && (
+                <>
+                  <ArticleFigure
+                    src={geospatialImg}
+                    alt="Process"
+                    caption="Data-driven spatial analysis."
+                    align="left"
+                    widthClassName="md:w-[320px]"
+                    thumbImgClassName="w-full h-40 object-cover cursor-pointer"
+                    onClick={() => setSelectedImg(geospatialImg)}
+                  />
 
-      <h2 id="controls" className="text-2xl font-semibold mt-10 mb-4">
-        Development controls
-      </h2>
-      <ArticleFigure
-        src={civilWorksImg}
-        alt="Infrastructure and servicing"
-        caption="Plans work best when backed by realistic servicing and phasing."
-        align="right"
-        widthClassName="md:w-[320px]"
-        thumbImgClassName="w-full h-44 object-cover"
-      />
-      <p className="text-muted-foreground leading-relaxed">
-        We help translate the plan into practical rules that guide approvals and protect
-        long-term intent. Controls can include zone definitions, permitted uses, buffers, plot
-        sizes, building lines, density guidance, and special conditions for sensitive areas and
-        infrastructure corridors.
-      </p>
+                  <div className="space-y-6">
+                    {[
+                      "Understanding site conditions and regulations",
+                      "Analyzing constraints and opportunities",
+                      "Developing and comparing planning options",
+                      "Refining the preferred plan",
+                      "Defining implementation and monitoring",
+                    ].map((text, i) => (
+                      <motion.p
+                        key={i}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: i * 0.1 }}
+                        className="text-muted-foreground"
+                      >
+                        <strong>{`0${i + 1}.`}</strong> {text}
+                      </motion.p>
+                    ))}
+                  </div>
 
-      <h2 id="deliverables" className="text-2xl font-semibold mt-10 mb-4">
-        Deliverables
-      </h2>
-      <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-        <li>Land-use plan maps and documentation</li>
-        <li>Supporting GIS layers (vector/raster) with metadata</li>
-        <li>Zoning schedules and development control notes</li>
-        <li>Implementation roadmap and monitoring indicators</li>
-      </ul>
+                  <div className="clear-both" />
+                </>
+              )}
 
-      <h2 id="inputs" className="text-2xl font-semibold mt-10 mb-4">
-        Project inputs
-      </h2>
-      <p className="text-muted-foreground leading-relaxed">
-        To move faster and reduce revisions, we typically confirm these items early:
-      </p>
-      <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-        <li>Planning objectives and decision-makers (who signs off)</li>
-        <li>Area of interest boundary and any available base data (CAD/GIS)</li>
-        <li>Applicable regulations/standards and required submission formats</li>
-        <li>Stakeholder list and engagement expectations (where required)</li>
-      </ul>
+              {/* VALUE */}
+              {activeTab === "value" && (
+                <>
+                  <ArticleFigure
+                    src={civilWorksImg}
+                    alt="Infrastructure"
+                    caption="Planning aligned with infrastructure."
+                    align="right"
+                    widthClassName="md:w-[320px]"
+                    thumbImgClassName="w-full h-44 object-cover cursor-pointer"
+                    onClick={() => setSelectedImg(civilWorksImg)}
+                  />
 
-      <h2 id="applications" className="text-2xl font-semibold mt-10 mb-4">
-        Applications
-      </h2>
-      <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-        <li>Subdivisions and new developments</li>
-        <li>Institutional, industrial, and mixed-use projects</li>
-        <li>Environmental buffers and conservation planning</li>
-        <li>Growth management and service extension planning</li>
-      </ul>
+                  <p className="text-muted-foreground">
+                    Our approach combines <strong>technical expertise</strong> with practical,
+                    real-world understanding to deliver plans that are not just compliant,
+                    but <strong>usable and effective</strong>.
+                  </p>
 
-      <div className="clear-both mt-10 bg-card p-8 rounded-xl border text-center">
-        <h3 className="text-xl font-semibold mb-3">Need a Land-Use Plan?</h3>
-        <p className="text-muted-foreground mb-4">
-          Contact us for data-driven land-use planning support.
-        </p>
-        <Link to="/contact" className="inline-block bg-primary text-white px-6 py-3 rounded-lg">
-          Request Service
-        </Link>
+                  <p className="text-muted-foreground">
+                    We focus on <strong>clarity, efficiency, and long-term value</strong>,
+                    ensuring your project moves forward smoothly.
+                  </p>
+
+                  <p className="text-muted-foreground">
+                    Every plan is designed to be <strong>scalable, adaptable, and future-ready</strong>,
+                    giving you confidence in both approvals and execution.
+                  </p>
+
+                  <div className="clear-both" />
+                </>
+              )}
+
+            </motion.div>
+          </AnimatePresence>
+
+          {/* CTA */}
+          <div className="mt-12 bg-card border rounded-2xl p-8 text-center">
+            <h3 className="text-xl font-semibold mb-3">Need a Land-Use Plan?</h3>
+            <p className="text-muted-foreground mb-4">
+              Let’s help you plan smarter and move your project forward with confidence.
+            </p>
+            <Link to="/contact" className="bg-primary text-white px-6 py-3 rounded-lg">
+              Request Service
+            </Link>
+          </div>
+        </div>
       </div>
+
+      {/* IMAGE MODAL */}
+      <AnimatePresence>
+        {selectedImg && (
+          <motion.div
+            className="fixed inset-0 bg-black/70 flex items-center justify-center z-50"
+            onClick={() => setSelectedImg(null)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.img
+              src={selectedImg}
+              className="max-w-[90%] max-h-[90%] rounded-xl"
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.8 }}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
     </ArticleLayout>
   );
 };
 
 export default LandUsePlanning;
-

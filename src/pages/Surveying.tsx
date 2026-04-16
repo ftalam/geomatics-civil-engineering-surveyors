@@ -71,14 +71,6 @@ const Surveying = () => {
       </p>
       <p className="text-muted-foreground leading-relaxed">Relief is commonly communicated using:</p>
 
-      <ArticleFigure
-        src={contoursImg}
-        alt="Contour representation"
-        caption="Relief represented using contour lines"
-        align="left"
-        widthClassName="md:w-[340px]"
-        thumbImgClassName="w-full h-44 object-cover"
-      />
 
       <ul className="list-disc pl-6 text-muted-foreground space-y-2">
         <li>
@@ -97,7 +89,7 @@ const Surveying = () => {
 
       <div className="clear-both" />
 
-      <h2 id="control" className="text-2xl font-semibold mt-10 mb-4">
+      <h2 id="control" className="text-x font-semibold mt-10 mb-4">
         Control & datums
       </h2>
       <ArticleFigure

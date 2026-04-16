@@ -12,12 +12,26 @@ import {
   Wrench,
 } from "lucide-react";
 
+import siteSurveyImg from "@/assets/Site-survey.png";
+import contoursImg from "@/assets/contours.png";
+import aerialImg from "@/assets/AERIAL.png";
+import topoMapsImg from "@/assets/topo-maps.jpg";
+import totalStationImg from "@/assets/chcnav-cts-m100-total-station-surveying.jpg";
+import gnssImg from "@/assets/gnss-smart-full-antennas-chcnav-i93.jpg";
+import shop from "@/assets/shopstand.jpg";
+import landUse from "@/assets/SubdivisionPlan.png";
+import GISRS from "@/assets/img.jpeg";
+import urbanRegional from "@/assets/NakuruAerialImg.png";
+import cors from "@/assets/image.png";
+
+
 export type ServiceDefinition = {
   id: string;
   title: string;
   description: string;
   details: string;
   icon: LucideIcon;
+  image: string;
 };
 
 export const services: ServiceDefinition[] = [
@@ -29,6 +43,7 @@ export const services: ServiceDefinition[] = [
     details:
       "We capture natural and man-made features (terrain, elevations, roads, buildings, drainage) and deliver accurate maps, plans, and digital terrain models to support design and construction.",
     icon: Mountain,
+    image: topoMapsImg,
   },
   {
     id: "cadastral-surveys",
@@ -38,6 +53,7 @@ export const services: ServiceDefinition[] = [
     details:
       "We provide accurate boundary determination, beacon verification/re-establishment, subdivisions, and documentation aligned with applicable survey regulations and land administration requirements.",
     icon: MapPinned,
+    image: siteSurveyImg,
   },
   {
     id: "engineering-surveys",
@@ -46,6 +62,7 @@ export const services: ServiceDefinition[] = [
     details:
       "We support construction and infrastructure projects with setting out, as-built surveys, control establishment, profiles and cross-sections, and quality checks to keep work aligned and verifiable.",
     icon: HardHat,
+    image: totalStationImg,
   },
   {
     id: "geodetic-gps-control",
@@ -55,6 +72,7 @@ export const services: ServiceDefinition[] = [
     details:
       "We establish and verify geodetic control networks using GNSS methods (including CORS/RTK workflows where applicable) to provide reliable horizontal and vertical control for large-scale mapping and engineering works.",
     icon: Satellite,
+    image: cors,
   },
   {
     id: "uav-mapping",
@@ -63,6 +81,7 @@ export const services: ServiceDefinition[] = [
     details:
       "We use UAV/drone surveys to produce orthophotos, point clouds, DEM/DSM, and other mapping outputs for planning, monitoring, and progress reporting with fast turnaround.",
     icon: Plane,
+    image: aerialImg, 
   },
   {
     id: "gis-remote-sensing",
@@ -72,6 +91,7 @@ export const services: ServiceDefinition[] = [
     details:
       "We build and manage GIS datasets, perform spatial analysis, and integrate remote sensing products to support decision-making, reporting, and visualization.",
     icon: Globe,
+    image: GISRS ,
   },
   {
     id: "spatial-planning",
@@ -80,6 +100,7 @@ export const services: ServiceDefinition[] = [
     details:
       "We provide spatial analysis and planning support for sustainable development, aligning land potential, constraints, and stakeholder needs with implementable strategies.",
     icon: LayoutGrid,
+    image: "/images/spatial-planning.jpg",
   },
   {
     id: "land-use-planning",
@@ -88,6 +109,7 @@ export const services: ServiceDefinition[] = [
     details:
       "We develop land-use plans and frameworks that balance growth, infrastructure needs, environmental constraints, and regulatory requirements.",
     icon: Trees,
+    image: landUse,
   },
   {
     id: "urban-regional-planning",
@@ -96,6 +118,7 @@ export const services: ServiceDefinition[] = [
     details:
       "We support urban and regional development with policy-aligned planning, development control guidance, and data-driven frameworks for implementation and monitoring.",
     icon: Building2,
+    image: urbanRegional,
   },
   {
     id: "equipment-supply-training",
@@ -104,6 +127,7 @@ export const services: ServiceDefinition[] = [
     details:
       "We supply surveying equipment and provide training and support to help teams operate confidently and maintain accurate, reliable workflows in the field.",
     icon: Wrench,
+    image: shop,
   },
 ];
 
