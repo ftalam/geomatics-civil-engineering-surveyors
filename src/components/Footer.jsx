@@ -6,7 +6,7 @@ import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Instagram } from "luc
 const Footer = () => {
   return (
     <footer className="bg-black border-t border-white/10">
-      <div className="container mx-auto px-2.5">
+      <div className="container mx-auto px-2.5 ,mt-1">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1">
           {/* Company Info */}
           <div>
@@ -29,7 +29,7 @@ const Footer = () => {
           {/* Quick Links */}
           <div >
             <h4 className="font-display font-semibold text-foreground mb-4 text-center">Quick Links</h4>
-            <ul className=" space-y-1 text-center">
+            <ul className=" grid sm-grid-cols-2 gap-2 text-center">
               {["Home", "About", "Services", "Products", "Industries",  "Support"].map((link) => (
                 <li key={link}>
                   <Link
@@ -125,7 +125,7 @@ const Footer = () => {
           
         </div>
 
-        <div className="border-t border-border mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="border-t border-border mt-1 mb-1 pt-4 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-muted-foreground text-sm">
             © {new Date().getFullYear()} Geomatics Civil Engineering Surveyors. All rights reserved.
           </p>

@@ -135,7 +135,7 @@ const Index = () => {
                 <span className="text-emerald-500">Precision-Based</span>{" "}
                 <span className="text-gradient">Decision Making</span>
               </h1>
-              <p className="text-black text-base md:text-lg mb-6 leading-relaxed">
+              <p className="text-muted-background text-base md:text-lg mb-6 leading-relaxed">
                 Innovative surveying solutions for businesses that need precision. Delivering cutting-edge geomatics services since 2000.
               </p>
               <div className="flex flex-wrap gap-4">
