@@ -32,21 +32,6 @@ const SpatialPlanning = () => {
         </>
       }
       toc={toc}
-      infobox={{
-        title: "Spatial planning",
-        images: [
-          {
-            src: renewableImg,
-            alt: "Planning context",
-            caption: "Evidence-based planning and site selection",
-          },
-        ],
-        items: [
-          { label: "Focus", value: "Constraints + opportunities" },
-          { label: "Method", value: "Spatial analysis" },
-          { label: "Output", value: "Strategies + frameworks" },
-        ],
-      }}
     >
       <p id="overview" className="text-lg text-muted-foreground leading-relaxed">
         Spatial planning brings together land potential, constraints, infrastructure, and

@@ -9,10 +9,10 @@ const COMPANY_PROFILE_DOC_PATH = "/profiles/Geomatics-Company-Profile.docx";
 
 const navLinks = [
   { name: "Home", path: "/" },
-  { name: "Industries", path: "/industries" },
-  { name: "Products", path: "/products" },
-  { name: "Support", path: "/support" },
   { name: "About", path: "/about" },
+  { name: "Products", path: "/products" },
+  { name: "Industries", path: "/industries" },
+  { name: "Support", path: "/support" },
   { name: "Contact", path: "/contact" },
 ];
 

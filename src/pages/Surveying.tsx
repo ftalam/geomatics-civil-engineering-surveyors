@@ -206,7 +206,7 @@ Surveyors also make use of online platforms and tools provided by government age
         Quantity surveying
       </h2>
         <p className="text-muted-foreground leading-relaxed">
-        Quantity surveying is a profession that deals with the costs and contracts of construction projects. A quantity surveyor is an expert in estimating the costs of materials, labor, and time needed for a project, as well as managing the financial and legal aspects of the project. A quantity surveyor can work for either the client or the contractor, and can be involved in different stages of the project, from planning to completion. Quantity surveyors are also known as Chartered Surveyors in the UK.
+        Quantity surveying is a profession that deals with the costs and contracts of construction projects. A quantity surveyor is an expert in estimating the costs of materials, labor and time needed for a project, as well as managing the financial and legal aspects of the project. A quantity surveyor can work for either the client or the contractor, and can be involved in different stages of the project, from planning to completion. Quantity surveyors are also known as Chartered Surveyors in the UK.
       </p>
 
       <h2 id="deliverables" className="text-2xl font-semibold mt-10 mb-4">

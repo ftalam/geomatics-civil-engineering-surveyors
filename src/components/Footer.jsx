@@ -6,7 +6,7 @@ import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Instagram } from "luc
 const Footer = () => {
   return (
     <footer className="bg-black border-t border-white/10">
-      <div className="container mx-auto px-2.5 py-4">
+      <div className="container mx-auto px-2.5">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1">
           {/* Company Info */}
           <div>
@@ -16,34 +16,21 @@ const Footer = () => {
             <img
               src={logoImg}
               alt="Geomatics Civil Engineering Surveyors logo"
-              className="h-10 w-auto object-contain"
+              className="h-18 w-auto object-contain"
             />
           </Link>
             </div>
             <p className="text-muted-foreground text-sm mb-6">
               Delivering precision geomatics solutions since 2000. Your trusted partner for surveying excellence.
             </p>
-            <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:bg-green-950 hover:text-primary-foreground transition-colors">
-                <Facebook className="w-5 h-5" />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:bg-green-950 hover:text-primary-foreground transition-colors">
-                <Twitter className="w-5 h-5" />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:bg-green-950 hover:text-primary-foreground transition-colors">
-                <Linkedin className="w-5 h-5" />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:bg-green-950 hover:text-primary-foreground transition-colors">
-                <Instagram className="w-5 h-5" />
-              </a>
-            </div>
+         
           </div>
 
           {/* Quick Links */}
           <div >
-            <h4 className="font-display font-semibold text-foreground mb-4">Quick Links</h4>
-            <ul className="grid grid-cols-2 gap-1">
-              {["Home", "Industries", "Products", "Support", "About", "Services"].map((link) => (
+            <h4 className="font-display font-semibold text-foreground mb-4 text-center">Quick Links</h4>
+            <ul className=" space-y-1 text-center">
+              {["Home", "About", "Services", "Products", "Industries",  "Support"].map((link) => (
                 <li key={link}>
                   <Link
                     to={link === "Home" ? "/" : `/${link.toLowerCase()}`}
@@ -120,7 +107,22 @@ const Footer = () => {
                 </a>
               </li>
             </ul>
+               <div className="flex gap-4 mt-6">
+              <a href="#" className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:bg-green-950 hover:text-primary-foreground transition-colors">
+                <Facebook className="w-5 h-5" />
+              </a>
+              <a href="#" className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:bg-green-950 hover:text-primary-foreground transition-colors">
+                <Twitter className="w-5 h-5" />
+              </a>
+              <a href="#" className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:bg-green-950 hover:text-primary-foreground transition-colors">
+                <Linkedin className="w-5 h-5" />
+              </a>
+              <a href="#" className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:bg-green-950 hover:text-primary-foreground transition-colors">
+                <Instagram className="w-5 h-5" />
+              </a>
+            </div>
           </div>
+          
         </div>
 
         <div className="border-t border-border mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">

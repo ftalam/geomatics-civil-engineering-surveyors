@@ -209,19 +209,15 @@ const LandUsePlanning = () => {
                   />
 
                   <p className="text-muted-foreground">
-                    Our approach combines <strong>technical expertise</strong> with practical,
-                    real-world understanding to deliver plans that are not just compliant,
-                    but <strong>usable and effective</strong>.
+                    Our approach combines <strong>technical expertise</strong> with practical,real-world understanding to deliver plans that are not just compliant, but <strong>usable and effective</strong>.
                   </p>
 
                   <p className="text-muted-foreground">
-                    We focus on <strong>clarity, efficiency, and long-term value</strong>,
-                    ensuring your project moves forward smoothly.
+                    We focus on <strong>clarity, efficiency, and long-term value</strong>,ensuring your project moves forward smoothly.
                   </p>
 
                   <p className="text-muted-foreground">
-                    Every plan is designed to be <strong>scalable, adaptable, and future-ready</strong>,
-                    giving you confidence in both approvals and execution.
+                    Every plan is designed to be <strong>scalable, adaptable, and future-ready</strong>, giving you confidence in both approvals and execution.
                   </p>
 
                   <div className="clear-both" />
@@ -233,7 +229,7 @@ const LandUsePlanning = () => {
 
           {/* CTA */}
           <div className="mt-12 bg-card border rounded-2xl p-8 text-center">
-            <h3 className="text-xl font-semibold mb-3">Need a Land-Use Plan?</h3>
+            <h3 className="text-xl font-semibold mb-3">Need a Spatial Plan?</h3>
             <p className="text-muted-foreground mb-4">
               Let’s help you plan smarter and move your project forward with confidence.
             </p>

@@ -236,10 +236,7 @@ const GisRemoteSensing = () => {
       </p>
       <ol className="list-decimal pl-6 text-muted-foreground space-y-2">
         <li>Define the area of interest, questions, and success criteria.</li>
-        <li>
-          Collect and prepare data (projection setup, mosaicking, cloud masking,
-          QA/QC).
-        </li>
+        <li>Collect and prepare data (projection setup, mosaicking, cloud masking,QA/QC).</li>
         <li>Run analysis (classification, indices, suitability, change detection).</li>
         <li>Validate results using ground truth, checks, or independent datasets.</li>
         <li>Compile outputs (maps, datasets, and short decision-ready summaries).</li>
@@ -251,10 +248,7 @@ const GisRemoteSensing = () => {
       <ul className="list-disc pl-6 text-muted-foreground space-y-2">
         <li>Printable maps and presentation-ready layouts</li>
         <li>GIS layers (vector/raster) with metadata</li>
-        <li>
-          Common formats: GeoPackage/GeoJSON/Shapefile (vector), GeoTIFF (raster),
-          CSV/Excel (summaries)
-        </li>
+        <li> Common formats: GeoPackage/GeoJSON/Shapefile (vector), GeoTIFF (raster),CSV/Excel (summaries)</li>
         <li>Analysis reports and visualizations</li>
       </ul>
 
