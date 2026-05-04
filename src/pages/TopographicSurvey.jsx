@@ -60,7 +60,7 @@ const TopographicSurvey = () => {
     >
       <p id="overview" className="text-lg text-muted-foreground leading-relaxed">
         Topographic surveying is the foundation of successful engineering,
-        construction, and land development projects. It involves accurately measuring
+        construction and land development projects. It involves accurately measuring
         and mapping natural and man-made features to support design decisions and
         verification on the ground.
       </p>
@@ -77,121 +77,23 @@ const TopographicSurvey = () => {
             alt: "Orthophoto example",
             caption: "Orthophoto example (geometrically corrected aerial imagery)",
           },
-          {
-            src: topoMapsImg,
-            alt: "Topographic map",
-            caption: "A map sheet with terrain representation and contours",
-          },
-          
+        
         ]}
         align="right"
         widthClassName="md:w-[340px]"
       />
 
-      <h2 className="text-2xl font-semibold mt-10 mb-4">
-        What is a topographic survey?
-      </h2>
+      
       <p className="text-muted-foreground leading-relaxed">
-        A topographic survey captures the positions of not only relief but also natural, artifical and cultural features (roads, buildings,
-        drainage, utilities) together with elevations (spot heights, contours,
-        profiles). Deliverables can include fixed-dimension maps, CAD drawings,
-        orthophotos and digital terrain models depending on specification. <br/> 
-        Work on one of the first topographic maps was begun in France by Giovanni Domenico Cassini, the great Italian astronomer.
-      </p>
-      <p className="text-muted-foreground leading-relaxed">
-        The classical topographic mapping workflow is typically organized into
-        sequential steps to ensure accuracy and consistency:
-      </p>
-      <ol className="list-decimal pl-6 text-muted-foreground space-y-2">
-        <li>
-          Project specification: define outputs, accuracy, content, format, schedule,
-          and costing.
-        </li>
-        <li>
-          Establishment of control: set horizontal and vertical control using GNSS,
-          traverses, and/or leveling techniques as required.
-        </li>
-        <li>
-          Aerial photography (when applicable): capture imagery with appropriate
-          overlap and conditions to support mapping.
-        </li>
-        <li>
-          Aerotriangulation and adjustment: compute camera orientation and ground
-          coordinates to support reliable measurements.
-        </li>
-        <li>
-          Data capture: collect planimetric features and elevation information (spot
-          heights, breaklines, profiles).
-        </li>
-        <li>
-          Verification: field check ambiguous features and confirm names/boundaries
-          when needed.
-        </li>
-        <li>
-          Compilation: produce maps, CAD/GIS deliverables, terrain models, and
-          supporting metadata.
-        </li>
-        <li>
-          Quality review: validate accuracy and completeness against the agreed
-          specification.
-        </li>
-      </ol>
+      Our topographic survey service <b>integrates modern techniques</b> such as <b>UAV mapping</b> for rapid, high-resolution coverage with established 
+      <b>ground survey methods</b> to achieve the required accuracy. We establish robust control, <b>capture detailed terrain and feature data</b>, and 
+      verify critical elements in the field to ensure consistency and completeness.<br/>
 
-      <h2 id="toposdata" className="text-2xl font-semibold mt-10 mb-4">
-              Forms of topographic data
-            </h2>
-            <p className="text-muted-foreground leading-relaxed">
-            In practice, surveyors first sample heights in an area, then use these to produce a Digital Land Surface Model in the form of a TIN. The DLSM can then be used to visualize terrain, drape remote sensing images, quantify ecological properties of a surface or extract land surface objects. The contour data or any other sampled elevation datasets are not a DLSM. A DLSM implies that elevation is available continuously at each location in the study area, i.e. that the map represents a complete surface.
-            </p>
-
-      <div className="grid grid-cols-2 gap-3">  
-          <div>
-            <h2 className="font-semibold "> Raw Survey data</h2> 
-            <p className="text-muted-foreground leading-relaxed"> Topographic survey information is historically based upon notes of surveyors. They may derive naming and cultural information from other local sources
-              (for example, boundary delineation may be derived from local cadastral mapping) together with field observations. This information is often captured in field books, which are then used to produce the final map.
-               In modern practice, surveyors may also capture this information digitally using tablets or other devices in the field, which can then be directly integrated into the mapping process.
-            </p> 
-            <ArticleGallery
-              items={[
-                { src: UAVfieldwork, alt: "UAV fieldwork", caption: "Field survey data capture" },
-                { src: NakuruImg, alt: "Orthophoto", caption: "Orthophoto output" },
-              ]}
-            />
-          </div>
-          <div>
-            <h2 className="font-semibold "> Remote sensing data</h2> 
-            <p className="text-muted-foreground leading-relaxed"> As with field notes, remote sensing data (aerial and satellite photography, for example), is raw and uninterpreted. It may contain holes (due to cloud cover for example) or inconsistencies (due to the timing of specific image captures). Most modern topographic mapping includes a large component of remotely sensed data in its compilation process.</p>
-             <ArticleGallery
-              items={[
-                { src: contoursImg, alt: "Contour representation", caption: "Relief represented using contour lines", },
-                { src: NakuruImg, alt: "Orthophoto", caption: "Orthophoto output" },
-              ]}
-            /> 
-          </div>
-          <div>
-            <h2 className="font-semibold "> Topological modelling</h2> 
-             <p className="text-muted-foreground leading-relaxed"> Topological models represent the spatial relationships between different features in the landscape. A geographic information system (GIS) can recognize and analyze the spatial relationships that exist within digitally stored spatial data. These topological relationships allow complex spatial modelling and analysis to be performed. Topological relationships between geometric entities traditionally include adjacency (what adjoins what), containment (what encloses what), and proximity (how close something is to something else)
-                <ol className="list-disc pl-6 text-muted-foreground space-y-2">
-                  <li> reconstitute a sight in synthesized images of the ground </li>
-                  <li> determine a trajectory of overflight of the ground </li>
-                  <li> calculate surfaces or volumes </li>
-                  <li> trace topographic profiles</li>
-                </ol>
-             </p>
-          </div>
-           <div>
-            <h2 className="font-semibold "> Digital Elevation Model</h2> 
-            <p className="text-muted-foreground leading-relaxed"> The digital elevation model (DEM) is a raster-based digital dataset of the topography (hypsometry and/or bathymetry) of all or part of the Earth (or a telluric planet). 
-               Other models typically  include the digital terrain model (DTM), which represents the bare earth surface and Digital Surface Model (DSM), which represents the elevation of the top of the canopy or built structures.
-              <br/> These Models may be derived from existing paper maps and survey data, or they may be generated from new satellite or other remotely sensed radar or sonar data.  </p>
-             <ArticleGallery
-              items={[
-                { src: DEM, alt: "Digital Elevation Model", caption: "Sasumwa Line DEM" },
-                { src: NakuruImg, alt: "Orthophoto", caption: "Orthophoto output", align: "right" },
-              ]}
-            /> 
-          </div>
-      </div> 
+      Whether for roads, buildings, utilities or land development, our surveys deliver the clarity needed to move projects forward 
+      efficiently providing a dependable foundation for design, analysis and execution. 
+      <br/> Deliverables can include fixed-dimension maps, CAD drawings,
+        orthophotos and digital terrain models depending on specification. 
+      </p>
 
       <ArticleFigure
         src={cs}
@@ -199,21 +101,6 @@ const TopographicSurvey = () => {
         caption="Planimetric and topographic outputs used for design"
         align="right"
       />
-     
-      <h2 id="profiles" className="text-2xl font-semibold mt-10 mb-4">
-        Profiles & cross-sections
-      </h2>
-      <ArticleFigure
-        src={profile}
-        alt="Profile section"
-        caption="Profiles and cross-sections support design and earthworks"
-        align="right"
-      />
-      <p className="text-muted-foreground leading-relaxed">
-        Profiles and cross-sections describe elevation changes along a line. They are
-        essential for corridor design (roads and pipelines), drainage planning and
-        cut/fill computations.
-      </p>
 
       <div className="clear-both mt-10 bg-card p-8 rounded-xl border text-center">
         <h3 className="text-xl font-semibold mb-3">Need a Topographic Survey?</h3>

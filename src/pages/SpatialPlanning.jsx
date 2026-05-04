@@ -34,10 +34,15 @@ const SpatialPlanning = () => {
       toc={toc}
     >
       <p id="overview" className="text-lg text-muted-foreground leading-relaxed">
-        Spatial planning brings together land potential, constraints, infrastructure, and
-        stakeholder priorities to shape implementable strategies. It helps answer practical
-        questions such as where growth should go, how to protect sensitive areas, and how to
-        prioritise services and investment.
+        Spatial planning brings together land potential, constraints, infrastructure and
+        stakeholder priorities to shape implementable strategies. We help answer practical
+        questions such as where growth should go, how to protect sensitive areas and how to
+        prioritise services and investment. We provide professional spatial planning services that help governments, developers, institutions
+         and communities make informed decisions about how land and resources are organized, developed, and managed. Using advanced GIS, remote sensing, mapping
+          and survey data, we analyze existing spatial patterns, infrastructure networks, environmental constraints, and development opportunities to 
+          create practical planning solutions. Our work supports zoning, infrastructure placement, environmental management, public service distribution
+           and long-term growth strategies—ensuring that land is used efficiently, sustainably and in a way that balances economic development, social needs
+            and environmental protection.
       </p>
 
       <ArticleFigure
@@ -49,21 +54,6 @@ const SpatialPlanning = () => {
         thumbImgClassName="w-full h-44 object-cover"
       />
 
-      <h2 id="inputs" className="text-2xl font-semibold mt-10 mb-4">
-        Inputs
-      </h2>
-      <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-        <li>Base maps, boundaries, and any available CAD/GIS datasets</li>
-        <li>Land cover, terrain (DEM), hydrology, and environmental constraints</li>
-        <li>Infrastructure networks and service points (roads, water, power, schools, health)</li>
-        <li>Population/economic indicators and stakeholder priorities</li>
-      </ul>
-
-      <div className="clear-both" />
-
-      <h2 id="analysis" className="text-2xl font-semibold mt-10 mb-4">
-        Spatial analysis
-      </h2>
       <ArticleFigure
         src={renewableImg}
         alt="Suitability analysis"
@@ -74,8 +64,7 @@ const SpatialPlanning = () => {
       />
       <p className="text-muted-foreground leading-relaxed">
         We use spatial analysis to identify opportunities, quantify constraints, and test
-        feasibility. Typical workflows include suitability modelling, access and catchment
-        analysis, growth pattern mapping, and multi-criteria evaluation.
+        feasibility. 
       </p>
       <ul className="list-disc pl-6 text-muted-foreground space-y-2">
         <li>Constraints mapping (hazards, buffers, slopes, protected areas)</li>
@@ -86,9 +75,6 @@ const SpatialPlanning = () => {
 
       <div className="clear-both" />
 
-      <h2 id="scenarios" className="text-2xl font-semibold mt-10 mb-4">
-        Scenarios
-      </h2>
       <ArticleFigure
         src={architectureImg}
         alt="Growth scenarios"
@@ -104,9 +90,6 @@ const SpatialPlanning = () => {
         complexity.
       </p>
 
-      <h2 id="criteria" className="text-2xl font-semibold mt-10 mb-4">
-        Decision criteria
-      </h2>
       <ArticleFigure
         src={civilWorksImg}
         alt="Infrastructure planning"
@@ -124,63 +107,7 @@ const SpatialPlanning = () => {
 
       <div className="clear-both" />
 
-      <h2 id="outputs" className="text-2xl font-semibold mt-10 mb-4">
-        Outputs
-      </h2>
-      <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-        <li>Planning maps and supporting spatial datasets</li>
-        <li>Options/scenarios with recommended strategies</li>
-        <li>Implementation guidance, priorities, and monitoring indicators</li>
-      </ul>
-   
-      <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-        <li>Safety and risk (flooding, steep slopes, sensitive environments)</li>
-        <li>Access and service efficiency (roads, water, power, social services)</li>
-        <li>Cost and feasibility (terrain, network extensions, phasing)</li>
-        <li>Policy alignment and compliance (setbacks, buffers, reserved corridors)</li>
-      </ul>
-
-      <div className="clear-both" />
-
-      <h2 id="deliverables" className="text-xl font-semibold mt-10 mb-4">
-        Deliverables
-      </h2>
-      <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-        <li>Suitability and constraints maps with clear assumptions</li>
-        <li>Ranked options and scenario comparisons</li>
-        <li>GIS layers (vector/raster) packaged for handover</li>
-        <li>Short decision brief with implementation notes and next steps</li>
-      </ul>
-
-      <h2 id="qa" className="text-xl font-semibold mt-10 mb-4">
-        Quality & metadata
-      </h2>
-      <ArticleFigure
-        src={siteImg}
-        alt="Planning and data QA"
-        caption="Clear assumptions and metadata make outputs usable and defensible."
-        align="right"
-        widthClassName="md:w-[280px]"
-        thumbImgClassName="w-full h-40 object-cover"
-      />
-      <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-        <li>Coordinate reference system (CRS) checks and consistent units</li>
-        <li>Documented buffers, weights, thresholds, and exclusion rules</li>
-        <li>Versioned datasets and handover notes (sources, dates, limitations)</li>
-        <li>Optional field verification for sensitive or high-stakes locations</li>
-      </ul>
-
-      <div className="clear-both" />
-
-      <h2 id="applications" className="text-xl font-semibold mt-10 mb-4">
-        Applications
-      </h2>
-      <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-        <li>Facility and utility siting (schools, health, water points, substations)</li>
-        <li>Service coverage and investment prioritisation</li>
-        <li>Risk-sensitive planning and environmental safeguarding</li>
-        <li>Growth management and corridor planning</li>
-      </ul>
+      
 
       <div className="clear-both mt-10 bg-card p-8 rounded-xl border text-center">
         <h3 className="text-xl font-semibold mb-3">Need Spatial Planning?</h3>

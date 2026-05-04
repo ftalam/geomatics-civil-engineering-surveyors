@@ -47,24 +47,16 @@ const UrbanRegionalPlanning = () => {
       }}
     >
       <p id="overview" className="text-lg text-muted-foreground leading-relaxed">
-        We support sustainable urban and regional development with planning frameworks
-        that align policy, infrastructure, environmental safeguards, and community
-        needs. The goal is a clear spatial strategy that can guide investment,
-        approvals, and implementation over time.
+        We support sustainable urban and regional development with planning frameworks that align policy, infrastructure, 
+        environmental safeguards and community needs. Through integrated geospatial intelligence, demographic analysis, 
+        infrastructure mapping and land suitability assessments, we help plan urban expansion, transportation systems, 
+        housing developments, economic zones and public amenities at both local and regional scales. 
+        Our approach ensures that growth is coordinated, infrastructure is strategically located and communities are designed to 
+        be accessible, livable and sustainable. From master plans and development control strategies to regional growth frameworks, 
+        we provide the technical foundation needed to guide balanced development and transform spaces into thriving human environments. 
+        The goal is a clear spatial strategy that can guide investment, approvals and implementation over time.
       </p>
 
-      <ArticleFigure
-        src={architectureImg}
-        alt="Urban form and development control"
-        caption="Plans define urban form, densities, and development control approaches."
-        align="right"
-        widthClassName="md:w-[340px]"
-        thumbImgClassName="w-full h-44 object-cover"
-      />
-
-      <h2 id="baseline" className="text-2xl font-semibold mt-10 mb-4">
-        Baseline studies
-      </h2>
       <ArticleFigure
         src={geospatialImg}
         alt="Baseline GIS analysis"
@@ -96,40 +88,6 @@ const UrbanRegionalPlanning = () => {
         <li>Land allocation principles and development corridors</li>
         <li>Open space networks, buffers, and risk-sensitive planning</li>
         <li>Economic and service nodes (centres hierarchy where applicable)</li>
-      </ul>
-
-      <h2 id="implementation" className="text-2xl font-semibold mt-10 mb-4">
-        Implementation
-      </h2>
-      <ArticleFigure
-        src={civilWorksImg}
-        alt="Infrastructure-led implementation"
-        caption="Implementation ties spatial intent to investment, phasing, and approvals."
-        align="right"
-        widthClassName="md:w-[320px]"
-        thumbImgClassName="w-full h-44 object-cover"
-      />
-      <p className="text-muted-foreground leading-relaxed">
-        A plan is only useful if it can be implemented. We help translate strategy
-        into practical guidance such as phasing, priority projects, development
-        control notes, and monitoring indicators.
-      </p>
-
-      <h2 id="outputs" className="text-2xl font-semibold mt-10 mb-4">
-        Outputs
-      </h2>
-      <ArticleFigure
-        src={renewableImg}
-        alt="Resilience and sustainability"
-        caption="Plans integrate sustainability and resilience considerations."
-        align="left"
-        widthClassName="md:w-[320px]"
-        thumbImgClassName="w-full h-44 object-cover"
-      />
-      <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-        <li>Planning maps and reports (structure plans, strategies)</li>
-        <li>Implementation frameworks and monitoring indicators</li>
-        <li>Supporting spatial datasets and metadata</li>
       </ul>
 
       <div className="clear-both mt-10 bg-card p-8 rounded-xl border text-center">

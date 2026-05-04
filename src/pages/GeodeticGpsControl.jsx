@@ -79,9 +79,6 @@ const GeodeticGpsControl = () => {
 
       <div className="clear-both" />
 
-      <h2 id="methods" className="text-2xl font-semibold mt-10 mb-4">
-        Methods
-      </h2>
       <ArticleFigure
         src={gnssI76Img}
         alt="RTK and densification"

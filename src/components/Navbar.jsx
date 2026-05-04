@@ -36,7 +36,7 @@ const Navbar = () => {
             <img
               src={logoImg}
               alt="Geomatics Civil Engineering Surveyors logo"
-              className="h-10 w-auto object-contain"
+              className="h-12 w-auto object-contain"
             />
           </Link>
 

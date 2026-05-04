@@ -220,22 +220,22 @@ const AboutUs = () => {
           <div className="grid md:grid-cols-2 gap-8">
             <div>
               <h3 className="text-2xl text-primary mb-4"> <b>GET IN TOUCH</b> <br/> WITH US </h3>
-              <div className="space-y-3 grid grid-cols-2">
-                <div className="flex items-center gap-3">
-                  <Phone className="w-5 h-5 text-primary flex-shrink-0" />
-                  <div>
-                    <p className="font-medium">Phone</p>
-                    <p className="text-sm text-muted-foreground">+254 768922891</p>
-                  </div>
-                </div>
+            </div>
+            <div >
+              <div className="flex items-center gap-3">
+               <Phone className="w-5 h-5 text-primary flex-shrink-0" />
+                <div>
+                 <p className="font-medium">Phone</p>
+                 <p className="text-sm text-muted-foreground">+254 768922891</p>
+               </div>
+              </div>
 
-                <div className="flex items-center gap-3">
-                  <Mail className="w-5 h-5 text-primary flex-shrink-0" />
-                  <div>
-                    <p className="font-medium">Email</p>
-                    <p className="text-sm text-muted-foreground">sales@geomatics.co.ke</p>
-                  </div>
-                </div>
+              <div className="flex items-center gap-3">
+               <Mail className="w-5 h-5 text-primary flex-shrink-0" />
+               <div>
+                 <p className="font-medium">Email</p>
+                 <p className="text-sm text-muted-foreground">sales@geomatics.co.ke</p>
+               </div>
               </div>
             </div>
 
@@ -248,9 +248,7 @@ const AboutUs = () => {
                 <Link to="/geoshop/about" className="block text-muted-foreground hover:text-primary transition-colors">
                   About Us
                 </Link>
-                <Link to="/contact" className="block text-muted-foreground hover:text-primary transition-colors">
-                  Contact
-                </Link>
+               
                 <Link to="/services" className="block text-muted-foreground hover:text-primary transition-colors">
                   Services
                 </Link>

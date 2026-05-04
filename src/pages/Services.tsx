@@ -60,6 +60,16 @@ const Services = () => {
               </Link>
             ))}
           </div>
+           {/* CTA */}
+          <div className="mt-12 bg-card border rounded-2xl p-8 text-center">
+            <h3 className="text-xl font-semibold mb-3">Need a Survey?</h3>
+            <p className="text-muted-foreground mb-4">
+              Let’s help you plan smarter and move your project forward with confidence.
+            </p>
+            <Link to="/contact" className="bg-primary text-white px-6 py-3 rounded-lg">
+              Request Service
+            </Link>
+          </div>
         </div>
       </section>
     </Layout>
