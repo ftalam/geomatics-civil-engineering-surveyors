@@ -51,19 +51,12 @@ const EngineeringSurvey = () => {
         We support design and construction by establishing control, setting out key features, verifying levels and producing as-built records.
       </p>
       <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-        <ArticleFigure
-        src={architectureImg}
-        alt="Site layout and built environment"
-        caption="Site layout combines control, design interpretation, and continuous checks."
-        align="left"
-        widthClassName="md:w-[320px]"
-        thumbImgClassName="w-full h-40 object-cover"
-      />
-      <li><b>Feasibility Studies.</b> We support project planning and decision-making. It involves site reconnaissance and terrain assessment together with preliminary topographic surveys to aid in identification of natural and man-made features. This helps engineers determine whether the project is viable and identify potential risks early (e.g., flood zones,steep terrain).</li>
-      <li><b>Control Surveys (Geodetic Framework).</b> This establishes the reference framework for the subsequent surveys. Key activities include stablishment of horizontal and vertical control points through traversing/trilateration or GNSS observations tied to the national coordinate systems and levelling respectively hence ensuring all project data aligns correctly. </li>
+      
+      <li><b>Feasibility Studies.</b> We assess site conditions early through reconnaissance and preliminary topographic surveys, helping identify opportunities, constraints, and project risks before design begins.</li>
+      <li><b>Control Surveys (Geodetic Framework).</b> We establish the reference framework for the subsequent surveys hence ensuring all project data aligns correctly. </li>
       <li><b>Detailed Topographic Surveys.</b> This captures high resolution ground data including measurements of terrain features (roads, buildings, utilities), spot heights and contour generation and mapped drainage patterns and surface features suppling engineers with accurate data for design and analysis. </li>
       <li><b>Engineering Design Support.</b> This involves preparation of base maps for CAD design, alignment definition and cross-sections and longitudinal profiles drawing which enables precise engineering design and modeling. </li>
-      <li><b>Setting Out (Construction layout).</b> This is the physical marking of design features on the ground to guide construction. It includes marking  roads, buildings, utilities & structures, setting out of foundation, columns & grids and establishing control lines using total stations or GNSS equipment to ensure works follow exact design specifications. </li>
+      <li><b>Setting Out (Construction layout).</b> We translate designs onto the ground with precision, marking structures, utilities, and control lines to ensure construction follows exact specifications. </li>
        <ArticleFigure
         src={architectureImg}
         alt="Site layout and built environment"
@@ -73,11 +66,10 @@ const EngineeringSurvey = () => {
         thumbImgClassName="w-full h-40 object-cover"
       />
       <li><b>Construction Surveys.</b> These are conducted to check alignment and levels during construction, verify positions of installed elements while continuously monitoring progress. </li>
-      <li><b>Earthworks & Quantity Surveys.</b> These involve volume calculations (cut and fill), stockpile measurements and terrain comparison to help manage material usage & project costs. </li>
-      <li><b>As-Built Surveys and QA Checks.</b> This involves capturing accurate final state of the project and performing quality assurance checks to ensure the constructed works align with the design intent. This guarantees reliability and legal/technical compliance. </li>
+      <li><b>Earthworks & Quantity Surveys.</b> We do volume calculations (cut and fill), stockpile measurements and terrain comparison to help manage material usage & project costs. </li>
+      <li><b>As-Built Surveys and QA Checks.</b>We capture accurate final project records and perform quality checks to confirm works are built to design, standards, and compliance requirements.</li>
       <li><b>Deformation/Monitoring Surveys.</b> These are conducted where required to assess structural performance and safety. Settlement and displacement measurements are done with observations of structures made either periodically or continuously. </li>
-      <li><b>Profiles and Cross-Sections.</b> These are used for corridors and earthworks to support design checks, quantities, and documentation. </li>
-      <p>Engineering surveying is not a single task—it is a continuous, integrated process that ensures every stage of a project is grounded in accurate spatial data.</p>
+     <p>Engineering surveying is not a single task—it is a continuous, integrated process that ensures every stage of a project is grounded in accurate spatial data.</p>
       </ul>
     <div className="clear-both" />
 

@@ -227,45 +227,7 @@ const GisRemoteSensing = () => {
 
       <div className="clear-both" />
 
-      <h2 id="workflow" className="text-2xl font-semibold mt-10 mb-4">
-        Workflow
-      </h2>
-      <p className="text-muted-foreground leading-relaxed">
-        We structure GIS/remote sensing work so results are repeatable and easy to
-        audit. A typical project includes:
-      </p>
-      <ol className="list-decimal pl-6 text-muted-foreground space-y-2">
-        <li>Define the area of interest, questions, and success criteria.</li>
-        <li>Collect and prepare data (projection setup, mosaicking, cloud masking,QA/QC).</li>
-        <li>Run analysis (classification, indices, suitability, change detection).</li>
-        <li>Validate results using ground truth, checks, or independent datasets.</li>
-        <li>Compile outputs (maps, datasets, and short decision-ready summaries).</li>
-      </ol>
-
-      <h2 id="deliverables" className="text-2xl font-semibold mt-10 mb-4">
-        Deliverables
-      </h2>
-      <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-        <li>Printable maps and presentation-ready layouts</li>
-        <li>GIS layers (vector/raster) with metadata</li>
-        <li> Common formats: GeoPackage/GeoJSON/Shapefile (vector), GeoTIFF (raster),CSV/Excel (summaries)</li>
-        <li>Analysis reports and visualizations</li>
-      </ul>
-
-      <h2 id="qa" className="text-2xl font-semibold mt-10 mb-4">
-        Quality & metadata
-      </h2>
-      <p className="text-muted-foreground leading-relaxed">
-        Decisions are only as good as the data behind them. We document coordinate
-        systems, processing steps, assumptions, and limitations (e.g., cloud cover,
-        sensor resolution) so results can be interpreted correctly and reused later.
-      </p>
-      <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-        <li>Coordinate reference system (CRS) and transformation notes</li>
-        <li>Data lineage (sources, dates, versions)</li>
-        <li>Checks for topology, completeness, and obvious anomalies</li>
-        <li>Clear map legends, scale/accuracy notes, and interpretation guidance</li>
-      </ul>
+     
 
       <h2 id="applications" className="text-2xl font-semibold mt-10 mb-4">
         Applications
