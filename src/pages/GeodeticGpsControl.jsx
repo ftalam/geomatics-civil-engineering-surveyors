@@ -63,7 +63,7 @@ const GeodeticGpsControl = () => {
         thumbImgClassName="w-full h-44 object-cover"
       />
 
-      <h2 id="datums" className="text-xl font-semibold mt-10 mb-4">
+      <h2 id="datums" className="text-xl font-semibold">
         Datums & coordinates
       </h2>
       <p className="text-muted-foreground leading-relaxed">
@@ -78,15 +78,28 @@ const GeodeticGpsControl = () => {
       </ul>
 
       <div className="clear-both" />
-
+  <div className = "grid grid-cols-2">
+   
+      <div>
+      <h2 id="monuments" className="text-xl font-semibold">
+        Monumentation
+      </h2>
       <ArticleFigure
-        src={gnssI76Img}
-        alt="RTK and densification"
-        caption="RTK/CORS workflows support densification and construction control."
+        src={stakeImg}
+        alt="Monumentation"
+        caption="Proper monumentation ensures long-term stability and reusability of control points(CPs)."
         align="left"
         widthClassName="md:w-[320px]"
-        thumbImgClassName="w-full h-40 object-cover"
+        thumbImgClassName="w-full h-28 object-contain"
       />
+      <p className="text-muted-foreground leading-relaxed">
+        Control is only useful if it can be recovered. CPs are physically marked on the ground using durable monuments such as concrete pillars, metal rods or survey nails.
+         We advise on station location (stability,
+        sky visibility, access) and help document monuments/marks with clear descriptions and
+        photos so teams can reuse the network reliably.
+      </p>
+      </div>
+      <div> 
       <p className="text-muted-foreground leading-relaxed">
         Methods are selected based on accuracy requirements, logistics, and the size of the
         network. Common approaches include:
@@ -105,29 +118,8 @@ const GeodeticGpsControl = () => {
           a backbone and RTK for working points.
         </li>
       </ul>
-
-      <div className="clear-both" />
-
-      <h2 id="monuments" className="text-2xl font-semibold mt-10 mb-4">
-        Monumentation
-      </h2>
-      <ArticleFigure
-        src={stakeImg}
-        alt="Monumentation"
-        caption="Proper monumentation ensures long-term stability and reusability of control points."
-        align="left"
-        widthClassName="md:w-[320px]"
-        thumbImgClassName="w-full h-40 object-contain"
-      />
-      <p className="text-muted-foreground leading-relaxed">
-        Control is only useful if it can be recovered. Control points are physically marked on the ground using durable monuments such as concrete pillars, metal rods, or survey nails.
-        Proper monumentation ensures long-term stability and reusability of control points.
-         We advise on station location (stability,
-        sky visibility, access) and help document monuments/marks with clear descriptions and
-        photos so teams can reuse the network reliably.
-      </p>
-
-      <div className="clear-both" />
+      </div>
+      </div>
 
       <div className="clear-both mt-10 bg-card p-8 rounded-xl border text-center">
         <h3 className="text-xl font-semibold mb-3">Need Geodetic Control?</h3>

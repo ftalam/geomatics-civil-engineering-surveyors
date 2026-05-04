@@ -33,18 +33,7 @@ const SpatialPlanning = () => {
       }
       toc={toc}
     >
-      <p id="overview" className="text-lg text-muted-foreground leading-relaxed">
-        Spatial planning brings together land potential, constraints, infrastructure and
-        stakeholder priorities to shape implementable strategies. We help answer practical
-        questions such as where growth should go, how to protect sensitive areas and how to
-        prioritise services and investment. We provide professional spatial planning services that help governments, developers, institutions
-         and communities make informed decisions about how land and resources are organized, developed, and managed. Using advanced GIS, remote sensing, mapping
-          and survey data, we analyze existing spatial patterns, infrastructure networks, environmental constraints, and development opportunities to 
-          create practical planning solutions. Our work supports zoning, infrastructure placement, environmental management, public service distribution
-           and long-term growth strategies—ensuring that land is used efficiently, sustainably and in a way that balances economic development, social needs
-            and environmental protection.
-      </p>
-
+   
       <ArticleFigure
         src={geospatialImg}
         alt="Spatial analysis layers"
@@ -90,14 +79,8 @@ const SpatialPlanning = () => {
         complexity.
       </p>
 
-      <ArticleFigure
-        src={civilWorksImg}
-        alt="Infrastructure planning"
-        caption="Strategies are tied to infrastructure, phasing, and implementation feasibility."
-        align="left"
-        widthClassName="md:w-[320px]"
-        thumbImgClassName="w-full h-44 object-cover"
-      />
+     
+      
       <ul className="list-disc pl-6 text-muted-foreground space-y-2">
         <li>Safety and risk (flooding, steep slopes, sensitive environments)</li>
         <li>Access and service efficiency (roads, water, power, social services)</li>

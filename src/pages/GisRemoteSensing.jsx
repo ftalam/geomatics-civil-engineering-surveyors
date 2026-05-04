@@ -188,8 +188,6 @@ const GisRemoteSensing = () => {
         </li>
       </ul>
 
-      <div className="clear-both" />
-
       <h2 id="GIS" className="text-xl font-semibold mt-10 mb-4">
         Geographic Information Systems
       </h2>
@@ -229,33 +227,7 @@ const GisRemoteSensing = () => {
 
      
 
-      <h2 id="applications" className="text-2xl font-semibold mt-10 mb-4">
-        Applications
-      </h2>
-
-      <ArticleFigure
-        src={renewableImg}
-        alt="Renewable energy site suitability"
-        caption="Suitability & planning"
-        align="right"
-        widthClassName="md:w-[260px]"
-        thumbImgClassName="w-full h-36 object-cover"
-      />
-
-      <p className="text-muted-foreground leading-relaxed">
-        By combining these data types with remote sensing inputs, GIS enables powerful
-        spatial analysis, decision support and communication of complex information
-        through maps and dashboards. Common use cases include infrastructure planning,
-        environmental monitoring, land management, project tracking, and decision
-        support systems.
-      </p>
-      <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-        <li>Land cover mapping and change detection</li>
-        <li>Site selection and suitability modelling</li>
-        <li>Environmental monitoring and compliance mapping</li>
-        <li>Asset and utility mapping (where data is available)</li>
-        <li>Progress monitoring for construction and land development</li>
-      </ul>
+  
 
       <div className="clear-both mt-10 bg-card p-8 rounded-xl border text-center">
         <h3 className="text-xl font-semibold mb-3">Need GIS Support?</h3>

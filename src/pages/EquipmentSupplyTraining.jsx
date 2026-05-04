@@ -33,12 +33,12 @@ const EquipmentSupplyTraining = () => {
       }
       toc={toc}
       infobox={{
-        title: "Survey equipment",
+        title: "Bestseller Survey equipment",
         images: [
           {
             src: totalStationImg,
             alt: "Total station",
-            caption: "Total stations, GNSS, and laser scanning workflows",
+            caption: "Visual-Lidar",
           },
         ],
         items: [

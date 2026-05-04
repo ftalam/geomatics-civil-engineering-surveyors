@@ -48,11 +48,7 @@ const UrbanRegionalPlanning = () => {
     >
       <p id="overview" className="text-lg text-muted-foreground leading-relaxed">
         We support sustainable urban and regional development with planning frameworks that align policy, infrastructure, 
-        environmental safeguards and community needs. Through integrated geospatial intelligence, demographic analysis, 
-        infrastructure mapping and land suitability assessments, we help plan urban expansion, transportation systems, 
-        housing developments, economic zones and public amenities at both local and regional scales. 
-        Our approach ensures that growth is coordinated, infrastructure is strategically located and communities are designed to 
-        be accessible, livable and sustainable. From master plans and development control strategies to regional growth frameworks, 
+        environmental safeguards and community needs.  From master plans and development control strategies to regional growth frameworks, 
         we provide the technical foundation needed to guide balanced development and transform spaces into thriving human environments. 
         The goal is a clear spatial strategy that can guide investment, approvals and implementation over time.
       </p>
