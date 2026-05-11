@@ -72,11 +72,6 @@ const TopographicSurvey = () => {
             alt: "UAV fieldwork",
             caption: "UAV fieldwork for aerial mapping and rapid coverage",
           },
-          {
-            src: NakuruImg,
-            alt: "Orthophoto example",
-            caption: "Orthophoto example (geometrically corrected aerial imagery)",
-          },
         
         ]}
         align="right"

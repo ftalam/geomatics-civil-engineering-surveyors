@@ -36,9 +36,9 @@ const EquipmentSupplyTraining = () => {
         title: "Bestseller Survey equipment",
         images: [
           {
-            src: totalStationImg,
-            alt: "Total station",
-            caption: "Visual-Lidar",
+            src: laserScannerImg,
+            alt: "Vi-Li i100",
+            caption: "Versatile Visual-Lidar GNSS Receiver ",
           },
         ],
         items: [

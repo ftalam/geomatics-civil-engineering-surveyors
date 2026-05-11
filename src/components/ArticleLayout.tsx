@@ -84,10 +84,10 @@ const ArticleLayout = ({
 
   return (
     <Layout footerCollapsible footerDefaultOpen={false}>
-      <main id="content" className="mw-body py-10 md:py-14">
+      <main id="content" className="mw-body py-1 md:py-14">
         <div className="mw-page-container">
           <div className="mw-page-container-inner">
-            <div className="w-full max-w-7xl px-4 mx-auto">
+            <div className="w-full max-w-7xl px-1 mx-auto">
               <div className="flex gap-6">
                 <div className="min-w-0 flex-1">
                   <Link
@@ -141,7 +141,7 @@ const ArticleLayout = ({
                   </div>
                   </header>
 
-                  <div className="mt-6">
+                  <div className="mt-4">
                     <article
                       className="min-w-0 space-y-6 leading-relaxed"
                       style={{ fontFamily: '"Times New Roman", Times, serif' }}
