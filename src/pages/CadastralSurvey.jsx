@@ -2,7 +2,7 @@ import ArticleFigure from "@/components/ArticleFigure";
 import ArticleLayout from "@/components/ArticleLayout";
 import ArticleStack from "@/components/ArticleStack";
 import { Link } from "react-router-dom";
-
+import RIM from "@/assets/Igamurathi.jpg";
 import geospatialImg from "@/assets/geospatial.jpg";
 import topoMapsImg from "@/assets/topo-maps.jpg";
 import architectureImg from "@/assets/architecture.jpg";
@@ -67,14 +67,9 @@ const CadastralSurvey = () => {
         <ArticleStack
               items={[
                 {
-                  src: geospatialImg,
-                  alt: "UAV fieldwork",
-                  caption: "UAV fieldwork for aerial mapping and rapid coverage",
-                },
-                {
-                  src: landuseImg,
-                  alt: "Orthophoto example",
-                  caption: "Orthophoto example (geometrically corrected aerial imagery)",
+                  src: RIM,
+                  alt: "Registry Index Map Sheet",
+                  caption: "RIM Sheet showing approximate boundaries in rural areas",
                 },
               ]}
               align="right"
@@ -91,7 +86,7 @@ const CadastralSurvey = () => {
         <li><b>Digital Outputs</b> CAD drawings, georeferenced plans and other GIS files; GeJSON etc,.</li>
       </ul>
 
-      <h2 id="when" className="text-xl font-semibold mt-10 mb-4"> When do you need a cadastral survey? </h2>
+      <h2 id="when" className="text-xl font-semibold mt-1 mb-4"> When do you need a cadastral survey? </h2>
       <ul className="list-decimal pl-6 text-muted-foreground space-y-2">
         <li>Land Purchase or Sale. To confirm exact boundaries before transfers, avoid encroachments and legal disputes. </li>
         <li>Subdivisions, Mutations and Amalgamations. Required for approval and new title issuance.</li>

@@ -54,17 +54,9 @@ const EngineeringSurvey = () => {
       
       <li><b>Feasibility Studies.</b> We assess site conditions early through reconnaissance and preliminary topographic surveys, helping identify opportunities, constraints, and project risks before design begins.</li>
       <li><b>Control Surveys (Geodetic Framework).</b> We establish the reference framework for the subsequent surveys hence ensuring all project data aligns correctly. </li>
-      <li><b>Detailed Topographic Surveys.</b> This captures high resolution ground data including measurements of terrain features (roads, buildings, utilities), spot heights and contour generation and mapped drainage patterns and surface features suppling engineers with accurate data for design and analysis. </li>
-      <li><b>Engineering Design Support.</b> This involves preparation of base maps for CAD design, alignment definition and cross-sections and longitudinal profiles drawing which enables precise engineering design and modeling. </li>
+     <li><b>Engineering Design Support.</b> This involves preparation of base maps for CAD design, alignment definition and cross-sections and longitudinal profiles drawing which enables precise engineering design and modeling. </li>
       <li><b>Setting Out (Construction layout).</b> We translate designs onto the ground with precision, marking structures, utilities, and control lines to ensure construction follows exact specifications. </li>
-       <ArticleFigure
-        src={architectureImg}
-        alt="Site layout and built environment"
-        caption="Site layout combines control, design interpretation, and continuous checks."
-        align="left"
-        widthClassName="md:w-[320px]"
-        thumbImgClassName="w-full h-40 object-cover"
-      />
+    
       <li><b>Construction Surveys.</b> These are conducted to check alignment and levels during construction, verify positions of installed elements while continuously monitoring progress. </li>
       <li><b>Earthworks & Quantity Surveys.</b> We do volume calculations (cut and fill), stockpile measurements and terrain comparison to help manage material usage & project costs. </li>
       <li><b>As-Built Surveys and QA Checks.</b>We capture accurate final project records and perform quality checks to confirm works are built to design, standards, and compliance requirements.</li>
@@ -73,18 +65,15 @@ const EngineeringSurvey = () => {
       </ul>
     <div className="clear-both" />
 
-      
-      <h2 id="qa" className="text-xl font-semibold mt-10 mb-4">
-        Quality control
-      </h2>
-      <ArticleFigure
-        src={geospatialImg}
-        alt="Survey checks and QA"
-        caption="Independent checks and consistent control reduce rework and risk."
+       <ArticleFigure
+        src={architectureImg}
+        alt="Site layout and built environment"
+        caption="Site layout combines control, design interpretation, and continuous checks."
         align="left"
         widthClassName="md:w-[320px]"
-        thumbImgClassName="w-full h-44 object-cover"
+        thumbImgClassName="w-full h-40 object-cover"
       />
+
       <p className="text-muted-foreground leading-relaxed">
       A key aspect of quality control is <b>verification and redudancy</b>. Measurements are often repeated & independent checks such as <b>closing traverses</b>, <b>backsight/foresight observations</b> & <b>level loops</b> are carried out to detect & minimize errors. Instruments are regularly calibrated and tested to ensure they are functioning correctly, while environmental factors such as temperature, wind & line-of-sight obstructions are also considered during fieldwork.
 Another important component is <b>data validation</b> and <b>adjustment</b>. Survey data is reviewed, processed & adjusted (often using least squares methods) to achieve the best possible accuracy. Surveyors also ensure that all work is properly <b>referenced to established control points & datums</b>, maintaining consistency across the entire project.

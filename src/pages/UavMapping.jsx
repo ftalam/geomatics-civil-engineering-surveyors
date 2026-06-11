@@ -7,6 +7,7 @@ import x500Img from "@/assets/chcnav-x500-uav-professional-multirotor-drone.jpg"
 import UAVfieldwork from "@/assets/UAVfieldwork.jpg";
 import NakuruImg from "@/assets/NakuruAerialImg.png";
 import sasumwaDemImg from "@/assets/sasumwaDEM.png";
+import house from "@/assets/building.pc.png";
 
 const toc = [
   { id: "overview", label: "Overview" },
@@ -61,7 +62,7 @@ const UavMapping = () => {
             Typical outputs
           </h2>
           <ArticleFigure
-            src={sasumwaDemImg}
+            src={NakuruImg}
             alt="Digital elevation model example"
             caption="Terrain models support design checks, drainage understanding, and quantities."
             align="right"
@@ -80,11 +81,11 @@ const UavMapping = () => {
             Use cases
           </h2>
           <ArticleFigure
-            src={aidroneImg}
+            src={house}
             alt="Orthophoto production"
             caption="Orthophotos provide accurate, map-like imagery for measurements and context."
             align="right"
-            widthClassName="md:w-[320px]"
+            widthClassName="md:w-[200px]"
             thumbImgClassName="w-full h-44 object-cover"
           />
           

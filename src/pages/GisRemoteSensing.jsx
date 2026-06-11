@@ -7,6 +7,8 @@ import RSImg from "@/assets/Remote_Sensing_Illustration.jpg";
 import geospatialImg from "@/assets/geospatial.jpg";
 import siteImg from "@/assets/Site-survey.png";
 import renewableImg from "@/assets/renewable-energy.jpg";
+import contour from "@/assets/contours.png";
+
 
 const toc = [
   { id: "overview", label: "Overview" },
@@ -152,13 +154,11 @@ const GisRemoteSensing = () => {
         differences).
       </p>
 
-
-
       <h2 id="data" className="text-xl font-semibold mt-10 mb-4">
         Data sources
       </h2>
       <ArticleFigure
-        src={geospatialImg}
+        src={contour}
         alt="Spatial data layers"
         caption="Most projects combine multiple datasets into a consistent spatial reference."
         align="right"
@@ -172,7 +172,7 @@ const GisRemoteSensing = () => {
       <ul className="list-disc pl-6 text-muted-foreground space-y-2">
         <li>
           <span className="text-foreground">Satellite imagery</span> (multispectral,
-          radar) for land cover, vegetation, water, and change detection.
+          radar) for land cover, vegetation, water and change detection.
         </li>
         <li>
           <span className="text-foreground">UAV imagery</span> for high-detail
@@ -188,24 +188,15 @@ const GisRemoteSensing = () => {
         </li>
       </ul>
 
-      <h2 id="GIS" className="text-xl font-semibold mt-10 mb-4">
+      <h2 id="GIS" className="text-xl font-semibold mt-1 mb-1">
         Geographic Information Systems
       </h2>
 
-      <ArticleFigure
-        src={siteImg}
-        alt="Site plan"
-        caption="Site planning and layout"
-        align="right"
-        widthClassName="md:w-[260px]"
-        thumbImgClassName="w-full h-36 object-cover"
-      />
-
       <p className="text-muted-foreground leading-relaxed">
         Geographic Information System (GIS) is a computer-based framework designed to
-        capture, store, manipulate, analyze, manage, and present spatial or geographic
-        data. While remote sensing provides the "what" and "where," GIS explains the
-        "why" and "how" by layering different types of information. GIS integrates{" "}
+        capture, store, manipulate, analyze, manage and present spatial or geographic
+        data. <i>While remote sensing provides the "what" and "where," GIS explains the
+        "why" and "how" by layering different types of information.</i>  GIS integrates{" "}
         <b>hardware</b>, <b>software</b>, and <b>data</b> to help <b>people</b>{" "}
         understand patterns and relationships in the physical world using various{" "}
         <b>methods</b> such as spatial analysis, modeling and visualization.
@@ -224,10 +215,6 @@ const GisRemoteSensing = () => {
       </ul>
 
       <div className="clear-both" />
-
-     
-
-  
 
       <div className="clear-both mt-10 bg-card p-8 rounded-xl border text-center">
         <h3 className="text-xl font-semibold mb-3">Need GIS Support?</h3>

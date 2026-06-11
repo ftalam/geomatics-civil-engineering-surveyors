@@ -6,6 +6,43 @@ import { supabase } from "@/lib/supabaseClient";
 
 const ORDER_STATUSES = ["pending", "approved"];
 
+const getProfileFromOrder = (order) => {
+  if (Array.isArray(order?.profiles)) return order.profiles[0] || null;
+  return order?.profiles || null;
+};
+
+const attachProfilesToOrders = async (orderData) => {
+  
+  const safeOrders = Array.isArray(orderData) ? orderData : [];
+  const userIds = Array.from(
+    new Set(safeOrders.map((order) => order?.user_id).filter(Boolean)),
+  );
+
+  if (!userIds.length) return safeOrders;
+
+  const { data: profilesData, error } = await supabase
+    .from("profiles")
+    .select("id, email, phone");
+
+
+  if (error) {
+    console.warn("Failed to load order profiles:", error);
+    return safeOrders;
+  }
+
+  const profilesById = new Map(
+    (Array.isArray(profilesData) ? profilesData : []).map((profile) => [
+      profile.id,
+      profile,
+    ]),
+  );
+
+  return safeOrders.map((order) => ({
+    ...order,
+    profiles: profilesById.get(order.user_id) || getProfileFromOrder(order),
+  }));
+};
+
 const AdminDashboard = () => {
   const navigate = useNavigate();
 
@@ -41,35 +78,9 @@ const AdminDashboard = () => {
       return;
     }
 
-    const safeOrders = Array.isArray(orderData) ? orderData : [];
-    const userIds = Array.from(
-      new Set(safeOrders.map((order) => order.user_id).filter(Boolean)),
-    );
+    const ordersWithProfiles = await attachProfilesToOrders(orderData);
 
-    let profileById = {};
-
-    if (userIds.length) {
-      const { data: profileData, error: profileError } = await supabase
-        .from("profiles")
-        .select("id, email")
-        .in("id", userIds);
-
-      if (!profileError && Array.isArray(profileData)) {
-        profileById = Object.fromEntries(
-          profileData.map((profile) => [
-            profile.id,
-            { email: profile.email },
-          ]),
-        );
-      }
-    }
-
-    setOrders(
-      safeOrders.map((order) => ({
-        ...order,
-        profiles: profileById[order.user_id] ?? order.profiles,
-      })),
-    );
+    setOrders(ordersWithProfiles);
     setLoading(false);
   }, []);
 
@@ -110,12 +121,14 @@ const AdminDashboard = () => {
   const groupedOrders = useMemo(() => {
     return orders.map((order) => {
       const orderItems = Array.isArray(order.items) ? order.items : [];
+      const profile = getProfileFromOrder(order);
 
       return {
         id: `order_${order.id}`,
         orderId: order.id,
         userId: order.user_id,
-        userEmail: order.profiles?.email || order.user_id,
+        userEmail: profile?.email || "No profile email found",
+        userPhone: profile?.phone || "No profile phone found",
         createdAt: order.created_at,
         status: order.status,
         items: orderItems.map((item) => ({
@@ -256,25 +269,13 @@ const AdminDashboard = () => {
         async (payload) => {
           console.log('New order received:', payload.new);
           toast.success("New order received");
-          // Fetch the order with profile info
-          const { data: newOrders } = await supabase
-            .from("orders")
-            .select(`
-              *,
-              profiles:user_id (
-                email
-              )
-            `)
-            .eq("id", payload.new.id)
-            .limit(1);
-
-          const newOrder = Array.isArray(newOrders) ? newOrders[0] : null;
+          const [newOrder] = await attachProfilesToOrders([payload.new]);
 
           if (newOrder) {
             setOrders((prev) => [newOrder, ...prev]);
             setNotifications((prev) => [
               {
-                message: "🛒 New order received",
+                message: "New order received",
                 created_at: new Date()
               },
               ...prev
@@ -286,11 +287,14 @@ const AdminDashboard = () => {
       .on(
         "postgres_changes",
         { event: "UPDATE", schema: "public", table: "orders" },
-        (payload) => {
+        async (payload) => {
           console.log('Order updated:', payload.new);
+          const [updatedOrder] = await attachProfilesToOrders([payload.new]);
           setOrders((prev) =>
             prev.map((order) =>
-              order.id === payload.new.id ? { ...order, ...payload.new } : order
+              order.id === payload.new.id
+                ? { ...order, ...(updatedOrder || payload.new) }
+                : order
             )
           );
           setLastUpdate(new Date());
@@ -426,7 +430,13 @@ const AdminDashboard = () => {
               : `Order IDs: ${group.orderIds.join(", ")}`}
           </p>
           <p className="font-semibold">
-            {group.userEmail} • {new Date(group.createdAt).toLocaleString()}
+            {group.userEmail} - {group.userPhone}
+          </p>
+          <p className="text-xs text-gray-500">
+            User ID: {group.userId}
+          </p>
+          <p className="text-sm text-gray-500">
+            {new Date(group.createdAt).toLocaleString()}
           </p>
 
           <div className="space-y-2 mt-3">

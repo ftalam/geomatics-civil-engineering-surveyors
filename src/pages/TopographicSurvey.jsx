@@ -3,7 +3,7 @@ import ArticleGallery from "@/components/ArticleGallery";
 import ArticleLayout from "@/components/ArticleLayout";
 import ArticleStack from "@/components/ArticleStack";
 import { Link } from "react-router-dom";
-import topoMapsImg from "@/assets/topo-maps.jpg";
+import topoMapsImg from "@/assets/topo.png";
 import NakuruImg from "@/assets/NakuruAerialImg.png";
 import architectureImg from "@/assets/architecture.jpg";
 import civilWorksImg from "@/assets/civil-works.jpg";
@@ -72,7 +72,6 @@ const TopographicSurvey = () => {
             alt: "UAV fieldwork",
             caption: "UAV fieldwork for aerial mapping and rapid coverage",
           },
-        
         ]}
         align="right"
         widthClassName="md:w-[340px]"
@@ -80,8 +79,7 @@ const TopographicSurvey = () => {
 
       
       <p className="text-muted-foreground leading-relaxed">
-      Our topographic survey service <b>integrates modern techniques</b> such as <b>UAV mapping</b> for rapid, high-resolution coverage with established 
-      <b>ground survey methods</b> to achieve the required accuracy. We establish robust control, <b>capture detailed terrain and feature data</b>, and 
+      Our topographic survey service <b>integrates modern techniques</b> such as <b>UAV mapping</b> for rapid, high-resolution coverage with established <b>ground survey methods</b> to achieve the required accuracy. We establish robust control, <b>capture detailed terrain and feature data</b>, and 
       verify critical elements in the field to ensure consistency and completeness.<br/>
 
       Whether for roads, buildings, utilities or land development, our surveys deliver the clarity needed to move projects forward 
@@ -90,12 +88,6 @@ const TopographicSurvey = () => {
         orthophotos and digital terrain models depending on specification. 
       </p>
 
-      <ArticleFigure
-        src={cs}
-        alt="Survey plan"
-        caption="Planimetric and topographic outputs used for design"
-        align="right"
-      />
 
       <div className="clear-both mt-10 bg-card p-8 rounded-xl border text-center">
         <h3 className="text-xl font-semibold mb-3">Need a Topographic Survey?</h3>

@@ -15,7 +15,7 @@ import {
 import siteSurveyImg from "@/assets/Site-survey.png";
 import contoursImg from "@/assets/contours.png";
 import aerialImg from "@/assets/AERIAL.png";
-import topoMapsImg from "@/assets/topo-maps.jpg";
+import topoMapsImg from "@/assets/topo.png";
 import totalStationImg from "@/assets/chcnav-cts-m100-total-station-surveying.jpg";
 import gnssImg from "@/assets/gnss-smart-full-antennas-chcnav-i93.jpg";
 import shop from "@/assets/shopstand.jpg";
@@ -23,6 +23,7 @@ import landUse from "@/assets/SubdivisionPlan.png";
 import GISRS from "@/assets/img.jpeg";
 import urbanRegional from "@/assets/NakuruAerialImg.png";
 import cors from "@/assets/image.png";
+import construction from "@/assets/construction.png";
 
 
 export type ServiceDefinition = {
@@ -62,7 +63,7 @@ export const services: ServiceDefinition[] = [
     details:
       "We support construction and infrastructure projects with setting out, as-built surveys, control establishment, profiles and cross-sections, and quality checks to keep work aligned and verifiable.",
     icon: HardHat,
-    image: totalStationImg,
+    image: construction,
   },
   {
     id: "geodetic-gps-control",

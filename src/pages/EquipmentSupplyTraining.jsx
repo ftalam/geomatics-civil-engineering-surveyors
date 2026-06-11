@@ -118,14 +118,7 @@ const EquipmentSupplyTraining = () => {
             <h2 id="training" className="text-x font-semibold mt-10 mb-4">
             Training
           </h2>
-          <ArticleFigure
-            src={totalStationImg}
-            alt="Total station training"
-            caption="Training covers field setup, data capture, checks, and reporting."
-            align="right"
-            widthClassName="md:w-[280px]"
-            thumbImgClassName="w-full h-44 object-contain"
-          />
+          
           <p className="text-muted-foreground leading-relaxed">
             Training is tailored to your team and workflows: field setup, data capture, quality
             checks, and best-practice reporting. We focus on repeatable methods that reduce errors
@@ -141,14 +134,7 @@ const EquipmentSupplyTraining = () => {
         <div> <h2 id="support" className="text-x font-semibold mt-10 mb-4">
             Support
           </h2>
-          <ArticleFigure
-            src={laserScannerImg}
-            alt="Laser scanner"
-            caption="After-sales support keeps your team productive across changing projects."
-            align="left"
-            widthClassName="md:w-[200px]"
-            thumbImgClassName="w-auto h-44 object-contain"
-          />
+        
           <p className="text-muted-foreground leading-relaxed">
             We provide after-sales guidance and troubleshooting support: setup checks, workflow
             improvements and help interpreting results so your equipment remains useful over the
