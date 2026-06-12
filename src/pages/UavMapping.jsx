@@ -49,8 +49,7 @@ const UavMapping = () => {
         />
        <p className="text-muted-foreground leading-relaxed">
        To achieve this, we undertake a structured survey process that begins with clearly <b>defining project objectives and required accuracy</b>. 
-       We then plan and execute <b>UAV flights</b> with adequate forward and side <b>overlap</b>, selecting appropriate altitude to meet the desired 
-       <b>ground sample distance (GSD) </b> while accounting for terrain and airspace conditions. <br/>
+       We then plan and execute <b>UAV flights</b> with adequate forward and side <b>overlap</b>, selecting appropriate altitude to meet the desired <b>ground sample distance (GSD) </b> while accounting for terrain and airspace conditions. <br/>
        <b>Ground control</b> is established using high-precision GNSS or total station surveys to anchor the data spatially. 
        During acquisition, imagery is captured systematically along planned flight paths, with continuous field monitoring to ensure coverage, consistency and data quality. 
        The collected data is then processed through photogrammetric workflows, including <b>image alignment</b> and <b>dense surface reconstruction</b> 
