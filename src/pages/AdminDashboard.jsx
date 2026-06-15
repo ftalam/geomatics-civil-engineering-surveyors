@@ -6,6 +6,7 @@ import {
   Package, 
   Clock, 
   CheckCircle, 
+  Coins,
   DollarSign,
   Search,
   ChevronDown,
@@ -88,7 +89,7 @@ const attachProfilesToOrders = async (orderData) => {
 const formatCurrency = (amount) => {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "USD",
+    currency: "KSH",
   }).format(amount);
 };
 
@@ -309,7 +310,7 @@ const Header = ({
       <button
         onClick={onRefresh}
         disabled={refreshing}
-        className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-all duration-200 text-sm font-medium"
+        className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-all duration-200 text-sm text-gray-300 font-medium "
       >
         <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
         Refresh
@@ -320,8 +321,8 @@ const Header = ({
           onClick={onToggleNotifications}
           className="relative flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-all duration-200"
         >
-          <Bell className="h-4 w-4" />
-          <span className="text-sm font-medium hidden sm:inline">Notifications</span>
+          <Bell className="h-4 w-4 text-gray-400" />
+          <span className="text-sm text-gray-500 hidden sm:inline">Notifications</span>
           {unreadCount > 0 && (
             <span className="absolute -top-1 -right-1 h-5 w-5 bg-red-500 text-white rounded-full text-xs flex items-center justify-center">
               {unreadCount}
@@ -412,22 +413,22 @@ const StatsGrid = ({ stats }) => {
       textColor: "text-emerald-600",
     },
     {
-      label: "Revenue",
-      value: formatCurrency(stats.revenue),
-      icon: DollarSign,
-      bgColor: "bg-violet-50",
-      textColor: "text-violet-600",
-    },
+    label: "Revenue",
+    value: ` ${formatCurrency(stats.revenue)}`,
+    icon: Coins, // or BagOfMoney if available
+    bgColor: "bg-violet-50",
+    textColor: "text-violet-600",
+    }
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
       {statCards.map((stat) => (
         <div
           key={stat.label}
-          className="group relative bg-white rounded-2xl p-6 shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 overflow-hidden"
+          className="group relative bg-white rounded-xl p-2 shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 overflow-hidden"
         >
-          <div className={`absolute top-0 right-0 w-32 h-32 -mr-8 -mt-8 ${stat.bgColor} opacity-20 rounded-full group-hover:scale-150 transition-transform duration-500`} />
+          <div className={`absolute top-0 right-0 w-32 h-30 -mr-8 -mt-8 ${stat.bgColor} opacity-20 rounded-full group-hover:scale-150 transition-transform duration-500`} />
           
           <div className="relative">
             <div className="flex items-center justify-between mb-4">
