@@ -605,7 +605,7 @@ const OrderCard = ({ order, isUpdating, isExpanded, onToggleExpand, onUpdateStat
                     orderItems.reduce((sum, item) => sum + calculateItemTotal(item), 0)
                   )}
                 </p>
-                <p className="text-xs text-gray-500">{orderItems.length} items</p>
+                <p className="text-xs text-gray-500">{orderItems.length} {orderItems.length === 1 ? 'item' : 'items'}</p>
               </div>
             )}
             <ChevronDown className={`h-5 w-5 text-gray-400 transition-transform duration-200 ${

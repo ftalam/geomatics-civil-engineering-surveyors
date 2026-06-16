@@ -32,21 +32,7 @@ const GeodeticGpsControl = () => {
         </>
       }
       toc={toc}
-      infobox={{
-        title: "Geodetic control",
-        images: [
-          {
-            src: gnssI93Img,
-            alt: "GNSS receiver",
-            caption: "GNSS equipment used for control surveys",
-          },
-        ],
-        items: [
-          { label: "Focus", value: "Coordinates + heights" },
-          { label: "Scale", value: "Project / corridor" },
-          { label: "Output", value: "Control stations" },
-        ],
-      }}
+   
     >
       <p id="overview" className="text-lg text-muted-foreground leading-relaxed">
         Geodetic control provides the reference framework that ties mapping and engineering
@@ -101,7 +87,7 @@ const GeodeticGpsControl = () => {
       </div>
       <div> 
       <p className="text-muted-foreground leading-relaxed">
-        Methods are selected based on accuracy requirements, logistics, and the size of the
+        Methods are selected based on accuracy requirements, logistics and the size of the
         network. Common approaches include:
       </p>
       <ul className="list-disc pl-6 text-muted-foreground space-y-2">
