@@ -14,14 +14,6 @@ import DEM from "@/assets/sasumwaDEM.png";
 import profile from "@/assets/PLAN&PROFILE.png";
 import cs from "@/assets/CROSS-SECTION.png";
 
-const toc = [
-  { id: "overview", label: "Overview" },
-  { id: "process", label: "Process" },
-  { id: "toposdata", label: "Topographic data" },
-  { id: "maps", label: "Topographic maps" },
-  { id: "profiles", label: "Profiles & cross-sections" },
-];
-
 const TopographicSurvey = () => {
   const [expanded, setExpanded] = useState(false);
   return (
@@ -40,7 +32,6 @@ const TopographicSurvey = () => {
           .
         </>
       }
-      toc={toc}
       infobox={{
         title: "Topographic map sheet",
         images: [

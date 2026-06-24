@@ -286,6 +286,20 @@ const getProductPriceLabel = (product) => {
   return `KES ${price.toLocaleString()}`;
 };
 
+const normalizeOrderRequests = (specialRequests = {}) => {
+  const cleanValue = (value) => String(value ?? "").trim();
+
+  return {
+    specialMessage: cleanValue(specialRequests.specialMessage),
+    estimateDemo: cleanValue(specialRequests.estimateDemo),
+    buyRent: cleanValue(specialRequests.buyRent),
+    aob: cleanValue(specialRequests.aob),
+  };
+};
+
+const hasOrderRequests = (requests) =>
+  Object.values(requests || {}).some((value) => String(value ?? "").trim());
+
 const getProductFetchErrorMessage = (error) => {
   if (!error) return "Unable to load products.";
 
@@ -868,7 +882,7 @@ const Geoshop = () => {
     setCart((prev) => removeItemFromCart(prev, productId));
   };
 
-  const handleCheckout = async () => {
+  const handleCheckout = async (specialRequests = {}) => {
     if (!user?.id) {
       requireLogin();
       return;
@@ -895,15 +909,20 @@ const Geoshop = () => {
         image: item.image,
       }));
 
+      const orderRequests = normalizeOrderRequests(specialRequests);
+      const orderPayload = {
+        user_id: user.id,
+        items: orderItems,
+        status: "pending",
+      };
+
+      if (hasOrderRequests(orderRequests)) {
+        orderPayload.special_requests = orderRequests;
+      }
+
       const { data: inserted, error } = await supabase
         .from("orders")
-        .insert([
-        {
-          user_id: user.id,
-          items: orderItems,
-          status: "pending",
-        },
-      ])
+        .insert([orderPayload])
         .select("id, order_number");
 
       if (error) {

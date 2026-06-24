@@ -8,15 +8,6 @@ import laserScannerImg from "@/assets/handheld-+Laser-scanners-chcnav-RS10.jpg";
 import chcnavBaseImg from "@/assets/chcnav-ibase.jpg";
 import shopImg from "@/assets/SH-stand.jpg";
 
-const toc = [
-  { id: "overview", label: "Overview" },
-  { id: "selection", label: "Equipment selection" },
-  { id: "setup", label: "Setup & workflow" },
-  { id: "training", label: "Training" },
-  { id: "maintenance", label: "Calibration & maintenance" },
-  { id: "support", label: "Support" },
-];
-
 const EquipmentSupplyTraining = () => {
   return (
     <ArticleLayout
@@ -31,7 +22,6 @@ const EquipmentSupplyTraining = () => {
           .
         </>
       }
-      toc={toc}
       infobox={{
         title: "Bestseller Survey equipment",
         images: [
@@ -48,15 +38,6 @@ const EquipmentSupplyTraining = () => {
         ],
       }}
     >
-      <p id="overview" className="text-lg text-muted-foreground leading-relaxed">
-        We help teams select the right surveying equipment and build confidence using it. From
-        supply to onboarding and continued support, we keep your workflows productive and
-        accurate.
-      </p>
-
-      <h2 id="selection" className="text-xl font-semibold mt-10 mb-4">
-        Equipment selection
-      </h2>
       <ArticleFigure
         src={shopImg}
         alt="Geoshop equipment"
@@ -76,35 +57,8 @@ const EquipmentSupplyTraining = () => {
         <li>GNSS receivers for RTK, densification and corridor control</li>
         <li>Laser scanning for rapid capture of complex scenes</li>
       </ul>
-
-      <div className="clear-both" />
-
-      <div className="grid grid-cols-2 md:grid-cols-2 gap-10 mt-10">
-        <div> <h2 id="setup" className="text-x font-semibold mt-10 mb-4">
-              Setup & workflow
-            </h2>
-            <ArticleFigure
-              src={chcnavBaseImg}
-              alt="GNSS base station"
-              caption="Correct setup (datums, antenna heights, base/rover) prevents costly rework."
-              align="left"
-              widthClassName="md:w-[320px]"
-              thumbImgClassName="w-full h-40 object-cover"
-            />
-            <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-              <li>Device configuration and field-ready templates</li>
-              <li>Coordinate system setup (projections/datum parameters)</li>
-              <li>Data management workflow and file naming/transfer guidelines</li>
-              <li>Starter checklists for daily checks and QA</li>
-            </ul>
-        </div>
-            
-        <div> 
-              <h2 id="maintenance" className="text-x font-semibold mt-10 mb-4">
-              Calibration & maintenance
-            </h2>
             <p className="text-muted-foreground leading-relaxed">
-              Equipment performance depends on calibration and routine care. We advise on checks and
+             We advise on checks and
               maintenance schedules to keep results consistent and to reduce downtime.
             </p>
             <ul className="list-disc pl-6 text-muted-foreground space-y-2">
@@ -112,36 +66,12 @@ const EquipmentSupplyTraining = () => {
               <li>Battery/cabling care and field protection guidance</li>
               <li>Firmware/software updates aligned to stable workflows</li>
             </ul>
-        </div>
-
-        <div> 
-            <h2 id="training" className="text-x font-semibold mt-10 mb-4">
-            Training
-          </h2>
-          
-          <p className="text-muted-foreground leading-relaxed">
-            Training is tailored to your team and workflows: field setup, data capture, quality
-            checks, and best-practice reporting. We focus on repeatable methods that reduce errors
-            and accelerate delivery.
-          </p>
-          <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-            <li>GNSS RTK/static workflows, control, and troubleshooting</li>
-            <li>Total station setup, traversing, setting out, and as-builts</li>
-            <li>Laser scanning capture basics and registration concepts</li>
-          </ul>
-        </div>
-
-        <div> <h2 id="support" className="text-x font-semibold mt-10 mb-4">
-            Support
-          </h2>
-        
           <p className="text-muted-foreground leading-relaxed">
             We provide after-sales guidance and troubleshooting support: setup checks, workflow
             improvements and help interpreting results so your equipment remains useful over the
             long term.
           </p>
-        </div>
-      </div>
+      
 
       <div className="clear-both mt-10 bg-card p-8 rounded-xl border text-center">
         <h3 className="text-xl font-semibold mb-3">Need Equipment or Training?</h3>

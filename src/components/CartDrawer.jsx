@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -38,12 +39,88 @@ export default function CartDrawer({
 }) {
   if (!open) return null;
 
+  // Form state for special requests
+  const [specialMessage, setSpecialMessage] = useState("");
+  const [estimateDemo, setEstimateDemo] = useState("");
+  const [buyRent, setBuyRent] = useState("");
+  const [aob, setAob] = useState("");
+
   const subtotal = (Array.isArray(cart) ? cart : []).reduce(
     (sum, item) => sum + (item.price || 0) * (item.quantity || 1),
     0,
   );
 
   const recentOrders = Array.isArray(orderHistory) ? orderHistory.slice(0, 6) : [];
+
+  // Validate required fields
+  const isFormValid =
+    specialMessage.trim() !== "" &&
+    estimateDemo.trim() !== "" &&
+    buyRent.trim() !== "" &&
+    aob.trim() !== "";
+
+  // Handle checkout with form data
+  const handleCheckoutWithForm = () => {
+    if (!isFormValid) {
+      alert("Please fill in all required fields: Message, Estimate/Demo, Interest, and AOB");
+      return;
+    }
+
+    // Create order data with special requests
+    const specialRequests = {
+      specialMessage,
+      estimateDemo,
+      buyRent,
+      aob,
+    };
+
+    // Call the parent onCheckout with the form data
+    // You may need to modify onCheckout in the parent to accept this parameter
+    onCheckout(specialRequests);
+  };
+
+  // Add to your component state
+const [cancellingOrder, setCancellingOrder] = useState(null);
+
+// Add the cancel order handler
+const handleCancelOrder = async (orderId) => {
+  // Ask for confirmation
+  if (!window.confirm("Are you sure you want to cancel this order?")) {
+    return;
+  }
+
+  setCancellingOrder(orderId);
+  
+  try {
+    // Call your API to cancel the order
+    const response = await fetch(`/api/orders/${orderId}/cancel`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // Add any auth headers if needed
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to cancel order');
+    }
+
+    // Refresh the order history to show updated status
+    if (onRefreshOrderHistory) {
+      await onRefreshOrderHistory();
+    }
+    
+    // Optional: Show success message
+    // You can add a toast notification here if you have one
+    
+  } catch (error) {
+    console.error('Error cancelling order:', error);
+    // Optional: Show error message
+    alert('Failed to cancel order. Please try again.');
+  } finally {
+    setCancellingOrder(null);
+  }
+};
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex justify-center items-start overflow-y-auto p-4">
@@ -152,10 +229,90 @@ export default function CartDrawer({
               </div>
             </div>
 
+            {/* Special Requests Section */}
+            <div className="bg-gray-50 rounded-2xl p-6 border-2 border-blue-200/50 mb-6">
+              {/* Message textarea */}
+              <div className="mb-5">
+                <label htmlFor="specialMessage" className="block font-semibold text-gray-700 mb-2">
+                  💬 Your Message
+                </label>
+                <textarea
+                  id="specialMessage"
+                  value={specialMessage}
+                  onChange={(e) => setSpecialMessage(e.target.value)}
+                  placeholder="e.g. I'd like an estimate on this equipment or a rental fee quote…"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-[#99ED47] focus:outline-none focus:ring-2 focus:ring-[#99ED47]/30 bg-white text-gray-900 font-medium resize-none"
+                  rows="4"
+                />
+                <p className="text-xs text-gray-600 mt-1">Let us know if this is an estimate, a demo request or any specific requirement.</p>
+              </div>
+
+              {/* Option dropdowns grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+                {/* Estimate/Demo dropdown */}
+                <div>
+                  <label htmlFor="estimateDemoSelect" className="block font-semibold text-gray-600 mb-2">
+                    📋 Estimate or Demo
+                  </label>
+                  <select
+                    id="estimateDemoSelect"
+                    value={estimateDemo}
+                    onChange={(e) => setEstimateDemo(e.target.value)}
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-[#99ED47] focus:outline-none focus:ring-2 focus:ring-[#99ED47]/30 bg-white text-gray-900 font-medium cursor-pointer"
+                  >
+                    <option value="">– select –</option>
+                    <option value="estimate">📊 Estimate only</option>
+                    <option value="demonstration">🎥 Demonstration</option>
+                    <option value="estimate+demo">📋 Estimate + demo</option>
+                  </select>
+                </div>
+
+                {/* Buy/Rent dropdown */}
+                <div>
+                  <label htmlFor="buyRentSelect" className="block font-semibold text-gray-600 mb-2">
+                    🤝 Interested In
+                  </label>
+                  <select
+                    id="buyRentSelect"
+                    value={buyRent}
+                    onChange={(e) => setBuyRent(e.target.value)}
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-[#99ED47] focus:outline-none focus:ring-2 focus:ring-[#99ED47]/30 bg-white text-gray-900 font-medium cursor-pointer"
+                  >
+                    <option value="">– select –</option>
+                    <option value="buy">💳 Buying</option>
+                    <option value="rent">📆 Renting</option>
+                    <option value="buy-rent">🔄 Either (buy/rent)</option>
+                    <option value="not-sure">🤔 Not sure</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* AOB input */}
+              <div className="mb-4">
+                <label htmlFor="aobInput" className="block font-semibold text-gray-700 mb-2">
+                  Any Other Business
+                </label>
+                <input
+                  type="text"
+                  id="aobInput"
+                  value={aob}
+                  onChange={(e) => setAob(e.target.value)}
+                  placeholder="e.g. special delivery, additional warranty, contact preference …"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-[#99ED47] focus:outline-none focus:ring-2 focus:ring-[#99ED47]/30 bg-white text-gray-900 font-medium"
+                />
+                <p className="text-xs text-gray-600 mt-1">Anything else we should know</p>
+              </div>
+
+              <div className="flex items-center gap-2 text-xs text-gray-700 bg-white rounded-lg p-3 border border-gray-200">
+                <span>✓</span>
+                <span>Your preferences help us tailor the response</span>
+              </div>
+            </div>
+
             <button
-              onClick={onCheckout}
-              disabled={isSubmitting}
-              className="w-full bg-[#99ED47] hover:bg-[#8ddc3a] text-gray-900 font-bold py-4 rounded-full shadow-[0_4px_16px_rgba(153,237,71,0.4)] hover:shadow-[0_8px_24px_rgba(153,237,71,0.5)] hover:scale-105 transition-all duration-200 text-lg"
+              onClick={handleCheckoutWithForm}
+              disabled={isSubmitting || !isFormValid}
+              className="w-full bg-[#99ED47] hover:bg-[#8ddc3a] text-gray-900 font-bold py-4 rounded-full shadow-[0_4px_16px_rgba(153,237,71,0.4)] hover:shadow-[0_8px_24px_rgba(153,237,71,0.5)] hover:scale-105 transition-all duration-200 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting ? "Sending order..." : "Send Order →"}
             </button>
@@ -235,11 +392,26 @@ export default function CartDrawer({
                         <p className="text-xs text-muted-foreground mt-1">
                           KES {computeOrderTotal(order).toFixed(2)}
                         </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
 
+                         {/* Cancel Button - Only show for pending orders */}
+                          {order.status !== "approved" && order.status !== "cancelled" && (
+                            <button
+                              onClick={() => handleCancelOrder(order.id)}
+                              disabled={cancellingOrder === order.id}
+                              className="mt-2 text-xs text-red-600 hover:text-red-800 font-medium transition-colors"
+                            >
+                              {cancellingOrder === order.id ? "Cancelling..." : "Cancel Order"}
+                            </button>
+                          )}
+                          
+                          {/* Show cancelled status */}
+                          {order.status === "cancelled" && (
+                            <p className="mt-2 text-xs text-red-500 font-medium">Cancelled</p>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 <div className="flex items-center justify-end gap-2 pt-2">
                   <DialogClose asChild>
                     <Link

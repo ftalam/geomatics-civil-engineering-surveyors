@@ -6,19 +6,24 @@ import {
   Package, 
   Clock, 
   CheckCircle, 
-  Coins,
   DollarSign,
   Search,
   ChevronDown,
   RefreshCw,
-  X,
   AlertCircle,
   Loader2,
-  User,
   Mail,
   Phone,
   Calendar,
-  Hash
+  Hash,
+  MessageSquare,
+  Filter,
+  XCircle,
+  Check,
+  Zap,
+  Shield,
+  Users,
+  TrendingUp
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabaseClient";
@@ -28,13 +33,31 @@ import { supabase } from "@/lib/supabaseClient";
 // ============================================================================
 
 const ORDER_STATUSES = ["pending", "approved"];
+const STATUS_LABELS = {
+  pending: "Pending Review",
+  approved: "Approved",
 
-const STATUS_STYLES = {
-  pending: "bg-yellow-100 text-yellow-700 border border-yellow-200",
-  approved: "bg-green-100 text-green-700 border border-green-200",
+  
 };
 
-const POLLING_INTERVAL = 30000; // 30 seconds
+const STATUS_STYLES = {
+  pending: "bg-amber-50 text-amber-700 border-amber-200",
+  approved: "bg-emerald-50 text-emerald-700 border-emerald-200",
+  processing: "bg-blue-50 text-blue-700 border-blue-200",
+  completed: "bg-purple-50 text-purple-700 border-purple-200",
+  cancelled: "bg-red-50 text-red-700 border-red-200",
+};
+
+const STATUS_ICONS = {
+  pending: Clock,
+  approved: CheckCircle,
+  processing: Loader2,
+  completed: Check,
+  cancelled: XCircle
+};
+
+const POLLING_INTERVAL = 30000;
+const MAX_NOTIFICATIONS = 50;
 
 // ============================================================================
 // UTILITY FUNCTIONS
@@ -42,30 +65,20 @@ const POLLING_INTERVAL = 30000; // 30 seconds
 
 const getProfileFromOrder = (order) => {
   if (!order?.profiles) return null;
-  if (Array.isArray(order.profiles)) {
-    return order.profiles[0] || null;
-  }
+  if (Array.isArray(order.profiles)) return order.profiles[0] || null;
   return order.profiles;
 };
 
 const attachProfilesToOrders = async (orderData) => {
   const safeOrders = Array.isArray(orderData) ? orderData : [];
-  
   if (!safeOrders.length) return [];
 
-  // Get unique user IDs
-  const userIds = [...new Set(
-    safeOrders
-      .map((order) => order?.user_id)
-      .filter(Boolean)
-  )];
-
+  const userIds = [...new Set(safeOrders.map(order => order?.user_id).filter(Boolean))];
   if (!userIds.length) return safeOrders;
 
-  // Fetch profiles
   const { data: profilesData, error } = await supabase
     .from("profiles")
-    .select("id, email, phone")
+    .select("id, email, phone, full_name, avatar_url")
     .in("id", userIds);
 
   if (error) {
@@ -73,14 +86,12 @@ const attachProfilesToOrders = async (orderData) => {
     return safeOrders;
   }
 
-  // Create lookup map
   const profilesById = {};
-  (profilesData || []).forEach((profile) => {
+  (profilesData || []).forEach(profile => {
     profilesById[profile.id] = profile;
   });
 
-  // Attach profiles to orders
-  return safeOrders.map((order) => ({
+  return safeOrders.map(order => ({
     ...order,
     profiles: profilesById[order.user_id] || getProfileFromOrder(order),
   }));
@@ -89,7 +100,9 @@ const attachProfilesToOrders = async (orderData) => {
 const formatCurrency = (amount) => {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "KSH",
+    currency: "KES",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
   }).format(amount);
 };
 
@@ -106,15 +119,90 @@ const formatDate = (dateString) => {
 
 const formatTimeAgo = (date) => {
   const seconds = Math.floor((new Date().getTime() - new Date(date).getTime()) / 1000);
-  
   if (seconds < 60) return "just now";
   if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
   if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
   return `${Math.floor(seconds / 86400)}d ago`;
 };
 
-const calculateItemTotal = (item) => {
-  return (item.price || 0) * (item.quantity || 1);
+const calculateItemTotal = (item) => (item.price || 0) * (item.quantity || 1);
+
+const parseJsonValue = (value) => {
+  if (typeof value !== "string") return value;
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+  if (trimmed.startsWith("{") || trimmed.startsWith("[")) {
+    try { return JSON.parse(trimmed); } 
+    catch { return value; }
+  }
+  return value;
+};
+
+const normalizeOrderRequests = (order) => {
+  const sources = [
+    order?.special_requests,
+    order?.specialRequests,
+    order?.request_details,
+    order?.requestDetails,
+    order?.metadata?.special_requests,
+    order?.metadata?.specialRequests,
+  ];
+
+  const entries = [];
+  const seen = new Set();
+
+  sources.forEach(source => {
+    const parsed = parseJsonValue(source);
+    if (!parsed) return;
+
+    if (typeof parsed === "string") {
+      const key = `Message:${parsed}`;
+      if (!seen.has(key)) {
+        seen.add(key);
+        entries.push({ label: "Message", value: parsed });
+      }
+      return;
+    }
+
+    if (typeof parsed === "object" && !Array.isArray(parsed)) {
+      Object.entries(parsed).forEach(([key, value]) => {
+        const parsedValue = parseJsonValue(value);
+        const normalizedValue = parsedValue && typeof parsedValue === "object"
+          ? JSON.stringify(parsedValue)
+          : String(parsedValue ?? "").trim();
+        
+        if (normalizedValue) {
+          const entryKey = `${key}:${normalizedValue}`;
+          if (!seen.has(entryKey)) {
+            seen.add(entryKey);
+            const label = key
+              .replace(/[_-]+/g, " ")
+              .replace(/([a-z])([A-Z])/g, "$1 $2")
+              .replace(/\b\w/g, letter => letter.toUpperCase());
+            entries.push({ label, value: normalizedValue });
+          }
+        }
+      });
+    }
+  });
+
+  // Add direct fields
+  [
+    ["Message", order?.message],
+    ["Message", order?.order_message],
+    ["Notes", order?.notes],
+  ].forEach(([label, value]) => {
+    const normalizedValue = String(value ?? "").trim();
+    if (normalizedValue) {
+      const key = `${label}:${normalizedValue}`;
+      if (!seen.has(key)) {
+        seen.add(key);
+        entries.push({ label, value: normalizedValue });
+      }
+    }
+  });
+
+  return entries;
 };
 
 const normalizeOrderId = (value) => {
@@ -125,26 +213,14 @@ const normalizeOrderId = (value) => {
   return value;
 };
 
-const generateId = () => {
-  return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-};
+const generateId = () => `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
-const logMissingProfiles = (orders) => {
-  const missingProfiles = orders.filter(order => {
-    const profile = getProfileFromOrder(order);
-    return !profile;
-  });
-  
-  if (missingProfiles.length > 0) {
-    console.warn(`${missingProfiles.length} orders missing profiles:`, 
-      missingProfiles.map(o => ({
-        orderId: o.id,
-        orderNumber: o.order_number,
-        userId: o.user_id,
-        status: o.status
-      }))
-    );
+const getOrderTotal = (order) => {
+  if (order.total_amount) return order.total_amount;
+  if (Array.isArray(order.items)) {
+    return order.items.reduce((sum, item) => sum + calculateItemTotal(item), 0);
   }
+  return 0;
 };
 
 // ============================================================================
@@ -164,6 +240,7 @@ const initialState = {
     dateRange: "all",
     sortBy: "newest",
   },
+  selectedOrderId: null,
 };
 
 function reducer(state, action) {
@@ -181,7 +258,7 @@ function reducer(state, action) {
     case "UPDATE_ORDER":
       return {
         ...state,
-        orders: state.orders.map((order) =>
+        orders: state.orders.map(order =>
           order.id === action.payload.id ? { ...order, ...action.payload } : order
         ),
         updatingOrderId: null,
@@ -191,7 +268,7 @@ function reducer(state, action) {
     case "REMOVE_ORDER":
       return {
         ...state,
-        orders: state.orders.filter((order) => order.id !== action.payload),
+        orders: state.orders.filter(order => order.id !== action.payload),
         lastUpdate: new Date(),
       };
     
@@ -204,13 +281,13 @@ function reducer(state, action) {
     case "ADD_NOTIFICATION":
       return {
         ...state,
-        notifications: [action.payload, ...state.notifications].slice(0, 50),
+        notifications: [action.payload, ...state.notifications].slice(0, MAX_NOTIFICATIONS),
       };
     
     case "MARK_NOTIFICATIONS_READ":
       return {
         ...state,
-        notifications: state.notifications.map((n) => ({ ...n, read: true })),
+        notifications: state.notifications.map(n => ({ ...n, read: true })),
       };
     
     case "CLEAR_NOTIFICATIONS":
@@ -225,6 +302,9 @@ function reducer(state, action) {
     case "SET_FILTERS":
       return { ...state, filters: { ...state.filters, ...action.payload } };
     
+    case "SET_SELECTED_ORDER":
+      return { ...state, selectedOrderId: action.payload };
+    
     default:
       return state;
   }
@@ -235,29 +315,26 @@ function reducer(state, action) {
 // ============================================================================
 
 const LoadingSkeleton = () => (
-  <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-    <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="animate-pulse">
         <div className="flex justify-between items-center mb-8">
           <div className="flex items-center gap-4">
-            <div className="h-10 w-10 bg-gray-200 rounded-lg" />
+            <div className="h-10 w-10 bg-slate-200 rounded-xl" />
             <div>
-              <div className="h-8 w-48 bg-gray-200 rounded mb-2" />
-              <div className="h-4 w-32 bg-gray-200 rounded" />
+              <div className="h-8 w-48 bg-slate-200 rounded mb-2" />
+              <div className="h-4 w-32 bg-slate-200 rounded" />
             </div>
           </div>
-          <div className="h-10 w-40 bg-gray-200 rounded-lg" />
-        </div>
-        
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-32 bg-gray-200 rounded-xl" />
-          ))}
+          <div className="flex gap-3">
+            <div className="h-10 w-32 bg-slate-200 rounded-xl" />
+            <div className="h-10 w-32 bg-slate-200 rounded-xl" />
+          </div>
         </div>
         
         <div className="space-y-4">
           {[...Array(5)].map((_, i) => (
-            <div key={i} className="h-48 bg-gray-200 rounded-xl" />
+            <div key={i} className="h-32 bg-slate-200 rounded-2xl" />
           ))}
         </div>
       </div>
@@ -281,26 +358,27 @@ const Header = ({
     <div className="flex items-center gap-4">
       <button
         onClick={onBack}
-        className="p-2 hover:bg-white rounded-xl transition-all duration-200 hover:shadow-sm"
+        className="p-2.5 bg-white rounded-xl hover:bg-slate-50 transition-all duration-200 shadow-sm hover:shadow-md border border-slate-200"
         aria-label="Go back"
       >
-        <ArrowLeft className="h-5 w-5" />
+        <ArrowLeft className="h-5 w-5 text-slate-600" />
       </button>
       <div>
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-          Admin Dashboard
+        <h1 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
+          <Shield className="h-6 w-6 text-indigo-600" />
+          Order Management
         </h1>
         <div className="flex items-center gap-2 mt-1">
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-slate-500">
             Last updated {formatTimeAgo(lastUpdate)}
           </p>
           <button
             onClick={onRefresh}
             disabled={refreshing}
-            className="p-1 hover:bg-gray-200 rounded transition-colors"
+            className="p-1 hover:bg-slate-200 rounded transition-colors"
             aria-label="Refresh"
           >
-            <RefreshCw className={`h-3 w-3 text-gray-400 ${refreshing ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`h-3 w-3 text-slate-400 ${refreshing ? 'animate-spin' : ''}`} />
           </button>
         </div>
       </div>
@@ -310,7 +388,7 @@ const Header = ({
       <button
         onClick={onRefresh}
         disabled={refreshing}
-        className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-all duration-200 text-sm text-gray-300 font-medium "
+        className="flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 text-sm font-medium text-slate-600 shadow-sm"
       >
         <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
         Refresh
@@ -319,25 +397,25 @@ const Header = ({
       <div className="relative" ref={notificationRef}>
         <button
           onClick={onToggleNotifications}
-          className="relative flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-all duration-200"
+          className="relative flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 shadow-sm"
         >
-          <Bell className="h-4 w-4 text-gray-400" />
-          <span className="text-sm text-gray-500 hidden sm:inline">Notifications</span>
+          <Bell className="h-4 w-4 text-slate-600" />
+          <span className="text-sm font-medium text-slate-600 hidden sm:inline">Alerts</span>
           {unreadCount > 0 && (
-            <span className="absolute -top-1 -right-1 h-5 w-5 bg-red-500 text-white rounded-full text-xs flex items-center justify-center">
+            <span className="absolute -top-1 -right-1 h-5 w-5 bg-rose-500 text-white rounded-full text-xs flex items-center justify-center font-medium animate-pulse">
               {unreadCount}
             </span>
           )}
         </button>
 
         {showNotifications && (
-          <div className="absolute right-0 mt-2 w-96 bg-white rounded-xl shadow-2xl border border-gray-200 z-50 overflow-hidden">
-            <div className="p-4 border-b border-gray-100 flex items-center justify-between bg-gray-50">
-              <h3 className="font-semibold text-gray-900">Notifications</h3>
+          <div className="absolute right-0 mt-2 w-96 bg-white rounded-2xl shadow-2xl border border-slate-200 z-50 overflow-hidden animate-fade-in">
+            <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+              <h3 className="font-semibold text-slate-800">Notifications</h3>
               {notifications.length > 0 && (
                 <button
                   onClick={onClearNotifications}
-                  className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                  className="text-sm text-indigo-600 hover:text-indigo-700 font-medium"
                 >
                   Clear all
                 </button>
@@ -347,9 +425,9 @@ const Header = ({
             <div className="max-h-[32rem] overflow-y-auto">
               {notifications.length === 0 ? (
                 <div className="p-8 text-center">
-                  <Bell className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-                  <p className="text-sm text-gray-500">No notifications yet</p>
-                  <p className="text-xs text-gray-400 mt-1">
+                  <Bell className="h-12 w-12 text-slate-300 mx-auto mb-3" />
+                  <p className="text-sm text-slate-500">No notifications yet</p>
+                  <p className="text-xs text-slate-400 mt-1">
                     New order updates will appear here
                   </p>
                 </div>
@@ -357,25 +435,25 @@ const Header = ({
                 notifications.map((notification) => (
                   <div
                     key={notification.id}
-                    className={`p-4 border-b border-gray-50 last:border-b-0 hover:bg-gray-50 transition-colors cursor-pointer ${
-                      !notification.read ? 'bg-blue-50' : ''
+                    className={`p-4 border-b border-slate-50 last:border-b-0 hover:bg-slate-50 transition-colors cursor-pointer ${
+                      !notification.read ? 'bg-indigo-50' : ''
                     }`}
                   >
                     <div className="flex items-start gap-3">
-                      <div className={`h-2 w-2 rounded-full mt-2 ${
-                        notification.type === 'success' ? 'bg-green-500' :
-                        notification.type === 'error' ? 'bg-red-500' :
-                        notification.type === 'warning' ? 'bg-yellow-500' :
-                        'bg-blue-500'
+                      <div className={`h-2 w-2 rounded-full mt-2 flex-shrink-0 ${
+                        notification.type === 'success' ? 'bg-emerald-500' :
+                        notification.type === 'error' ? 'bg-rose-500' :
+                        notification.type === 'warning' ? 'bg-amber-500' :
+                        'bg-indigo-500'
                       }`} />
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm text-gray-900">{notification.message}</p>
-                        <p className="text-xs text-gray-500 mt-1">
+                        <p className="text-sm text-slate-800">{notification.message}</p>
+                        <p className="text-xs text-slate-500 mt-1">
                           {formatTimeAgo(notification.timestamp)}
                         </p>
                       </div>
                       {!notification.read && (
-                        <div className="h-2 w-2 bg-blue-500 rounded-full" />
+                        <div className="h-2 w-2 bg-indigo-500 rounded-full flex-shrink-0" />
                       )}
                     </div>
                   </div>
@@ -389,108 +467,49 @@ const Header = ({
   </div>
 );
 
-const StatsGrid = ({ stats }) => {
-  const statCards = [
-    {
-      label: "Total Orders",
-      value: stats.total,
-      icon: Package,
-      bgColor: "bg-blue-50",
-      textColor: "text-blue-600",
-    },
-    {
-      label: "Pending",
-      value: stats.pending,
-      icon: Clock,
-      bgColor: "bg-amber-50",
-      textColor: "text-amber-600",
-    },
-    {
-      label: "Approved",
-      value: stats.approved,
-      icon: CheckCircle,
-      bgColor: "bg-emerald-50",
-      textColor: "text-emerald-600",
-    },
-    {
-    label: "Revenue",
-    value: ` ${formatCurrency(stats.revenue)}`,
-    icon: Coins, // or BagOfMoney if available
-    bgColor: "bg-violet-50",
-    textColor: "text-violet-600",
-    }
-  ];
-
-  return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-      {statCards.map((stat) => (
-        <div
-          key={stat.label}
-          className="group relative bg-white rounded-xl p-2 shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 overflow-hidden"
-        >
-          <div className={`absolute top-0 right-0 w-32 h-30 -mr-8 -mt-8 ${stat.bgColor} opacity-20 rounded-full group-hover:scale-150 transition-transform duration-500`} />
-          
-          <div className="relative">
-            <div className="flex items-center justify-between mb-4">
-              <div className={`p-3 rounded-xl ${stat.bgColor}`}>
-                <stat.icon className={`h-6 w-6 ${stat.textColor}`} />
-              </div>
-            </div>
-            
-            <p className="text-sm font-medium text-gray-600 mb-1">{stat.label}</p>
-            <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
-            
-            {stat.label === "Revenue" && stats.total > 0 && (
-              <p className="text-xs text-gray-500 mt-2">
-                Avg. order: {formatCurrency(stats.averageOrderValue)}
-              </p>
-            )}
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-};
-
 const FiltersBar = ({ filters, onFilterChange, totalResults }) => (
-  <div className="bg-white rounded-2xl p-4 mb-6 shadow-sm border border-gray-200">
+  <div className="bg-white rounded-2xl p-4 mb-6 shadow-sm border border-slate-200">
     <div className="flex flex-col sm:flex-row gap-4">
       <div className="flex-1 relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
         <input
           type="text"
-          placeholder="Search by order number, email, or name..."
+          placeholder="Search orders by number, email, or name..."
           value={filters.search}
           onChange={(e) => onFilterChange({ search: e.target.value })}
-          className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+          className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm text-slate-700 transition-all"
         />
       </div>
 
       <select
         value={filters.status}
         onChange={(e) => onFilterChange({ status: e.target.value })}
-        className="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm font-medium"
+        className="px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm font-medium text-slate-700 transition-all"
       >
         <option value="all">All Statuses</option>
-        <option value="pending">Pending</option>
-        <option value="approved">Approved</option>
+        {ORDER_STATUSES.map(status => (
+          <option key={status} value={status}>
+            {STATUS_LABELS[status] || status.charAt(0).toUpperCase() + status.slice(1)}
+          </option>
+        ))}
       </select>
 
       <select
         value={filters.dateRange}
         onChange={(e) => onFilterChange({ dateRange: e.target.value })}
-        className="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm font-medium"
+        className="px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm font-medium text-slate-700 transition-all"
       >
         <option value="all">All Time</option>
         <option value="today">Today</option>
         <option value="week">This Week</option>
         <option value="month">This Month</option>
+        <option value="quarter">This Quarter</option>
       </select>
 
       <select
         value={filters.sortBy}
         onChange={(e) => onFilterChange({ sortBy: e.target.value })}
-        className="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm font-medium"
+        className="px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm font-medium text-slate-700 transition-all"
       >
         <option value="newest">Newest First</option>
         <option value="oldest">Oldest First</option>
@@ -499,17 +518,30 @@ const FiltersBar = ({ filters, onFilterChange, totalResults }) => (
       </select>
     </div>
 
-    <div className="mt-3 text-sm text-gray-500">
-      Showing {totalResults} {totalResults === 1 ? "order" : "orders"}
+    <div className="mt-3 flex items-center justify-between">
+      <span className="text-sm text-slate-500">
+        Showing <span className="font-semibold text-slate-700">{totalResults}</span> {totalResults === 1 ? "order" : "orders"}
+      </span>
+      {(filters.status !== "all" || filters.search) && (
+        <button
+          onClick={() => onFilterChange({ status: "all", search: "" })}
+          className="text-sm text-indigo-600 hover:text-indigo-700 font-medium flex items-center gap-1"
+        >
+          <XCircle className="h-4 w-4" />
+          Clear filters
+        </button>
+      )}
     </div>
   </div>
 );
 
 const EmptyState = ({ hasFilters, onClearFilters }) => (
-  <div className="text-center py-16 bg-white rounded-2xl border border-gray-200">
-    <Package className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-    <h3 className="text-lg font-semibold text-gray-900 mb-2">No orders found</h3>
-    <p className="text-gray-500 mb-4">
+  <div className="text-center py-16 bg-white rounded-2xl border border-slate-200 shadow-sm">
+    <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+      <Package className="h-10 w-10 text-slate-400" />
+    </div>
+    <h3 className="text-lg font-semibold text-slate-800 mb-2">No orders found</h3>
+    <p className="text-slate-500 max-w-sm mx-auto">
       {hasFilters
         ? "No orders match your current filters. Try adjusting your search criteria."
         : "Orders will appear here once they're created."}
@@ -517,98 +549,108 @@ const EmptyState = ({ hasFilters, onClearFilters }) => (
     {hasFilters && (
       <button
         onClick={onClearFilters}
-        className="text-blue-600 hover:text-blue-700 font-medium text-sm"
+        className="mt-4 text-indigo-600 hover:text-indigo-700 font-medium text-sm inline-flex items-center gap-1"
       >
+        <Filter className="h-4 w-4" />
         Clear all filters
       </button>
     )}
   </div>
 );
 
-const OrderCard = ({ order, isUpdating, isExpanded, onToggleExpand, onUpdateStatus }) => {
+const OrderCard = ({ 
+  order, 
+  isUpdating, 
+  isExpanded, 
+  onToggleExpand, 
+  onUpdateStatus 
+}) => {
   const profile = getProfileFromOrder(order);
   const status = ORDER_STATUSES.includes(order.status) ? order.status : "pending";
-  const statusStyle = STATUS_STYLES[status] || "bg-gray-100 text-gray-700 border border-gray-200";
+  const statusStyle = STATUS_STYLES[status] || "bg-slate-100 text-slate-700 border-slate-200";
+  const StatusIcon = STATUS_ICONS[status] || Package;
   const orderItems = Array.isArray(order.items) ? order.items : [];
+  const orderRequests = normalizeOrderRequests(order);
+  const total = getOrderTotal(order);
 
   return (
     <div
       id={`order-${order.id}`}
-      className={`bg-white rounded-2xl border shadow-sm transition-all duration-200 ${
-        isUpdating ? 'opacity-50 border-gray-200' : 'border-gray-200 hover:shadow-md'
-      } ${isExpanded ? 'ring-2 ring-blue-500' : ''}`}
+      className={`bg-white rounded-2xl border shadow-sm transition-all duration-300 ${
+        isUpdating ? 'opacity-60 border-slate-200' : 'border-slate-200 hover:shadow-md'
+      } ${isExpanded ? 'ring-2 ring-indigo-500 shadow-lg' : ''}`}
     >
       <div className="p-6 cursor-pointer" onClick={onToggleExpand}>
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div className="flex items-start gap-4 flex-1">
-            <div className={`p-3 rounded-xl ${statusStyle.split(' ')[0]}`}>
-              <Package className={`h-6 w-6 ${statusStyle.split(' ')[1]}`} />
+            <div className={`p-3 rounded-xl ${statusStyle.split(' ')[0]} flex-shrink-0`}>
+              <StatusIcon className={`h-6 w-6 ${statusStyle.split(' ')[1]}`} />
             </div>
 
-            <div className="flex-1">
-              <div className="flex items-center gap-3 mb-1">
-                <h3 className="text-lg font-semibold text-gray-900">
+            <div className="flex-1 min-w-0">
+              <div className="flex flex-wrap items-center gap-3 mb-1">
+                <h3 className="text-lg font-semibold text-slate-800">
                   Order #{order.order_number || order.id.slice(0, 8)}
                 </h3>
-                <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusStyle}`}>
-                  {status}
+                <span className={`px-3 py-1 rounded-full text-xs font-medium border ${statusStyle}`}>
+                  {STATUS_LABELS[status] || status.charAt(0).toUpperCase() + status.slice(1)}
                 </span>
               </div>
 
-              {/* Contact Details */}
-              <div className="mt-3 space-y-2">
-                {profile ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    {profile.email && (
-                      <p className="text-sm text-gray-600 flex items-center gap-2">
-                        <Mail className="h-4 w-4 text-gray-400" />
-                        <span className="font-medium">Email:</span> {profile.email}
-                      </p>
-                    )}
-                    {profile.phone && (
-                      <p className="text-sm text-gray-600 flex items-center gap-2">
-                        <Phone className="h-4 w-4 text-gray-400" />
-                        <span className="font-medium">Phone:</span> {profile.phone}
-                      </p>
-                    )}
-                    {!profile.email && !profile.phone && (
-                      <div className="bg-amber-50 border border-amber-200 rounded-lg p-2 col-span-2">
-                        <p className="text-xs text-amber-700 flex items-center gap-2">
-                          <AlertCircle className="h-3 w-3" />
-                          Profile exists but contact details are missing
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <div className="bg-amber-50 border border-amber-200 rounded-lg p-2">
-                    <p className="text-xs text-amber-700 flex items-center gap-2">
-                      <AlertCircle className="h-3 w-3" />
-                      No profile found - User may not have completed registration
+              {profile && (
+                <div className="mt-2 flex flex-wrap gap-3">
+                  {profile.full_name && (
+                    <p className="text-sm text-slate-600 flex items-center gap-1.5">
+                      <Users className="h-4 w-4 text-slate-400" />
+                      <span className="font-medium">{profile.full_name}</span>
                     </p>
-                  </div>
+                  )}
+                  {profile.email && (
+                    <p className="text-sm text-slate-600 flex items-center gap-1.5">
+                      <Mail className="h-4 w-4 text-slate-400" />
+                      {profile.email}
+                    </p>
+                  )}
+                  {profile.phone && (
+                    <p className="text-sm text-slate-600 flex items-center gap-1.5">
+                      <Phone className="h-4 w-4 text-slate-400" />
+                      {profile.phone}
+                    </p>
+                  )}
+                </div>
+              )}
+
+              <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-slate-400">
+                <span className="flex items-center gap-1">
+                  <Calendar className="h-3 w-3" />
+                  {formatDate(order.created_at)}
+                </span>
+                {orderRequests.length > 0 && (
+                  <span className="flex items-center gap-1 text-indigo-600">
+                    <MessageSquare className="h-3 w-3" />
+                    {orderRequests.length} message{orderRequests.length > 1 ? 's' : ''}
+                  </span>
+                )}
+                {orderItems.length > 0 && (
+                  <span className="flex items-center gap-1">
+                    <Package className="h-3 w-3" />
+                    {orderItems.length} item{orderItems.length > 1 ? 's' : ''}
+                  </span>
                 )}
               </div>
-
-              <p className="text-xs text-gray-400 mt-2">
-                <Calendar className="h-3 w-3 inline mr-1" />
-                {formatDate(order.created_at)}
-              </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            {orderItems.length > 0 && (
+          <div className="flex items-center gap-4 flex-shrink-0">
+            {total > 0 && (
               <div className="text-right">
-                <p className="text-2xl font-bold text-gray-900">
-                  {formatCurrency(
-                    orderItems.reduce((sum, item) => sum + calculateItemTotal(item), 0)
-                  )}
+                <p className="text-2xl font-bold text-slate-800">
+                  {formatCurrency(total)}
                 </p>
-                <p className="text-xs text-gray-500">{orderItems.length} {orderItems.length === 1 ? 'item' : 'items'}</p>
+                <p className="text-xs text-slate-500">Total value</p>
               </div>
             )}
-            <ChevronDown className={`h-5 w-5 text-gray-400 transition-transform duration-200 ${
+            <ChevronDown className={`h-5 w-5 text-slate-400 transition-transform duration-300 ${
               isExpanded ? 'transform rotate-180' : ''
             }`} />
           </div>
@@ -616,42 +658,72 @@ const OrderCard = ({ order, isUpdating, isExpanded, onToggleExpand, onUpdateStat
       </div>
 
       {isExpanded && (
-        <div className="border-t border-gray-100 p-6 bg-gray-50 rounded-b-2xl">
-          <div className="space-y-3 mb-6">
-            <h4 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-              <Package className="h-4 w-4" />
-              Order Items
-            </h4>
-            {orderItems.map((item, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between bg-white p-4 rounded-xl border border-gray-200"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 bg-gray-100 rounded-lg flex items-center justify-center">
-                    <Hash className="h-4 w-4 text-gray-400" />
-                  </div>
-                  <div>
-                    <p className="font-medium text-gray-900">{item.name}</p>
-                    <p className="text-sm text-gray-500">
-                      {formatCurrency(item.price)} × {item.quantity || 1}
+        <div className="border-t border-slate-100 p-6 bg-slate-50 rounded-b-2xl animate-fade-in">
+          {orderRequests.length > 0 && (
+            <div className="space-y-3 mb-6">
+              <h4 className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                <MessageSquare className="h-4 w-4 text-indigo-600" />
+                Customer Messages
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {orderRequests.map((request, index) => (
+                  <div
+                    key={`${request.label}-${index}`}
+                    className="bg-white p-4 rounded-xl border border-indigo-100 shadow-sm"
+                  >
+                    <p className="text-xs font-semibold uppercase tracking-wide text-indigo-600">
+                      {request.label}
+                    </p>
+                    <p className="mt-1 text-sm text-slate-700 whitespace-pre-wrap break-words">
+                      {request.value}
                     </p>
                   </div>
-                </div>
-                <p className="font-semibold text-gray-900">
-                  {formatCurrency(calculateItemTotal(item))}
-                </p>
+                ))}
               </div>
-            ))}
-          </div>
+            </div>
+          )}
+
+          {orderItems.length > 0 && (
+            <div className="space-y-3 mb-6">
+              <h4 className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                <Package className="h-4 w-4 text-indigo-600" />
+                Order Items
+              </h4>
+              <div className="space-y-2">
+                {orderItems.map((item, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow"
+                  >
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                      <div className="h-10 w-10 bg-slate-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <Hash className="h-4 w-4 text-slate-400" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium text-slate-800 truncate">{item.name}</p>
+                        <p className="text-sm text-slate-500">
+                          {formatCurrency(item.price)} × {item.quantity || 1}
+                        </p>
+                      </div>
+                    </div>
+                    <p className="font-semibold text-slate-800 ml-4 flex-shrink-0">
+                      {formatCurrency(calculateItemTotal(item))}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div>
-            <h4 className="text-sm font-semibold text-gray-700 mb-3">
+            <h4 className="text-sm font-semibold text-slate-700 mb-3">
               Update Status
             </h4>
             <div className="flex flex-wrap gap-2">
               {ORDER_STATUSES.map((newStatus) => {
-                const style = STATUS_STYLES[newStatus] || "bg-gray-100 text-gray-700 border border-gray-200";
+                const style = STATUS_STYLES[newStatus] || "bg-slate-100 text-slate-700 border-slate-200";
+                const Icon = STATUS_ICONS[newStatus] || CheckCircle;
+                const isActive = order.status === newStatus;
                 return (
                   <button
                     key={newStatus}
@@ -659,17 +731,18 @@ const OrderCard = ({ order, isUpdating, isExpanded, onToggleExpand, onUpdateStat
                       e.stopPropagation();
                       onUpdateStatus(order.id, newStatus);
                     }}
-                    disabled={isUpdating || order.status === newStatus}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${style} hover:scale-105 hover:shadow-sm ${
-                      isUpdating || order.status === newStatus ? 'opacity-50 cursor-not-allowed' : ''
-                    }`}
+                    disabled={isUpdating || isActive}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 border ${style} ${
+                      isActive ? 'ring-2 ring-offset-2 ring-indigo-500 scale-105' : ''
+                    } ${isUpdating || isActive ? 'opacity-60 cursor-not-allowed' : 'hover:scale-105 hover:shadow-md'}`}
                   >
                     {isUpdating ? (
                       <Loader2 className="h-4 w-4 animate-spin" />
                     ) : (
-                      <CheckCircle className="h-4 w-4" />
+                      <Icon className="h-4 w-4" />
                     )}
-                    {newStatus.charAt(0).toUpperCase() + newStatus.slice(1)}
+                    {STATUS_LABELS[newStatus] || newStatus.charAt(0).toUpperCase() + newStatus.slice(1)}
+                    {isActive && <Check className="h-3 w-3" />}
                   </button>
                 );
               })}
@@ -689,7 +762,6 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(reducer, initialState);
   const [showNotifications, setShowNotifications] = useState(false);
-  const [selectedOrder, setSelectedOrder] = useState(null);
   const notificationRef = useRef(null);
   const pollingRef = useRef(null);
 
@@ -718,12 +790,12 @@ const AdminDashboard = () => {
       if (error) throw new Error(error.message);
 
       const ordersWithProfiles = await attachProfilesToOrders(orderData || []);
-      logMissingProfiles(ordersWithProfiles);
       dispatch({ type: "SET_ORDERS", payload: ordersWithProfiles });
     } catch (err) {
       const message = err instanceof Error ? err.message : "An unexpected error occurred";
       dispatch({ type: "SET_ERROR", payload: message });
       console.error("Error fetching orders:", err);
+      toast.error("Failed to load orders");
     }
   }, []);
 
@@ -768,7 +840,20 @@ const AdminDashboard = () => {
       }
 
       const orderLabel = data.order_number ? `#${data.order_number}` : normalizedId;
-      toast.success(`Order ${orderLabel} updated to ${newStatus}`);
+      toast.success(`Order ${orderLabel} updated to ${STATUS_LABELS[newStatus] || newStatus}`);
+      
+      // Add notification for status change
+      dispatch({
+        type: "ADD_NOTIFICATION",
+        payload: {
+          id: generateId(),
+          type: "success",
+          message: `Order ${orderLabel} status changed to ${STATUS_LABELS[newStatus] || newStatus}`,
+          orderId: normalizedId,
+          timestamp: new Date().toISOString(),
+          read: false,
+        },
+      });
       
       await fetchOrders(false);
     } catch (err) {
@@ -795,19 +880,22 @@ const AdminDashboard = () => {
           
           if (newOrder) {
             dispatch({ type: "ADD_ORDER", payload: newOrder });
+            const orderLabel = payload.new.order_number ? `#${payload.new.order_number}` : payload.new.id;
             dispatch({
               type: "ADD_NOTIFICATION",
               payload: {
                 id: generateId(),
                 type: "success",
-                message: `New order #${payload.new.order_number || payload.new.id} received`,
+                message: `🆕 New order ${orderLabel} received`,
                 orderId: payload.new.id,
                 timestamp: new Date().toISOString(),
                 read: false,
               },
             });
             
-            toast.success("New order received!");
+            toast.success(`🎉 New order ${orderLabel} received!`, {
+              duration: 5000,
+            });
           }
         }
       )
@@ -821,12 +909,13 @@ const AdminDashboard = () => {
             dispatch({ type: "UPDATE_ORDER", payload: updatedOrder });
             
             if (payload.new.status !== payload.old.status) {
+              const orderLabel = payload.new.order_number ? `#${payload.new.order_number}` : payload.new.id;
               dispatch({
                 type: "ADD_NOTIFICATION",
                 payload: {
                   id: generateId(),
                   type: "info",
-                  message: `Order #${payload.new.order_number || payload.new.id} updated to ${payload.new.status}`,
+                  message: `📝 Order ${orderLabel} status: ${STATUS_LABELS[payload.new.status] || payload.new.status}`,
                   orderId: payload.new.id,
                   timestamp: new Date().toISOString(),
                   read: false,
@@ -841,13 +930,14 @@ const AdminDashboard = () => {
         { event: "DELETE", schema: "public", table: "orders" },
         (payload) => {
           dispatch({ type: "REMOVE_ORDER", payload: payload.old.id });
+          const orderLabel = payload.old.order_number ? `#${payload.old.order_number}` : payload.old.id;
           
           dispatch({
             type: "ADD_NOTIFICATION",
             payload: {
               id: generateId(),
               type: "warning",
-              message: `Order #${payload.old.order_number || payload.old.id} was deleted`,
+              message: `🗑️ Order ${orderLabel} was deleted`,
               orderId: payload.old.id,
               timestamp: new Date().toISOString(),
               read: false,
@@ -882,54 +972,34 @@ const AdminDashboard = () => {
   }, [fetchOrders]);
 
   // Memoized computations
-  const orderStats = useMemo(() => {
-    const stats = {
-      total: state.orders.length,
-      pending: 0,
-      approved: 0,
-      revenue: 0,
-      averageOrderValue: 0,
-    };
-
-    state.orders.forEach((order) => {
-      if (order.status === "pending") stats.pending++;
-      if (order.status === "approved") {
-        stats.approved++;
-        if (Array.isArray(order.items)) {
-          stats.revenue += order.items.reduce(
-            (sum, item) => sum + calculateItemTotal(item),
-            0
-          );
-        }
-      }
-    });
-
-    stats.averageOrderValue = stats.total > 0 ? stats.revenue / stats.total : 0;
-
-    return stats;
-  }, [state.orders]);
-
   const filteredAndSortedOrders = useMemo(() => {
     let filtered = [...state.orders];
 
     // Apply status filter
     if (state.filters.status !== "all") {
-      filtered = filtered.filter((order) => order.status === state.filters.status);
+      filtered = filtered.filter(order => order.status === state.filters.status);
     }
 
     // Apply search filter
     if (state.filters.search) {
       const searchLower = state.filters.search.toLowerCase();
-      filtered = filtered.filter((order) => {
+      filtered = filtered.filter(order => {
         const profile = getProfileFromOrder(order);
-        const orderNumber = (order.order_number || "").toLowerCase();
+        const orderNumber = String(order.order_number || "").toLowerCase();
         const email = (profile?.email || "").toLowerCase();
         const phone = (profile?.phone || "").toLowerCase();
+        const name = (profile?.full_name || "").toLowerCase();
+        const requestText = normalizeOrderRequests(order)
+          .map(req => `${req.label} ${req.value}`)
+          .join(" ")
+          .toLowerCase();
         
         return (
           orderNumber.includes(searchLower) ||
           email.includes(searchLower) ||
-          phone.includes(searchLower)
+          phone.includes(searchLower) ||
+          name.includes(searchLower) ||
+          requestText.includes(searchLower)
         );
       });
     }
@@ -941,9 +1011,10 @@ const AdminDashboard = () => {
         today: new Date(now.getFullYear(), now.getMonth(), now.getDate()),
         week: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
         month: new Date(now.getFullYear(), now.getMonth() - 1, now.getDate()),
+        quarter: new Date(now.getFullYear(), now.getMonth() - 3, now.getDate()),
       };
       
-      filtered = filtered.filter((order) => {
+      filtered = filtered.filter(order => {
         return new Date(order.created_at) >= ranges[state.filters.dateRange];
       });
     }
@@ -956,9 +1027,9 @@ const AdminDashboard = () => {
         case "oldest":
           return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
         case "highest":
-          return (b.total_amount || 0) - (a.total_amount || 0);
+          return getOrderTotal(b) - getOrderTotal(a);
         case "lowest":
-          return (a.total_amount || 0) - (b.total_amount || 0);
+          return getOrderTotal(a) - getOrderTotal(b);
         default:
           return 0;
       }
@@ -968,18 +1039,25 @@ const AdminDashboard = () => {
   }, [state.orders, state.filters]);
 
   const unreadNotificationsCount = useMemo(() => {
-    return state.notifications.filter((n) => !n.read).length;
+    return state.notifications.filter(n => !n.read).length;
   }, [state.notifications]);
 
   // Handlers
   const handleManualRefresh = () => {
     fetchOrders(false);
-    toast.success("Orders refreshed");
+    toast.success("🔄 Orders refreshed");
   };
 
   const handleClearNotifications = () => {
     dispatch({ type: "CLEAR_NOTIFICATIONS" });
     toast.success("Notifications cleared");
+  };
+
+  const handleToggleNotifications = () => {
+    setShowNotifications(!showNotifications);
+    if (!showNotifications) {
+      dispatch({ type: "MARK_NOTIFICATIONS_READ" });
+    }
   };
 
   // Render loading skeleton
@@ -988,8 +1066,8 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <Header
           onBack={() => navigate(-1)}
@@ -999,35 +1077,27 @@ const AdminDashboard = () => {
           notifications={state.notifications}
           unreadCount={unreadNotificationsCount}
           showNotifications={showNotifications}
-          onToggleNotifications={() => {
-            setShowNotifications(!showNotifications);
-            if (!showNotifications) {
-              dispatch({ type: "MARK_NOTIFICATIONS_READ" });
-            }
-          }}
+          onToggleNotifications={handleToggleNotifications}
           onClearNotifications={handleClearNotifications}
           notificationRef={notificationRef}
         />
 
         {/* Error Banner */}
         {state.error && (
-          <div className="mb-6 bg-red-50 border border-red-200 rounded-xl p-4 flex items-start gap-3">
-            <AlertCircle className="h-5 w-5 text-red-500 mt-0.5 flex-shrink-0" />
+          <div className="mb-6 bg-rose-50 border border-rose-200 rounded-2xl p-4 flex items-start gap-3 animate-fade-in">
+            <AlertCircle className="h-5 w-5 text-rose-500 mt-0.5 flex-shrink-0" />
             <div className="flex-1">
-              <h3 className="text-sm font-medium text-red-800">Error Loading Orders</h3>
-              <p className="text-sm text-red-600 mt-1">{state.error}</p>
+              <h3 className="text-sm font-medium text-rose-800">Error Loading Orders</h3>
+              <p className="text-sm text-rose-600 mt-1">{state.error}</p>
             </div>
             <button
               onClick={handleManualRefresh}
-              className="text-sm text-red-600 hover:text-red-800 font-medium"
+              className="text-sm text-rose-600 hover:text-rose-800 font-medium whitespace-nowrap"
             >
               Retry
             </button>
           </div>
         )}
-
-        {/* Stats Grid */}
-        <StatsGrid stats={orderStats} />
 
         {/* Filters Bar */}
         <FiltersBar
@@ -1049,14 +1119,61 @@ const AdminDashboard = () => {
                 key={order.id}
                 order={order}
                 isUpdating={state.updatingOrderId === order.id}
-                isExpanded={selectedOrder === order.id}
-                onToggleExpand={() => setSelectedOrder(selectedOrder === order.id ? null : order.id)}
+                isExpanded={state.selectedOrderId === order.id}
+                onToggleExpand={() => dispatch({ 
+                  type: "SET_SELECTED_ORDER", 
+                  payload: state.selectedOrderId === order.id ? null : order.id 
+                })}
                 onUpdateStatus={updateOrderStatus}
               />
             ))
           )}
         </div>
+
+        {/* Footer Stats */}
+        {filteredAndSortedOrders.length > 0 && (
+          <div className="mt-8 pt-6 border-t border-slate-200">
+            <div className="flex flex-wrap items-center justify-between gap-4 text-sm text-slate-500">
+              <div className="flex items-center gap-6">
+                <span>
+                  Total: <span className="font-semibold text-slate-700">{filteredAndSortedOrders.length}</span>
+                </span>
+                <span>
+                  Pending: <span className="font-semibold text-amber-600">
+                    {filteredAndSortedOrders.filter(o => o.status === "pending").length}
+                  </span>
+                </span>
+                <span>
+                  Approved: <span className="font-semibold text-emerald-600">
+                    {filteredAndSortedOrders.filter(o => o.status === "approved").length}
+                  </span>
+                </span>
+                <span className="hidden sm:inline">
+                  Total Value: <span className="font-semibold text-slate-700">
+                    {formatCurrency(filteredAndSortedOrders.reduce((sum, o) => sum + getOrderTotal(o), 0))}
+                  </span>
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Zap className="h-4 w-4 text-amber-500" />
+                <span className="text-xs text-slate-400">Live updates enabled</span>
+                <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
+
+      {/* Global Styles */}
+      <style jsx>{`
+        @keyframes fade-in {
+          from { opacity: 0; transform: translateY(-10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+          animation: fade-in 0.3s ease-out;
+        }
+      `}</style>
     </div>
   );
 };

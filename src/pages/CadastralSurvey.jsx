@@ -8,14 +8,7 @@ import topoMapsImg from "@/assets/topo-maps.jpg";
 import architectureImg from "@/assets/architecture.jpg";
 import landuseImg from "@/assets/SubdivisionPlan.png";
 
-const toc = [
-  { id: "overview", label: "Overview" },
-  { id: "when", label: "When you need it" },
-  { id: "evidence", label: "Boundary evidence" },
-  { id: "deliverables", label: "Deliverables" },
-  { id: "process", label: "Process" },
-  { id: "qa", label: "Checks & QA" },
-];
+
 
 const CadastralSurvey = () => {
   return (
@@ -31,7 +24,6 @@ const CadastralSurvey = () => {
           .
         </>
       }
-      toc={toc}
       infobox={{
         title: "Cadastral survey",
         images: [
@@ -82,20 +74,7 @@ const CadastralSurvey = () => {
         <li><b>Mutation forms</b> Required for subdivision and submitted to the land registry</li>
         <li><b>Registry Index Maps (RIM) Extracts</b> For general boundary surveys (common in rural areas)</li>
         <li><b>Beacon Certificates</b> Documentation confirming placements or restoration of boundary marks</li>
-        <li><b>Survey reports</b> Detailed methodology, findings and compliance notes</li>
-        <li><b>Digital Outputs</b> CAD drawings, georeferenced plans and other GIS files; GeJSON etc,.</li>
-      </ul>
-
-      <h2 id="when" className="text-xl font-semibold mt-1 mb-4"> When do you need a cadastral survey? </h2>
-      <ul className="list-decimal pl-6 text-muted-foreground space-y-2">
-        <li>Land Purchase or Sale. To confirm exact boundaries before transfers, avoid encroachments and legal disputes. </li>
-        <li>Subdivisions, Mutations and Amalgamations. Required for approval and new title issuance.</li>
-        <li>Title Deed processing. For conversion of land ownership records and areas transitioning from RIM to fixed surveys.</li>
-        <li>Boundary Re-establishment i.e when beacons are missing, disturbed or disputed.</li>
-        <li>Boundary dispute support and legally defensible evidence documentation. </li>
-        <li>Development and construction works. To ensure works are within property limits and comply with regulations.</li>
-        <li>Land use planning and management. Supports accurate land records, zoning and resource management.</li>
-        <li>Infrastructure & Utility projects. For right-of-way definition, easement documentation and land acquisition surveys.</li>
+        <li><b>Reports & digital data</b> Survey reports, CAD drawings, and georeferenced GIS files (e.g., GeoJSON).</li>
       </ul>
 
       <div className="clear-both mt-10 bg-card p-8 rounded-xl border text-center">
