@@ -2,7 +2,7 @@ import ArticleFigure from "@/components/ArticleFigure";
 import ArticleLayout from "@/components/ArticleLayout";
 import { Link } from "react-router-dom";
 import stakeImg from "@/assets/monument.jpg";
-import cs from "@/assets/CROSS-SECTION.png";
+import cs from "@/assets/CORS.jpeg";
 
 
 const GeodeticGpsControl = () => {

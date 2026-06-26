@@ -12,16 +12,14 @@ import {
   Wrench,
 } from "lucide-react";
 
-import siteSurveyImg from "@/assets/Site-survey.png";
-import contoursImg from "@/assets/contours.png";
+import siteSurveyImg from "@/assets/NakuruAerialImg.png";
+import SLP from "@/assets/Site-survey.png";
 import aerialImg from "@/assets/AERIAL.png";
 import topoMapsImg from "@/assets/topo.png";
-import totalStationImg from "@/assets/chcnav-cts-m100-total-station-surveying.jpg";
-import gnssImg from "@/assets/gnss-smart-full-antennas-chcnav-i93.jpg";
 import shop from "@/assets/shopstand.jpg";
 import landUse from "@/assets/SubdivisionPlan.png";
 import GISRS from "@/assets/img.jpeg";
-import urbanRegional from "@/assets/NakuruAerialImg.png";
+import urbanRegional from "@/assets/contours.png";
 import cors from "@/assets/image.png";
 import construction from "@/assets/construction.png";
 
@@ -101,7 +99,7 @@ export const services: ServiceDefinition[] = [
     details:
       "We provide spatial analysis and planning support for sustainable development, aligning land potential, constraints, and stakeholder needs with implementable strategies.",
     icon: LayoutGrid,
-    image: "/images/spatial-planning.jpg",
+    image: SLP,
   },
   {
     id: "land-use-planning",

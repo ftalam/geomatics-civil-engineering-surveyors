@@ -216,17 +216,11 @@ const handleCancelOrder = async (orderId) => {
             <h2 className="text-xl font-bold text-gray-900 mb-4">Order Summary</h2>
             <div className="space-y-3 mb-6">
               <div className="flex justify-between text-gray-600">
-                <span>Subtotal</span>
-                <span className="font-semibold">KES {subtotal.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between text-gray-600">
+               
                 <span>Delivery</span>
                 <span className="font-semibold text-green-600 text-xs">Will be communicated</span>
               </div>
-              <div className="border-t-2 border-gray-200 pt-3 flex justify-between">
-                <span className="text-xl font-bold text-gray-900">Total</span>
-                <span className="text-2xl font-black text-[#F23045]">KES {subtotal.toFixed(2)}</span>
-              </div>
+             
             </div>
 
             {/* Special Requests Section */}

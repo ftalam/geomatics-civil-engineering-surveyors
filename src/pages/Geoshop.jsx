@@ -532,46 +532,40 @@ const AdminUploadPanel = ({ userId, productColumns, onUpload }) => {
             <input
               value={form.name}
               onChange={(event) => handleInput("name", event.target.value)}
-              className="border rounded-lg p-3"
+              className="border rounded-lg p-3 text-black"
               placeholder="Product name"
               required
             />
             <input
               value={form.category}
               onChange={(event) => handleInput("category", event.target.value)}
-              className="border rounded-lg p-3"
+              className="border rounded-lg p-3 text-black"
               placeholder="Category"
               required
             />
             <input
-              value={form.price}
-              onChange={(event) => handleInput("price", event.target.value)}
-              className="border rounded-lg p-3"
-              placeholder="Price"
-            />
-            <input
               value={form.rating}
               onChange={(event) => handleInput("rating", event.target.value)}
-              className="border rounded-lg p-3"
+              className="border rounded-lg p-3 text-black"
               placeholder="Rating"
             />
             <input
               value={form.reviews}
               onChange={(event) => handleInput("reviews", event.target.value)}
-              className="border rounded-lg p-3"
+              className="border rounded-lg p-3 text-black"
               placeholder="Reviews"
             />
             <input
               type="file"
               accept="image/*"
               onChange={(event) => setImageFile(event.target.files?.[0] ?? null)}
-              className="border rounded-lg p-3"
+              className="border rounded-lg p-3 text-black"
               required
             />
             <textarea
               value={form.description}
               onChange={(event) => handleInput("description", event.target.value)}
-              className="border rounded-lg p-3 md:col-span-2 min-h-24"
+              className="border rounded-lg p-3 md:col-span-2 min-h-24 text-black"
               placeholder="Product description"
             />
             <textarea
@@ -579,19 +573,19 @@ const AdminUploadPanel = ({ userId, productColumns, onUpload }) => {
               onChange={(event) =>
                 handleInput("specificationsJson", event.target.value)
               }
-              className="border rounded-lg p-3 md:col-span-2 min-h-24"
+              className="border rounded-lg p-3 md:col-span-2 min-h-24 text-black"
               placeholder='Specifications JSON (e.g. [{"title":"Measurements","items":["Angular accuracy : 2\""]}])'
             />
             <textarea
               value={form.resourcesJson}
               onChange={(event) => handleInput("resourcesJson", event.target.value)}
-              className="border rounded-lg p-3 md:col-span-2 min-h-24"
+              className="border rounded-lg p-3 md:col-span-2 min-h-24 text-black"
               placeholder='Resources JSON (e.g. [{"language":"en","name":"Datasheet.pdf","size":"4.1 MB","url":"https://..."}])'
             />
             <textarea
               value={form.extraImageUrls}
               onChange={(event) => handleInput("extraImageUrls", event.target.value)}
-              className="border rounded-lg p-3 md:col-span-2 min-h-20"
+              className="border rounded-lg p-3 md:col-span-2 min-h-20 text-black"
               placeholder="Additional image URLs (comma-separated or one per line)"
             />
             <p className="text-xs text-muted-foreground md:col-span-2">

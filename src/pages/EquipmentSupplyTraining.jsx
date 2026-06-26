@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 import totalStationImg from "@/assets/chcnav-cts-m100-total-station-surveying.jpg";
 import gnssI93Img from "@/assets/gnss-smart-full-antennas-chcnav-i93.jpg";
-import laserScannerImg from "@/assets/handheld-+Laser-scanners-chcnav-RS10.jpg";
+import ViLiImg from "@/assets/chcnav-vili-i100-visual-lidar-gnss-rtk-receiver-surveying.jpg";
 import chcnavBaseImg from "@/assets/chcnav-ibase.jpg";
 import shopImg from "@/assets/SH-stand.jpg";
 
@@ -26,7 +26,7 @@ const EquipmentSupplyTraining = () => {
         title: "Bestseller Survey equipment",
         images: [
           {
-            src: laserScannerImg,
+            src: ViLiImg,
             alt: "Vi-Li i100",
             caption: "Versatile Visual-Lidar GNSS Receiver ",
           },
