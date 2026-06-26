@@ -280,12 +280,6 @@ const getProductImage = (product) => {
   return getProductImages(product)[0];
 };
 
-const getProductPriceLabel = (product) => {
-  const price = Number(product?.price);
-  if (!Number.isFinite(price) || price <= 0) return null;
-  return `KES ${price.toLocaleString()}`;
-};
-
 const normalizeOrderRequests = (specialRequests = {}) => {
   const cleanValue = (value) => String(value ?? "").trim();
 
@@ -1235,10 +1229,6 @@ const Geoshop = () => {
                     <Star className="w-4 h-4 fill-primary text-primary" />
                     {Number(product.rating) || 0} ({Number(product.reviews) || 0})
                   </div>
-
-                  {getProductPriceLabel(product) && (
-                    <p className="font-semibold mb-4">{getProductPriceLabel(product)}</p>
-                  )}
 
                   <div className="flex items-center gap-4">
                     <Button
