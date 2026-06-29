@@ -56,6 +56,13 @@ const STATUS_ICONS = {
   cancelled: XCircle
 };
 
+const NEED_LABELS = {
+  buy: "Buying",
+  rent: "Renting",
+  "buy-rent": "Either (buy/rent)",
+  "not-sure": "Not sure",
+};
+
 const POLLING_INTERVAL = 30000;
 const MAX_NOTIFICATIONS = 50;
 
@@ -205,6 +212,20 @@ const normalizeOrderRequests = (order) => {
   return entries;
 };
 
+const getOrderNeed = (order) => {
+  const request = normalizeOrderRequests(order).find(({ label }) => {
+    const normalizedLabel = label.toLowerCase().replace(/\s+/g, "");
+    return normalizedLabel === "buyrent";
+  });
+
+  return String(request?.value ?? "").trim();
+};
+
+const getNeedLabel = (need) => {
+  const normalizedNeed = String(need ?? "").trim();
+  return NEED_LABELS[normalizedNeed] || normalizedNeed;
+};
+
 const normalizeOrderId = (value) => {
   if (!value) return null;
   if (typeof value === "string" && value.startsWith("order_")) {
@@ -236,6 +257,7 @@ const initialState = {
   lastUpdate: new Date(),
   filters: {
     status: "all",
+    need: "all",
     search: "",
     dateRange: "all",
     sortBy: "newest",
@@ -495,6 +517,19 @@ const FiltersBar = ({ filters, onFilterChange, totalResults }) => (
       </select>
 
       <select
+        value={filters.need}
+        onChange={(e) => onFilterChange({ need: e.target.value })}
+        className="px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm font-medium text-slate-700 transition-all"
+      >
+        <option value="all">All Needs</option>
+        {Object.entries(NEED_LABELS).map(([value, label]) => (
+          <option key={value} value={value}>
+            {label}
+          </option>
+        ))}
+      </select>
+
+      <select
         value={filters.dateRange}
         onChange={(e) => onFilterChange({ dateRange: e.target.value })}
         className="px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm font-medium text-slate-700 transition-all"
@@ -513,8 +548,7 @@ const FiltersBar = ({ filters, onFilterChange, totalResults }) => (
       >
         <option value="newest">Newest First</option>
         <option value="oldest">Oldest First</option>
-        <option value="highest">Highest Value</option>
-        <option value="lowest">Lowest Value</option>
+        
       </select>
     </div>
 
@@ -522,9 +556,9 @@ const FiltersBar = ({ filters, onFilterChange, totalResults }) => (
       <span className="text-sm text-slate-500">
         Showing <span className="font-semibold text-slate-700">{totalResults}</span> {totalResults === 1 ? "order" : "orders"}
       </span>
-      {(filters.status !== "all" || filters.search) && (
+      {(filters.status !== "all" || filters.need !== "all" || filters.dateRange !== "all" || filters.search) && (
         <button
-          onClick={() => onFilterChange({ status: "all", search: "" })}
+          onClick={() => onFilterChange({ status: "all", need: "all", dateRange: "all", search: "" })}
           className="text-sm text-indigo-600 hover:text-indigo-700 font-medium flex items-center gap-1"
         >
           <XCircle className="h-4 w-4" />
@@ -571,6 +605,7 @@ const OrderCard = ({
   const StatusIcon = STATUS_ICONS[status] || Package;
   const orderItems = Array.isArray(order.items) ? order.items : [];
   const orderRequests = normalizeOrderRequests(order);
+  const orderNeed = getOrderNeed(order);
   const total = getOrderTotal(order);
 
   return (
@@ -631,6 +666,11 @@ const OrderCard = ({
                     {orderRequests.length} message{orderRequests.length > 1 ? 's' : ''}
                   </span>
                 )}
+                {orderNeed && (
+                  <span className="flex items-center gap-1 text-slate-600">
+                    Need: <span className="font-medium">{getNeedLabel(orderNeed)}</span>
+                  </span>
+                )}
                 {orderItems.length > 0 && (
                   <span className="flex items-center gap-1">
                     <Package className="h-3 w-3" />
@@ -641,19 +681,7 @@ const OrderCard = ({
             </div>
           </div>
 
-          <div className="flex items-center gap-4 flex-shrink-0">
-            {total > 0 && (
-              <div className="text-right">
-                <p className="text-2xl font-bold text-slate-800">
-                  {formatCurrency(total)}
-                </p>
-                <p className="text-xs text-slate-500">Total value</p>
-              </div>
-            )}
-            <ChevronDown className={`h-5 w-5 text-slate-400 transition-transform duration-300 ${
-              isExpanded ? 'transform rotate-180' : ''
-            }`} />
-          </div>
+       
         </div>
       </div>
 
@@ -980,6 +1008,11 @@ const AdminDashboard = () => {
       filtered = filtered.filter(order => order.status === state.filters.status);
     }
 
+    // Apply need filter
+    if (state.filters.need !== "all") {
+      filtered = filtered.filter(order => getOrderNeed(order) === state.filters.need);
+    }
+
     // Apply search filter
     if (state.filters.search) {
       const searchLower = state.filters.search.toLowerCase();
@@ -1110,8 +1143,23 @@ const AdminDashboard = () => {
         <div className="space-y-4">
           {filteredAndSortedOrders.length === 0 ? (
             <EmptyState
-              hasFilters={state.filters.status !== "all" || !!state.filters.search}
-              onClearFilters={() => dispatch({ type: "SET_FILTERS", payload: { status: "all", search: "" } })}
+              hasFilters={
+                state.filters.status !== "all" ||
+                state.filters.need !== "all" ||
+                state.filters.dateRange !== "all" ||
+                !!state.filters.search
+              }
+              onClearFilters={() =>
+                dispatch({
+                  type: "SET_FILTERS",
+                  payload: {
+                    status: "all",
+                    need: "all",
+                    dateRange: "all",
+                    search: "",
+                  },
+                })
+              }
             />
           ) : (
             filteredAndSortedOrders.map((order) => (

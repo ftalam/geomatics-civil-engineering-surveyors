@@ -26,7 +26,7 @@ const Services = () => {
             description="Comprehensive surveying and geomatics services tailored to your projects."
           />
 
-          <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+          <div className="mt-10 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-6">
             {services.map((service) => (
               <Link
                 key={service.id}

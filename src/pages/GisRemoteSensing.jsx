@@ -9,18 +9,6 @@ import siteImg from "@/assets/Site-survey.png";
 import renewableImg from "@/assets/renewable-energy.jpg";
 import contour from "@/assets/contours.png";
 
-
-const toc = [
-  { id: "overview", label: "Overview" },
-  { id: "RS", label: "Remote Sensing" },
-  { id: "data", label: "Data sources" },
-  { id: "GIS", label: "Geographic Information Systems" },
-  { id: "workflow", label: "Workflow" },
-  { id: "deliverables", label: "Deliverables" },
-  { id: "qa", label: "Quality & metadata" },
-  { id: "applications", label: "Applications" },
-];
-
 const GisRemoteSensing = () => {
   return (
     <ArticleLayout
@@ -37,7 +25,6 @@ const GisRemoteSensing = () => {
       }
       heroImage={LandingImg}
       heroImageAlt="GIS and remote sensing cover"
-      toc={toc}
       infobox={{
         title: "GIS & Remote Sensing",
         videos: [
@@ -112,17 +99,13 @@ const GisRemoteSensing = () => {
       <p id="overview" className="text-lg text-muted-foreground leading-relaxed">
         We turn spatial data into decisions. From building and maintaining GIS
         datasets to analyzing satellite and aerial imagery, we help teams visualize,
-        monitor, and plan with confidence.
+        monitor and plan with confidence. <i>While remote sensing provides the "what" and "where," GIS explains the
+        "why" and "how" by layering different types of information.</i>  
       </p>
-
-      <h2 id="RS" className="text-xl font-semibold mt-1 mb-1">
-        Remote Sensing
-      </h2>
-
       <p className="text-muted-foreground leading-relaxed">
-        Remote sensing involves the collection of information about an object or
+       <b>Remote sensing</b> involves the collection of information about an object or
         area from a distance in contrast to in-situ, typically using satellites,
-        aircraft or LiDAR. This technology optimizes detection of reflected or
+        aircraft or LiDAR. We optimize detection of reflected or
         emitted energy (electromagnetic radiation or radar) using passive or active
         sensors.
       </p>
@@ -154,9 +137,7 @@ const GisRemoteSensing = () => {
         differences).
       </p>
 
-      <h2 id="data" className="text-xl font-semibold mt-10 mb-4">
-        Data sources
-      </h2>
+    
       <ArticleFigure
         src={contour}
         alt="Spatial data layers"
@@ -167,7 +148,7 @@ const GisRemoteSensing = () => {
       />
       <p className="text-muted-foreground leading-relaxed">
         We work with a mix of existing and newly-captured datasets depending on your
-        objectives, time window, and required detail. Typical inputs include:
+        objectives, time window and required detail. Typical inputs include:
       </p>
       <ul className="list-disc pl-6 text-muted-foreground space-y-2">
         <li>
@@ -187,23 +168,15 @@ const GisRemoteSensing = () => {
           roads, utilities, soils, hazards) to provide context and constraints.
         </li>
       </ul>
-
-      <h2 id="GIS" className="text-xl font-semibold mt-1 mb-1">
-        Geographic Information Systems
-      </h2>
-
       <p className="text-muted-foreground leading-relaxed">
-        Geographic Information System (GIS) is a computer-based framework designed to
-        capture, store, manipulate, analyze, manage and present spatial or geographic
-        data. <i>While remote sensing provides the "what" and "where," GIS explains the
-        "why" and "how" by layering different types of information.</i>  GIS integrates{" "}
+      GIS integrates{" "}
         <b>hardware</b>, <b>software</b>, and <b>data</b> to help <b>people</b>{" "}
         understand patterns and relationships in the physical world using various{" "}
         <b>methods</b> such as spatial analysis, modeling and visualization.
         <br /> GIS uses two primary data structures: <b>vector data</b> (points, lines,
         polygons) for discrete features and <b>raster data</b> (grids of cells) for
         continuous phenomena.
-        <br /> Common GIS software includes ArcGIS, QGIS, and GRASS GIS, which support
+        <br /> Common GIS software includes ArcGIS, QGIS and GRASS GIS, which support
         a wide range of applications across industries.
       </p>
 

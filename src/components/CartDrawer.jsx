@@ -254,10 +254,10 @@ const handleCancelOrder = async (orderId) => {
                     onChange={(e) => setEstimateDemo(e.target.value)}
                     className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-[#99ED47] focus:outline-none focus:ring-2 focus:ring-[#99ED47]/30 bg-white text-gray-900 font-medium cursor-pointer"
                   >
-                    <option value="">– select –</option>
-                    <option value="estimate">📊 Estimate only</option>
+                    <option value="" disabled hidden className = "text-gray-900"> – select – </option>
+                    <option value="estimate">📊 Estimate </option>
                     <option value="demonstration">🎥 Demonstration</option>
-                    <option value="estimate+demo">📋 Estimate + demo</option>
+                    <option value="estimate+demo">📋 Quotation + demo</option>
                   </select>
                 </div>
 
@@ -272,11 +272,10 @@ const handleCancelOrder = async (orderId) => {
                     onChange={(e) => setBuyRent(e.target.value)}
                     className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-[#99ED47] focus:outline-none focus:ring-2 focus:ring-[#99ED47]/30 bg-white text-gray-900 font-medium cursor-pointer"
                   >
-                    <option value="">– select –</option>
+                    <option value="" disabled hidden > – select – </option>
                     <option value="buy">💳 Buying</option>
                     <option value="rent">📆 Renting</option>
                     <option value="buy-rent">🔄 Either (buy/rent)</option>
-                    <option value="not-sure">🤔 Not sure</option>
                   </select>
                 </div>
               </div>

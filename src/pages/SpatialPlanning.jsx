@@ -53,11 +53,11 @@ const SpatialPlanning = () => {
       {/* SECTION: SPATIAL ANALYSIS */}
       <section id="analysis" className="scroll-mt-20 mb-10">
         <p className="text-muted-foreground leading-relaxed mb-4">
-          We use advanced GIS data capture and geospatial analysis to identify project opportunities, quantify geographical constraints, and test early-stage engineering feasibility. Our analysis covers:
+          We use advanced GIS data capture and geospatial analysis to identify project opportunities, quantify geographical constraints and test early-stage engineering feasibility. Our analysis covers:
         </p>
         <ul className="list-disc pl-6 text-muted-foreground space-y-2 mb-6">
-          <li><strong>Constraints Mapping:</strong> Early identification of environmental hazards, steep slopes, water buffers, and protected areas.</li>
-          <li><strong>Accessibility & Service Coverage:</strong> Evaluating travel time, transit pathways, and existing utility network analysis.</li>
+          <li><strong>Constraints Mapping:</strong> Early identification of environmental hazards, steep slopes, water buffers and protected areas.</li>
+          <li><strong>Accessibility & Service Coverage:</strong> Evaluating travel time, transit pathways and existing utility network analysis.</li>
           <li><strong>Suitability Modeling:</strong> Dynamic algorithmic ranking to identify the absolute best locations for alternative sites.</li>
           <li><strong>Conflict Risk Checks:</strong> Detecting overlaps between your proposed land use and existing communal or commercial activities.</li>
         </ul>
@@ -70,10 +70,10 @@ const SpatialPlanning = () => {
        
        
         <p className="text-muted-foreground leading-relaxed mb-4">
-          Large-scale development planning works best when you can stress-test multiple pathways before moving to construction. We help you model alternative structural directions (such as compact cluster growth, transit-oriented corridor development, or service-led expansion phases) to visualize their impacts early.
+          Large-scale development planning works best when you can stress-test multiple pathways before moving to construction. We help you model alternative structural directions (such as compact cluster growth, transit-oriented corridor development or service-led expansion phases) to visualize their impacts early.
         </p>
         <p className="text-muted-foreground leading-relaxed">
-          This comparative method highlights crucial trade-offs regarding initial investment requirements, accessibility, long-term environmental footprint, and construction timelines.
+          This comparative method highlights crucial trade-offs regarding initial investment requirements, accessibility, long-term environmental footprint and construction timelines.
         </p>
       </section>
 
