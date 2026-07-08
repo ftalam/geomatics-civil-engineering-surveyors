@@ -60,7 +60,7 @@ const Contact = () => {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="py-12 bg-gradient-card">
+      <section className="py-6 bg-gradient-card">
         <div className="container mx-auto px-4">
           <SectionHeader
             badge="Contact Us"
@@ -71,7 +71,7 @@ const Contact = () => {
       </section>
 
       {/* Contact Section */}
-      <section className="py-20">
+      <section className="py-10">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             {/* Contact Form */}

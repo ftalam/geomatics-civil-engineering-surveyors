@@ -125,7 +125,7 @@ const Products = () => {
     <Layout>
       <div className="products-theme">
       {/* Hero Section */}
-      <section className="py-4 bg-gradient-card flex items-center justify-center">
+      <section className="py-3 bg-gradient-card flex items-center justify-center">
         <Link to="/geoshop/login" className="group">
           <img
             src={GeoLtdLogo}
@@ -144,7 +144,7 @@ const Products = () => {
       </section>
 
       {/* Filters & Products */}
-      <section className="py-12">
+      <section className="py-2">
         <div className="container mx-auto px-4">
           {/* Search & Filter Bar */}
           <div className="flex flex-col md:flex-row gap-4 mb-8">
@@ -229,8 +229,8 @@ const Products = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-card">
-        <div className="container mx-auto px-4">
+      <section className="py-10 bg-gradient-card">
+        <div className="container mx-auto px-2">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -241,9 +241,7 @@ const Products = () => {
             <h2 className="font-display font-bold text-3xl md:text-4xl text-foreground mb-6">
               Need Help Choosing?
             </h2>
-            <p className="text-muted-foreground text-lg mb-8">
-              Our experts are here to help you find the right equipment for your specific surveying needs.
-            </p>
+           
             <Button variant="hero" size="xl">
               Contact Sales <ArrowRight className="w-5 h-5" />
             </Button>

@@ -19,7 +19,7 @@ const supportOptions = [
   {
     icon: Headphones,
     title: "Technical Support",
-    description: "Get expert assistance with equipment setup, calibration, and troubleshooting.",
+    description: "Get expert assistance with equipment setup, calibration and troubleshooting.",
     action: "Contact Support",
   },
   {
@@ -31,7 +31,7 @@ const supportOptions = [
   {
     icon: FileText,
     title: "Documentation",
-    description: "Access comprehensive user manuals, guides, and product specifications.",
+    description: "Access comprehensive user manuals, guides and product specifications.",
     action: "View Docs",
   },
   {
@@ -43,7 +43,7 @@ const supportOptions = [
   {
     icon: Download,
     title: "Software Downloads",
-    description: "Download the latest firmware updates, drivers, and companion software.",
+    description: "Download the latest firmware updates, drivers and companion software.",
     action: "Downloads",
   },
   {
@@ -77,7 +77,7 @@ const Support = () => {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="py-12 bg-gradient-card">
+      <section className="py-6 bg-gradient-card">
         <div className="container mx-auto px-4">
           <SectionHeader
             badge="Support Center"
@@ -99,13 +99,13 @@ const Support = () => {
             </a>
           </div>
           <p className="text-center text-muted-foreground mt-4">
-            <strong>Address:</strong> P.O. BOX. 7726-00100, NAIROBI KENYA
+            <strong>Address:</strong> P.O. BOX. 7726-00100, Phileo Arcade - KENYA
           </p>
         </div>
       </section>
 
       {/* Support Options */}
-      <section className="py-20">
+      <section className="py-10">
         <div className="container mx-auto px-4">
           <SectionHeader
             title="How Can We Assist You?"
@@ -138,7 +138,7 @@ const Support = () => {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-20 bg-card/30">
+      <section className="py-10 bg-card/30">
         <div className="container mx-auto px-4">
           <SectionHeader
             badge="FAQ"
