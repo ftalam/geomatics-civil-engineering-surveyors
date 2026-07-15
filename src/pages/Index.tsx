@@ -182,20 +182,20 @@ const Index = () => {
       </section>
       
        {/* Clients Section*/}
-      <section className="py-2 border-y border-border bg-card/50 w-full sticky top-0 z-10 overflow-hidden">
+      <section className="py-2 border-y border-border bg-card/50 w-full overflow-hidden">
         <div className="w-full">
           <p className="text-center text-muted-foreground text-L mb-3">
             Our Clients
           </p>
           <div className="w-full flex items-center overflow-hidden">
-            <motion.div key={clientSlideIndex} 
+            <motion.div 
               initial={{ x: 40 }} 
               animate={{ x: 0 }} 
               transition={{duration: 0.4}}
-              className="w-full flex items-center justify-between gap-2 px-12" > 
+              className="flex w-full justify-center gap-20 px-12" > 
               {visibleClients.map((client) => ( 
                 <div key={client.name} 
-                  className=" h-20 flex items-center opacity-90 hover:opacity-100 transition-all" >
+                  className="flex-shrink-0 h-20 flex items-center opacity-90 hover:opacity-100 transition-all" >
                   <img 
                     src={client.logo} 
                     alt={client.name} 
@@ -333,13 +333,14 @@ const Index = () => {
                   Get in Touch
                 </Button>
               </Link>
-              <Button variant="outline" size="xl" onClick={() => window.open('/geoshop', '_blank')}>
+              <Button variant="outline" size="xl" onClick={() => window.open('/products')}>
                 Browse Products
               </Button>
             </div>
           </motion.div>
         </div>
       </section>
+
     </Layout>
   );
 };

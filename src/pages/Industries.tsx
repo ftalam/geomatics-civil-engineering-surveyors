@@ -78,7 +78,7 @@ const Industries = () => {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-card">
+      <section className="py-7 bg-gradient-card">
         <div className="container mx-auto px-4">
           <SectionHeader
             badge="Our Industries"
@@ -89,7 +89,7 @@ const Industries = () => {
       </section>
 
       {/* Industries List */}
-      <section className="py-20">
+      <section className="py-1">
         <div className="container mx-auto px-4">
           {industries.map((industry, index) => (
             <motion.div
@@ -98,14 +98,9 @@ const Industries = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
-              className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-24 last:mb-0 ${
-                index % 2 === 1 ? "lg:flex-row-reverse" : ""
-              }`}
+              className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-4 last:mb-0"
             >
               <div className={index % 2 === 1 ? "lg:order-2" : ""}>
-                <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6">
-                  <industry.icon className="w-7 h-7 text-primary" />
-                </div>
                 <h2 className="font-display font-bold text-3xl md:text-4xl text-foreground mb-4">
                   {industry.title}
                 </h2>
@@ -127,7 +122,7 @@ const Industries = () => {
                 </Link>
               </div>
               <div className={index % 2 === 1 ? "lg:order-1" : ""}>
-                <div className="rounded-2xl overflow-hidden shadow-card">
+                <div className="rounded-xl overflow-hidden shadow-card">
                   <img
                     src={industry.image}
                     alt={industry.title}
@@ -141,7 +136,7 @@ const Industries = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-card">
+      <section className="py-7 bg-gradient-card">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 30 }}

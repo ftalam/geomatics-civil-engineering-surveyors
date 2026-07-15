@@ -238,7 +238,7 @@ const Products = () => {
             viewport={{ once: true }}
             className="text-center max-w-3xl mx-auto"
           >
-            <h2 className="font-display font-bold text-3xl md:text-4xl text-foreground mb-6">
+            <h2 className="font-display font-bold text-2xl md:text-3xl text-foreground mb-6">
               Need Help Choosing?
             </h2>
            

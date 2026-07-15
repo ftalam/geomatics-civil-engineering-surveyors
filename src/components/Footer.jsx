@@ -73,9 +73,9 @@ const Footer = () => {
               />
 
               <div>
-                <p className="text-sm font-medium text-foreground">
-                  Geoshop
-                </p>
+                <Link to="/geoshop" target="_blank" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
+                  Geoshop Launch
+                </Link>
                 <p className="text-xs text-muted-foreground">
                   Providing high-quality surveying instruments.
                 </p>
@@ -96,8 +96,8 @@ const Footer = () => {
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="w-5 h-5 text-green-500 flex-shrink-0" />
-                <a href="tel:+254712345678" className="text-muted-foreground hover:text-green-500 transition-colors text-sm">
-                  +254 712 345 678
+                <a href="tel:+254768922891" className="text-muted-foreground hover:text-green-500 transition-colors text-sm">
+                  +254 768 922891
                 </a>
               </li>
               <li className="flex items-center gap-3">
