@@ -314,8 +314,8 @@ const AdminUploadPanel = ({ userId, productColumns, onUpload }) => {
     category: "",
     description: "",
     price: "",
-    rating: "4.5",
-    reviews: "0",
+    rating: "",
+    reviews: "",
     specificationsJson: "",
     resourcesJson: "",
     extraImageUrls: "",
@@ -513,8 +513,8 @@ const AdminUploadPanel = ({ userId, productColumns, onUpload }) => {
       category: "",
       description: "",
       price: "",
-      rating: "4.5",
-      reviews: "0",
+      rating: "",
+      reviews: "",
       specificationsJson: "",
       resourcesJson: "",
       extraImageUrls: "",
@@ -1542,7 +1542,7 @@ const Geoshop = () => {
           </div>
         </div>
          <div>
-             <p className="text-sm text-center text-muted-foreground"> © 2024 Geoshop. All rights reserved. </p>
+             <p className="text-sm text-center text-muted-foreground"> © {new Date().getFullYear()} Geoshop. All rights reserved. </p>
          </div>
       </footer>
     </div>

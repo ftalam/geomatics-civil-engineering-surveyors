@@ -6,8 +6,8 @@ import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Instagram } from "luc
 const Footer = () => {
   return (
     <footer className="bg-black border-t border-white/10">
-      <div className="container mx-auto px-2.5 ,mt-1">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1">
+      <div className="container mx-auto px-2.5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1 mt-2">
           {/* Company Info */}
           <div>
             <div className="flex items-center gap-3 mb-6">
@@ -91,13 +91,13 @@ const Footer = () => {
               <li className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
                 <span className="text-muted-foreground text-sm">
-                  Phileo Arcade, Ruiru. <br/>  P.O. BOX. 7726-00100, NAIROBI KENYA
+                  1st Floor, Phileo Arcade, Ruiru. <br/>  P.O. BOX. 7726-00100, NAIROBI KENYA
                 </span>
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="w-5 h-5 text-green-500 flex-shrink-0" />
-                <a href="tel:+254768922891" className="text-muted-foreground hover:text-green-500 transition-colors text-sm">
-                  +254 768 922891
+                <a href="tel:+254721235501" className="text-muted-foreground hover:text-green-500 transition-colors text-sm">
+                  +254 721 235 501 <br/> +254 768 922891
                 </a>
               </li>
               <li className="flex items-center gap-3">

@@ -101,6 +101,9 @@ const Industries = () => {
               className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-4 last:mb-0"
             >
               <div className={index % 2 === 1 ? "lg:order-2" : ""}>
+                <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6">
+                  <industry.icon className="w-5 h-5 text-primary" />
+                </div>
                 <h2 className="font-display font-bold text-3xl md:text-4xl text-foreground mb-4">
                   {industry.title}
                 </h2>

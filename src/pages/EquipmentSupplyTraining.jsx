@@ -12,7 +12,7 @@ const EquipmentSupplyTraining = () => {
   return (
     <ArticleLayout
       title="Equipment Supply & Training"
-      tagline="Sales, calibration, and training on professional surveying equipment."
+      tagline="Sales, calibration and training on professional surveying equipment."
       hatnote={
         <>
           For products and purchases, see{" "}

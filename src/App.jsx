@@ -2,7 +2,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 import { AuthProvider } from "@/context/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import AdminRoute from "@/components/AdminRoute";
@@ -31,6 +32,7 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <BrowserRouter>
+    <ScrollToTop />
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <AuthProvider>
@@ -96,5 +98,30 @@ const App = () => (
     </QueryClientProvider>
   </BrowserRouter>
 );
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    try {
+      const supportsSmooth =
+        typeof window !== "undefined" &&
+        typeof document !== "undefined" &&
+        typeof CSS !== "undefined" &&
+        (CSS.supports ? CSS.supports("scroll-behavior", "smooth") : "scrollBehavior" in document.documentElement.style);
+
+      if (supportsSmooth) {
+        window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+      } else {
+        // fallback for older browsers
+        window.scrollTo(0, 0);
+      }
+    } catch (e) {
+      // ignore server/non-browser environments
+    }
+  }, [pathname]);
+
+  return null;
+}
 
 export default App;

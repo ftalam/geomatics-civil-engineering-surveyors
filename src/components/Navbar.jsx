@@ -85,9 +85,9 @@ const Navbar = () => {
                 />
               </button>
             )}
-            <a href="tel:+254712345678" className="hidden md:flex items-center gap-2 text-slate-300 hover:text-cyan-300 transition-colors">
+            <a href="tel:+254721235501" className="hidden md:flex items-center gap-2 text-slate-300 hover:text-cyan-300 transition-colors">
               <Phone className="w-4 h-4" />
-              <span className="text-sm font-medium">+254 712 345 678</span>
+              <span className="text-sm font-medium">+254 721 235 501</span>
             </a>
             <a
               href={COMPANY_PROFILE_DOC_PATH}

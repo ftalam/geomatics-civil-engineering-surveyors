@@ -135,6 +135,7 @@ const Index = () => {
                 <span className="text-emerald-500">Precision-Based</span>{" "}
                 <span className="text-gradient">Decision Making</span>
               </h1>
+              <meta name="description" content="Innovative surveying solutions for businesses that need precision. Delivering cutting-edge geomatics services since 2000." />
               <p className="text-muted-background text-base md:text-lg mb-6 leading-relaxed">
                 Innovative surveying solutions for businesses that need precision. Delivering cutting-edge geomatics services since 2000.
               </p>
@@ -147,6 +148,8 @@ const Index = () => {
                 >
                   Shop Now <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
+                <meta name="keywords" content="geomatics, civil engineering, surveying, precision surveying, geospatial services, topographic surveys, construction site management, renewable energy surveys, mining surveys, architectural surveys
+                total station, GPS, RTK, Survey eqipement, ViLi-100, Laser Scanner, Drone" />
                 <Link to="/contact">
                   <Button variant="outline" size="lg">
                     Contact Us
@@ -181,7 +184,7 @@ const Index = () => {
         </div>
       </section>
       
-       {/* Clients Section*/}
+      {/* Clients Section*/}
       <section className="py-2 border-y border-border bg-card/50 w-full overflow-hidden">
         <div className="w-full">
           <p className="text-center text-muted-foreground text-L mb-3">

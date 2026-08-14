@@ -43,11 +43,11 @@ const AboutUs = () => {
       {/* Main Content */}
       <section className="py-12">
         <div className="container mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
+          <div className="grid lg:grid-cols-2 gap-4 items-center mb-16">
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 1.8, delay: 0.2 }}
             >
               <h2 className="text-3xl font-bold mb-6">Who We Are</h2>
               <p className="text-muted-foreground mb-4">
@@ -72,7 +72,7 @@ const AboutUs = () => {
             <motion.div
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              transition={{ duration: 1.8, delay: 0.2 }}
               className="relative h-screen overflow-hidden object-contain"
             >
               {images.map((img, index) => (
@@ -80,7 +80,7 @@ const AboutUs = () => {
                   key={index}
                   src={img}
                   alt="Surveying equipment and team"
-                  className={`absolute inset-0 w-full h-full object-cover rounded-lg shadow-lg transition-opacity duration-1000 ${
+                  className={`absolute inset-0 w-full h-full object-contain rounded-lg shadow-lg transition-opacity duration-1000 ${
                     index === current ? "opacity-100" : "opacity-0"
                   }`}
                 />
@@ -111,7 +111,7 @@ const AboutUs = () => {
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
+            transition={{ duration: 1.8, delay: 0.4 }}
             className="mb-16"
           >
             <h2 className="text-3xl font-bold text-center mb-12">Our Services</h2>
@@ -217,7 +217,7 @@ const AboutUs = () => {
       {/* Footer */}
  <footer className="bg-card border-t">
         <div className="container mx-auto px-4 py-6">
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-3 gap-8">
             <div>
               <h3 className="text-2xl text-primary mb-4"> <b>GET IN TOUCH</b> <br/> WITH US </h3>
             </div>
@@ -254,6 +254,7 @@ const AboutUs = () => {
                 </Link>
               </div>
             </div>
+
           </div>
         </div>
          <div>
