@@ -1,6 +1,7 @@
 ﻿# Civil Engineering Surveyors 
+ https://geomatics-civil-engineering-surveyors.netlify.app/
 
-**A responsive marketing site and component library built with Vite, React, TypeScript, and Tailwind CSS.**
+**A responsive marketing site and component library built with Vite, React,   JavaScript, and Tailwind CSS.**
 
 ---
 
