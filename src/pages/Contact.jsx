@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 const contactInfo = [
@@ -41,30 +41,11 @@ const Contact = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  useEffect(() => {
-    // Ensure the page is scrolled to the top when this route/component mounts
-    try {
-      const supportsSmooth =
-        typeof window !== "undefined" &&
-        typeof document !== "undefined" &&
-        typeof CSS !== "undefined" &&
-        (CSS.supports ? CSS.supports("scroll-behavior", "smooth") : "scrollBehavior" in document.documentElement.style);
-
-      if (supportsSmooth) {
-        window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
-      } else {
-        window.scrollTo(0, 0);
-      }
-    } catch (e) {
-      // ignore in non-browser environments
-    }
-  }, []);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     

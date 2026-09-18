@@ -165,13 +165,8 @@ const Index = () => {
       <section id="services" className="py-3 bg-card/30">
         <div className="container mx-auto px-2">
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {services.slice(0, 5).map((service, index) => (
+            {services.slice(0, 10).map((service, index) => (
               <ServiceCard key={service.id} {...service} index={index} />
-            ))}
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-4">
-            {services.slice(5).map((service, index) => (
-              <ServiceCard key={service.id} {...service} index={index + 5} />
             ))}
           </div>
           <div className="text-center mt-8">
@@ -187,22 +182,25 @@ const Index = () => {
       {/* Clients Section*/}
       <section className="py-2 border-y border-border bg-card/50 w-full overflow-hidden">
         <div className="w-full">
-          <p className="text-center text-muted-foreground text-L mb-3">
-            Our Clients
+          <p className="text-center text-muted-foreground text-sm sm:text-base mb-3 sm:mb-4 px-4">
+            We take pride in serving a diverse range of clients across various industries.
           </p>
           <div className="w-full flex items-center overflow-hidden">
             <motion.div 
               initial={{ x: 40 }} 
               animate={{ x: 0 }} 
               transition={{duration: 0.4}}
-              className="flex w-full justify-center gap-20 px-12" > 
+              className="flex w-full justify-center gap-6 sm:gap-8 lg:gap-20 px-4 sm:px-8 lg:px-12" > 
               {visibleClients.map((client) => ( 
                 <div key={client.name} 
-                  className="flex-shrink-0 h-20 flex items-center opacity-90 hover:opacity-100 transition-all" >
+                  className="flex-shrink-0 h-12 w-20
+                              sm:h-18 sm:w-28
+                              lg:h-20 lg:w-32
+                              flex items-center opacity-90 hover:opacity-100 transition-all" >
                   <img 
                     src={client.logo} 
                     alt={client.name} 
-                    className="h-full w-full object-contain" /> 
+                    className="max-h-full max-w-full object-contain" /> 
                 </div>
               ))} 
             </motion.div>
@@ -210,75 +208,21 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Why Choose Us */}
-      <section className="py-10">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-            >
-              <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-4">
-                Why Choose Us?
-              </span>
-              <h2 className="font-display font-bold text-3xl md:text-4xl text-foreground mb-6">
-                Your Trusted Partner for Precision Surveying
-              </h2>
-              <p className="text-muted-foreground text-lg mb-8">
-                Since 2000, we've been delivering cutting-edge geomatics services and technologies to developers and businesses working on innovative solutions that require precision.
-              </p>
-              <ul className="space-y-4">
-                {[
-                  "25+ years of industry experience",
-                  "State-of-the-art surveying equipment",
-                  "Expert team of certified surveyors",
-                  "Comprehensive support and training",
-                  "Partnerships with leading technology providers",
-                ].map((item) => (
-                  <li key={item} className="flex items-center gap-3">
-                    <CheckCircle className="w-5 h-5 text-primary flex-shrink-0" />
-                    <span className="text-foreground">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-              className="relative"
-            >
-              <div className="rounded-2xl overflow-hidden shadow-card">
-                <img
-                  src={geospatialImg}
-                  alt="Geospatial surveying"
-                  className="w-full aspect-square object-cover"
-                />
-              </div>
-              <div className="absolute -bottom-6 -left-6 bg-gradient-primary rounded-2xl p-6 shadow-glow">
-                <p className="font-display font-bold text-3xl text-primary-foreground">25+</p>
-                <p className="text-primary-foreground/80 text-sm">Years of Excellence</p>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Industries Section */}
+  
+      {/* Projects Section */}
       <section className="py-5 bg-card/30">
         <div className="container mx-auto px-2">
           <SectionHeader
-            badge="Industries"
-            title="Diverse Industries Expertise"
+            badge="Projects"
           />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
+          <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-3">
             {industries.slice(0, 5).map((industry, index) => (
               <IndustryCard key={industry.title} {...industry} index={index} />
             ))}
           </div>
+          <p className="text-center text-muted-foreground text-lg mb-3">
+            Take a look at some projects we've been involved in across various industries.
+          </p>
           <div className="text-center mt-12">
             <Link to="/industries">
               <Button variant="outline" size="lg">
@@ -289,34 +233,9 @@ const Index = () => {
         </div>
       </section>
 
-      
-      {/* Stats Section */}
-      <section className="py-8">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {stats.map((stat, index) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="text-center p-8 rounded-2xl bg-gradient-card shadow-card"
-              >
-                <stat.icon className="w-12 h-12 text-primary mx-auto mb-4" />
-                <p className="font-display font-bold text-4xl text-foreground mb-2">
-                  {stat.value}
-                </p>
-                <p className="text-muted-foreground">{stat.label}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* CTA Section */}
-      <section className="py-12 bg-gradient-card">
-        <div className="container mx-auto px-4">
+      <section className="py-4 bg-gradient-card">
+        <div className="container mx-auto px-2">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -324,7 +243,7 @@ const Index = () => {
             viewport={{ once: true }}
             className="text-center max-w-3xl mx-auto"
           >
-            <h2 className="font-display font-bold text-3xl md:text-4xl lg:text-5xl text-foreground mb-6">
+            <h2 className="font-display font-bold text-2xl md:text-xl lg:text-2xl text-foreground mb-2">
               Ready to Get Started?
             </h2>
             <p className="text-muted-foreground text-lg mb-8">

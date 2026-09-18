@@ -22,7 +22,7 @@ const SectionHeader = ({ badge, title, description, centered = true }: SectionHe
           {badge}
         </span>
       )}
-      <h2 className="font-display font-bold text-3xl md:text-4xl lg:text-5xl text-foreground mb-4">
+      <h2 className="font-display font-bold text-xl md:text-2xl lg:text-4xl text-foreground mb-2">
         {title}
       </h2>
       {description && (

@@ -99,7 +99,7 @@ const Support = () => {
             </a>
           </div>
           <p className="text-center text-muted-foreground mt-4">
-            <strong>Address:</strong> P.O. BOX. 7726-00100, Phileo Arcade - KENYA
+            <strong>Address:</strong> P.O. BOX. 7726-00100, Phileo Arcade, Along Thika Rd - KENYA
           </p>
         </div>
       </section>
