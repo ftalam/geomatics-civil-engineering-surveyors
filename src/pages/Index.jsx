@@ -180,7 +180,7 @@ const Index = () => {
       </section>
       
       {/* Clients Section*/}
-      <section className="py-2 border-y border-border bg-card/50 w-full overflow-hidden">
+      <section className="py-2 border-y border-border bg-gradient-card w-full overflow-hidden">
         <div className="w-full">
           <p className="text-center text-muted-foreground text-sm sm:text-base mb-3 sm:mb-4 px-4">
             We take pride in serving a diverse range of clients across various industries.
@@ -212,17 +212,17 @@ const Index = () => {
       {/* Projects Section */}
       <section className="py-5 bg-card/30">
         <div className="container mx-auto px-2">
-          <SectionHeader
+        
+          <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-3">
+            <SectionHeader
             badge="Projects"
+            description="Take a look at some projects we've been involved in across various industries."
           />
-          <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-3">
             {industries.slice(0, 5).map((industry, index) => (
               <IndustryCard key={industry.title} {...industry} index={index} />
             ))}
           </div>
-          <p className="text-center text-muted-foreground text-lg mb-3">
-            Take a look at some projects we've been involved in across various industries.
-          </p>
+        
           <div className="text-center mt-12">
             <Link to="/industries">
               <Button variant="outline" size="lg">
@@ -234,7 +234,7 @@ const Index = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-4 bg-gradient-card">
+      <section className="py-6 bg-card/60">
         <div className="container mx-auto px-2">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
