@@ -25,6 +25,7 @@ import kengenLogo from "@/assets/KenGen.png";
 import nibLogo from "@/assets/National-Irrigation-Board.png";
 import HHSGSLogo from "@/assets/HH-SGS.png";
 import konzaLogo from "@/assets/Konza_Techno_City_Logo.png";
+import GeoshopLogo from "@/assets/3.svg";
 
 const clientLogos = [
   { name: "KeNHA", logo: kenhaLogo },
@@ -140,13 +141,15 @@ const Index = () => {
                 Innovative surveying solutions for businesses that need precision. Delivering cutting-edge geomatics services since 2000.
               </p>
               <div className="flex flex-wrap gap-4">
-                <Button
-                  variant="hero"
-                  size="lg"
-                  className="products-theme"
+                <Button variant="outline" size="lg" className="group products-theme"
                   onClick={() => window.open("/geoshop", "_blank")}
                 >
-                  Shop Now <ArrowRight className="w-5 h-5 ml-2" />
+                  <img
+                    src={GeoshopLogo}
+                    alt="Geomatics Civil Engineering Surveyors logo"
+                    className="h-10 w-auto object-contain transition-[filter] group-hover:brightness-0 group-hover:invert"
+                    />
+                  <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
                 <meta name="keywords" content="geomatics, civil engineering, surveying, precision surveying, geospatial services, topographic surveys, construction site management, renewable energy surveys, mining surveys, architectural surveys
                 total station, GPS, RTK, Survey eqipement, ViLi-100, Laser Scanner, Drone" />

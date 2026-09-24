@@ -18,7 +18,7 @@ export default function Register() {
     event.preventDefault();
 
     if (!email.trim() || !password.trim() || !phone.trim()) {
-      alert("Email, phone, and password are required.");
+      alert("Email, phone and password are required.");
       return;
     }
 
@@ -45,7 +45,7 @@ export default function Register() {
       setSubmitting(false);
       if ((signUpError.message || "").toLowerCase().includes("database error saving new user")) {
         alert(
-          "Signup failed due to a database trigger/policy issue (commonly profiles auto-create). Check your Supabase SQL setup and run supabase/reconcile-orders-profiles.sql in the same project as your VITE_SUPABASE_URL.",
+          "SignUp failed due to a database trigger/policy issue (commonly profiles auto-create). Check your Supabase SQL setup and run supabase/reconcile-orders-profiles.sql in the same project as your VITE_SUPABASE_URL.",
         );
         return;
       }
