@@ -2,7 +2,7 @@ geomatics-civil-engineering-surveyors-main/
 │
 ├── src/
 │   ├── main.jsx                              ✅ Application entry point
-│   ├── App.jsx                               ✅ Providers and route registry
+│   ├── App.jsx                               ✅ Providers and routes registry
 │   ├── App.css                               ✅ Global application styles
 │   ├── index.css                             ✅ Tailwind/global styles
 │   │
@@ -22,7 +22,7 @@ geomatics-civil-engineering-surveyors-main/
 │   │   ├── Contact.jsx                        ✅ Contact page
 │   │   ├── Privacy.jsx                        ✅ Privacy page
 │   │   ├── Terms.jsx                          ✅ Terms page
-│   │   └── NotFound.tsx                       ✅ Catch-all route
+│   │   └── NotFound.tsx                       ✅ Catch-all routes
 │   │
 │   ├── components/                            ✅ Shared application components
 │   │   ├── Navbar.jsx

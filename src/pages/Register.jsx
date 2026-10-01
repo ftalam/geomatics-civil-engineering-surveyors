@@ -103,7 +103,7 @@ export default function Register() {
   return (
     <AuthLayout
       title="Create Account"
-      subtitle="Verify your phone number to create your geoshop account"
+      subtitle="Verify your details to create your geoshop account"
       footer={
         <p>
           <span className="text-gray-500">Already have an account? </span>
@@ -122,14 +122,14 @@ export default function Register() {
             <label className="mb-1 block text-sm text-gray-500">Phone number</label>
             <input
               className="h-12 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 text-base text-gray-800 placeholder:text-gray-500 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
-              placeholder="+254712345678"
+              placeholder="(+254)7 12 345678"
               type="tel"
               value={phone}
               onChange={(event) => setPhone(event.target.value)}
               required
             />
             <p className="mt-1 text-xs text-gray-500">
-              Use international format (example: +254712345678).
+              Use international format (example: (+254)7 12 345678).
             </p>
           </div>
 

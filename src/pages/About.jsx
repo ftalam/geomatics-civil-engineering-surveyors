@@ -70,13 +70,13 @@ const team = [
     name: "Eric Rapela",
     role: "Topographic Survey Expert",
     detail:
-      "University of Nairobi surveying graduate with over 10 years of experience in surveying and management of GIS, construction and design projects.",
+      "Over 10 years of experience in  land surveying and management of GIS, construction and design projects.",
   },
   {
     name: "Erick Ngomo",
     role: "Surveyor / GIS Expert",
     detail:
-      "Surveying graduate from the University of Nairobi with experience in surveying, GIS projects and mobile mapping.",
+      "Geospatial expert with experience in surveying, GIS projects and mobile mapping.",
   },
   {
     name: "Fred Juma",
