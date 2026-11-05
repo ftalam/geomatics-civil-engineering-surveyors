@@ -79,7 +79,24 @@ npm run test
 
 - Required: `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`
 
-##  Contributing
+## Geoshop marketing consent
+
+Geoshop registration uses the existing Supabase Auth signup and OTP flow.
+Marketing consent is optional and unchecked by default; the choice is saved in
+the new user's Auth metadata and recorded by the trigger in
+`supabase/marketing-consent.sql`. Run that SQL in the Supabase SQL editor before
+deploying the app. Existing accounts are backfilled as unsubscribed.
+
+Only the Supabase service role can read or change marketing preferences and
+unsubscribe tokens. Promotional mailers must send only to rows with
+`marketing_consent = true` and include the recipient's
+`unsubscribe-marketing` link. Deploy that function with:
+
+```bash
+supabase functions deploy unsubscribe-marketing
+```
+
+## Contributing
 
 - Fork, branch, and open a pull request. Run `npm run lint` and `npm run test` before submitting.
 
@@ -91,4 +108,3 @@ npm run test
 ---
 
 **Contact**: see `src/pages/Contact.tsx` for the contact flow integration details.
-

@@ -1,1 +1,4 @@
-project_id = "omobeynjqnzjrwsbrlzw"
+project_id = "qovphbyowvbmcynhqfxa"
+
+[functions.unsubscribe-marketing]
+verify_jwt = false

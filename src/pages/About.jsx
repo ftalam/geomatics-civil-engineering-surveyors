@@ -12,7 +12,6 @@ import {
   Compass,
   Cpu,
   MapPinned,
-  Users,
 } from "lucide-react";
 
 import geospatialImg from "@/assets/geospatial.jpg";
@@ -54,51 +53,6 @@ const services = [
   "Profiles, cross-sections and as-built surveys",
 ];
 
-const team = [
-  {
-    name: "MISK. Peter N. Mugo",
-    role: "Managing Director; Survey Engineer & GIS Expert",
-    detail:
-      "Registered surveyor with the Land Surveyors Board.",
-  },
-  {
-    name: "Fredrick Mwenda",
-    role: "Geodetic Control / Cadastral Survey",
-    detail: "Leads geodetic control works and cadastral survey assignments.",
-  },
-  {
-    name: "Eric Rapela",
-    role: "Topographic Survey Expert",
-    detail:
-      "Over 10 years of experience in  land surveying and management of GIS, construction and design projects.",
-  },
-  {
-    name: "Erick Ngomo",
-    role: "Surveyor / GIS Expert",
-    detail:
-      "Geospatial expert with experience in surveying, GIS projects and mobile mapping.",
-  },
-  {
-    name: "Fred Juma",
-    role: "GIS and Remote Sensing",
-    detail: "Supports GIS research, remote sensing and topographic survey work.",
-  },
-  {
-    name: "Marvin Mwangi",
-    role: "Surveyor / GIS Expert",
-    detail: "Supports topographical survey assignments and GIS workflows.",
-  },
-  {
-    name: "Faith Talam",
-    role: "Surveyor, GIS Developer & Sales Support",
-    detail: "GCES & Geoshop digital platform development and sales activities.",
-  },
-  {
-    name: "Bernice Njoroge",
-    role: "HR Director",
-    detail: "Leads staffing and welfare for the technical and support teams.",
-  },
-];
 
 const equipment = [
   "Countrywide CORS network for high-accuracy positioning",
@@ -202,34 +156,6 @@ const About = () => {
                 <item.icon className="w-7 h-7 text-primary mb-2" />
                 <h3 className="font-display font-bold text-lg text-foreground mb-2">{item.question}</h3>
                 <p className="text-sm leading-relaxed text-muted-foreground">{item.answer}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-     {/*Team*/}
-      <section className="py-8 bg-card/30">
-        <div className="container mx-auto px-4">
-          <SectionHeader
-            badge="The Team"
-            title="Named technical responsibility"
-            description="GCES is led by qualified survey and GIS professionals, with additional surveyors, GIS technicians and external experts engaged where a project requires specialist input."
-          />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {team.map((member, index) => (
-              <motion.div
-                key={member.name}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.45, delay: index * 0.05 }}
-                viewport={{ once: true }}
-                className="rounded-lg bg-gradient-card border border-border/60 p-6 shadow-card"
-              >
-                <Users className="w-6 h-6 text-primary mb-4" />
-                <h3 className="font-display font-bold text-xl text-foreground">{member.name}</h3>
-                <p className="text-sm font-semibold text-primary mt-1 mb-3">{member.role}</p>
-                <p className="text-sm leading-relaxed text-muted-foreground">{member.detail}</p>
               </motion.div>
             ))}
           </div>

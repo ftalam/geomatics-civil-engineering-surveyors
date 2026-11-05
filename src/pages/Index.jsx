@@ -74,10 +74,13 @@ const industries = [
 
 const partners = ["CHCNAV", "IVOLVE", "TOPCON", "QUANTUMSYSTEMS", "TELEO"];
 
-const stats = [
-  { icon: Users, value: "500+", label: "Clients Served" },
-  { icon: Award, value: "25+", label: "Years Experience" },
-  { icon: Target, value: "1000+", label: "Projects Completed" },
+const project = [
+  {
+    title: "Slam survey",
+    label: "Clients Served",
+    description: "We have successfully served over 500 clients across various industries, providing them with precision surveying solutions that meet their unique needs.",
+    image: architectureImg,
+  },
 ];
 
 const Index = () => {

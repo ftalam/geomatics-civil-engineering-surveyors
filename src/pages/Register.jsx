@@ -10,6 +10,7 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [otp, setOtp] = useState("");
+  const [marketingConsent, setMarketingConsent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [step, setStep] = useState("request_otp"); // request_otp | verify_otp
   const navigate = useNavigate();
@@ -36,6 +37,7 @@ export default function Register() {
         options: {
           data: {
             phone,
+            marketing_consent: marketingConsent,
           },
         },
       }),
@@ -168,6 +170,19 @@ export default function Register() {
               required
             />
           </div>
+
+          <label className="flex items-start gap-2 text-sm text-gray-600">
+            <input
+              className="mt-1 h-4 w-4 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500"
+              type="checkbox"
+              checked={marketingConsent}
+              onChange={(event) => setMarketingConsent(event.target.checked)}
+            />
+            <span>
+              Send me occasional product news and offers by email. This is optional,
+              and I can unsubscribe at any time.
+            </span>
+          </label>
 
           <button
             type="submit"

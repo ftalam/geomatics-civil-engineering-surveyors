@@ -45,17 +45,6 @@ const CadastralSurvey = () => {
        This is regardless of whether they are on land, water or defined by natural or artificial features.
       </p>
 
-      <p className="text-muted-foreground leading-relaxed">
-        - A boundary (<b>resurvey</b>) begins with obtaining deed descriptions and all available records, followed by a thorough <b>search</b> to account for incomplete or hard-to-find documentation.
-          <br/> - The <b>field survey</b> then commences with initial survey operations concentrated on locating monuments. 
-     Property corners may be marked by iron pins, metal survey markers, iron pipes e.tc.,
-        <br/> -When the approximate positions for the boundaries of the property have been located, <b> a traverse</b> is run around the property. 
-        While the control traverse is being run, ties will be measured and all details relevant to the boundaries will be acquired. 
-        This includes but is not limited to locating the property corners, monuments, fences, hedge rows, walls, walks, and buildings on the lot. <br/>
-        <br/> Boundary surveys typically combine records research, control verification, evidence
-          collection and measurement checks. 
-      </p>
-
         <ArticleStack
               items={[
                 {
