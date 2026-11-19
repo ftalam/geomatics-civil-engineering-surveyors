@@ -17,12 +17,12 @@ const contactInfo = [
   {
     icon: Phone,
     title: "Phone",
-    details: ["+254 721 235 501", "+254 768 123 456"],
+    details: ["+254 721 235 501", "+254 704 113 465"],
   },
   {
     icon: Mail,
     title: "Email",
-    details: ["pmugo@geomatics.co.ke", "sales@geomatics.co.ke"],
+    details: ["pmugo@geomatics.co.ke", "marvin@geomatics.co.ke"],
   },
   {
     icon: Clock,

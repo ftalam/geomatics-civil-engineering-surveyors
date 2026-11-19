@@ -219,16 +219,19 @@ const Index = () => {
       <section className="py-5 bg-card/30">
         <div className="container mx-auto px-2">
         
-          <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-3">
+          <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-3 gap-3">
             <SectionHeader
             badge="Projects"
             description="Take a look at some projects we've been involved in across various industries."
           />
-            {industries.slice(0, 5).map((industry, index) => (
-              <IndustryCard key={industry.title} {...industry} index={index} />
-            ))}
+            <Link to="https://storymaps.arcgis.com/stories/60f81e19e0474909b5dfad206085b113" className="hover:text-primary decoration-primary/60">
+             3D SLAM SURVEY 
+            </Link>
+            <Link to="https://arcg.is/4zCCe3" className="hover:text-primary decoration-primary/60">
+              Precision <ArrowRight className="w-5 h-5" /> 
+            </Link>
           </div>
-        
+      
           <div className="text-center mt-12">
             <Link to="/industries">
               <Button variant="outline" size="lg">
