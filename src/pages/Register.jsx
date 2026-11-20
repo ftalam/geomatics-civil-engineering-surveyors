@@ -80,9 +80,9 @@ export default function Register() {
 
     const { data, error } = await withSupabaseRetry(() =>
       supabase.auth.verifyOtp({
-        phone,
+        email,
         token: otp,
-        type: "sms",
+        type: "email",
       }),
     );
 
@@ -121,9 +121,9 @@ export default function Register() {
       {step === "request_otp" ? (
         <form onSubmit={handleRegister} className="space-y-5">
           <div>
-            <label className="mb-1 block text-sm text-gray-500">Phone number</label>
+            <label className="mb-1 block text-sm text-gray-500">Phone</label>
             <input
-              className="h-12 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 text-base text-gray-800 placeholder:text-gray-500 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
+              className="h-12 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 text-base text-gray-800 placeholder:text-gray-300 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
               placeholder="(+254)7 12 345678"
               type="tel"
               value={phone}
@@ -138,7 +138,7 @@ export default function Register() {
           <div>
             <label className="mb-1 block text-sm text-gray-500">Email</label>
             <input
-              className="h-12 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 text-base text-gray-800 placeholder:text-gray-500 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
+              className="h-12 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 text-base text-gray-800 placeholder:text-gray-300 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
               placeholder="your.email@example.com"
               type="email"
               value={email}
@@ -150,7 +150,7 @@ export default function Register() {
           <div>
             <label className="mb-1 block text-sm text-gray-500">Password</label>
             <input
-              className="h-12 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 text-base text-gray-800 placeholder:text-gray-500 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
+              className="h-12 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 text-base text-gray-800 placeholder:text-gray-300 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
               placeholder="Create a password"
               type="password"
               value={password}
@@ -162,7 +162,7 @@ export default function Register() {
           <div>
             <label className="mb-1 block text-sm text-gray-500">Confirm password</label>
             <input
-              className="h-12 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 text-base text-gray-800 placeholder:text-gray-500 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
+              className="h-12 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 text-base text-gray-800 placeholder:text-gray-300 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
               placeholder="Re-enter password"
               type="password"
               value={confirmPassword}
@@ -195,12 +195,12 @@ export default function Register() {
       ) : (
         <form onSubmit={handleVerifyOtp} className="space-y-5">
           <div>
-            <label className="mb-1 block text-sm text-gray-500">Phone number</label>
+            <label className="mb-1 block text-sm text-gray-500">Email</label>
             <input
-              className="h-12 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 text-base text-gray-800 placeholder:text-gray-500 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
-              type="tel"
-              value={phone}
-              onChange={(event) => setPhone(event.target.value)}
+              className="h-12 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 text-base text-gray-800 placeholder:text-gray-300 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
+              type="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
               required
             />
           </div>
@@ -208,7 +208,7 @@ export default function Register() {
           <div>
             <label className="mb-1 block text-sm text-gray-500">OTP code</label>
             <input
-              className="h-12 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 text-base text-gray-800 placeholder:text-gray-500 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
+              className="h-12 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 text-base text-gray-800 placeholder:text-gray-300 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
               placeholder="123456"
               inputMode="numeric"
               value={otp}
