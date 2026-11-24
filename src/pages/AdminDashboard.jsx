@@ -22,7 +22,6 @@ import {
   Check,
   Zap,
   Shield,
-  Users,
   TrendingUp
 } from "lucide-react";
 import { toast } from "sonner";
@@ -85,11 +84,12 @@ const attachProfilesToOrders = async (orderData) => {
 
   const { data: profilesData, error } = await supabase
     .from("profiles")
-    .select("id, email, phone, full_name, avatar_url")
+    .select("id, email, phone")
     .in("id", userIds);
 
   if (error) {
     console.warn("Failed to load order profiles:", error);
+    toast.error("Unable to load customer contact details.");
     return safeOrders;
   }
 
@@ -496,7 +496,7 @@ const FiltersBar = ({ filters, onFilterChange, totalResults }) => (
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
         <input
           type="text"
-          placeholder="Search orders by number, email, or name..."
+          placeholder="Search orders by number, email, or phone..."
           value={filters.search}
           onChange={(e) => onFilterChange({ search: e.target.value })}
           className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm text-slate-700 transition-all"
@@ -634,12 +634,6 @@ const OrderCard = ({
 
               {profile && (
                 <div className="mt-2 flex flex-wrap gap-3">
-                  {profile.full_name && (
-                    <p className="text-sm text-slate-600 flex items-center gap-1.5">
-                      <Users className="h-4 w-4 text-slate-400" />
-                      <span className="font-medium">{profile.full_name}</span>
-                    </p>
-                  )}
                   {profile.email && (
                     <p className="text-sm text-slate-600 flex items-center gap-1.5">
                       <Mail className="h-4 w-4 text-slate-400" />
@@ -652,7 +646,17 @@ const OrderCard = ({
                       {profile.phone}
                     </p>
                   )}
+                  {!profile.email && !profile.phone && (
+                    <p className="text-sm text-slate-500">
+                      No email or phone is saved for this customer.
+                    </p>
+                  )}
                 </div>
+              )}
+              {!profile && (
+                <p className="mt-2 text-sm text-slate-500">
+                  Customer contact details are unavailable.
+                </p>
               )}
 
               <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-slate-400">
@@ -1021,7 +1025,6 @@ const AdminDashboard = () => {
         const orderNumber = String(order.order_number || "").toLowerCase();
         const email = (profile?.email || "").toLowerCase();
         const phone = (profile?.phone || "").toLowerCase();
-        const name = (profile?.full_name || "").toLowerCase();
         const requestText = normalizeOrderRequests(order)
           .map(req => `${req.label} ${req.value}`)
           .join(" ")
@@ -1031,7 +1034,6 @@ const AdminDashboard = () => {
           orderNumber.includes(searchLower) ||
           email.includes(searchLower) ||
           phone.includes(searchLower) ||
-          name.includes(searchLower) ||
           requestText.includes(searchLower)
         );
       });

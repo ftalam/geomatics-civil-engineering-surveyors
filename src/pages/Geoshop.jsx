@@ -881,11 +881,17 @@ const Geoshop = () => {
     setSendingOrder(true);
 
     try {
+      const profilePayload = { id: user.id };
+      const email = user.email || user.user_metadata?.email;
+      const phone = user.phone || user.user_metadata?.phone;
+
+      if (email) profilePayload.email = email;
+      if (phone) profilePayload.phone = phone;
+
       // Ensure user profile exists
-      await supabase.from("profiles").upsert({
-        id: user.id,
-        email: user.email,
-      });
+      await supabase
+        .from("profiles")
+        .upsert(profilePayload, { onConflict: "id" });
 
       // Create order
       const orderItems = cart.map((item) => ({
