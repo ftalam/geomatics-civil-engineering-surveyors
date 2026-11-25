@@ -5,6 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Search, Filter, ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import GeoLtdLogo from "@/assets/2.svg";
 import bestSellerImg from "@/assets/chcnav-vili-i100-visual-lidar-gnss-rtk-receiver-surveying.jpg";
@@ -17,14 +25,18 @@ import i93Img from "@/assets/gnss-smart-full-antennas-chcnav-i93.jpg";
 import i89Img from "@/assets/gnss-smart-full-antennas-chcnav-i89.jpg";
 import i76Img from "@/assets/gnss-smart-full-antennas-chcnav-i76.jpg";
 import i73PlusImg from "@/assets/gnss-smart-full-antennas-chcnav-i73+.jpg";
+import i50Img from "@/assets/chcnav-i50-catalog.jpg";
+import levelImg from "@/assets/DSC-32B.png";
+import apache6Img from "@/assets/chcnav-apache-6.jpg";
+import lt800hImg from "@/assets/chcnav-lt800h-controller.jpg";
 
-const categories = ["All", "GNSS Receivers", "Total Stations", "Drones", "Accessories"];
+const categories = ["All", "Receiver", "Total Station", "Drone", "Marine Survey", "Scanner", "Level", "Accessories"];
 
 const products = [
   {
     id: 1,
     name: "CHCNAV Vi-Li i100 GNSS Receiver",
-    category: "GNSS Receivers",
+    category: "Receiver",
     rating: 4.8,
     reviews: 45,
     image: bestSellerImg,
@@ -33,7 +45,7 @@ const products = [
   {
     id: 2,
     name: "CHCNAV CTS-A100 Total Station",
-    category: "Total Stations",
+    category: "Total Station",
     rating: 4.9,
     reviews: 32,
     image: totalStationImg,
@@ -42,7 +54,7 @@ const products = [
   {
     id: 3,
     name: "CHCNAV X500 UAV",
-    category: "Drones",
+    category: "Drone",
     rating: 4.7,
     reviews: 28,
     image: droneImg,
@@ -51,7 +63,7 @@ const products = [
   {
     id: 4,
     name: "CHCNAV iBase",
-    category: "GNSS Receivers",
+    category: "Receiver",
     rating: 4.6,
     reviews: 56,
     image: iBaseImg,
@@ -59,7 +71,7 @@ const products = [
   {
     id: 5,
     name: "CHCNAV CTS-M100 Total Station",
-    category: "Total Stations",
+    category: "Total Station",
     rating: 4.6,
     reviews: 18,
     image: ctsM100Img,
@@ -68,7 +80,7 @@ const products = [
   {
     id: 6,
     name: "CHCNAV RS10",
-    category: "Accessories",
+    category: "Scanner",
     rating: 4.9,
     reviews: 41,
     image: laseScannerImg,
@@ -77,7 +89,7 @@ const products = [
   {
     id: 7,
     name: "CHCNAV i93",
-    category: "GNSS Receivers",
+    category: "Receiver",
     rating: 4.5,
     reviews: 89,
     image: i93Img,
@@ -85,7 +97,7 @@ const products = [
   {
     id: 8,
     name: "CHCNAV i89",
-    category: "GNSS Receivers",
+    category: "Receiver",
     rating: 4.5,
     reviews: 39,
     image: i89Img,
@@ -93,15 +105,15 @@ const products = [
   {
     id:9,
     name: "CHCNAV i83 Pro",
-    category: "GNSS Receivers",
+    category: "Receiver",
     rating: 4.4,
     reviews: 79,
-    image: i89Img,
+    image: i93Img,
   },
   {
     id:10,
     name: "CHCNAV i76",
-    category: "GNSS Receivers",
+    category: "Receiver",
     rating: 4.4,
     reviews: 79,
     image: i76Img,
@@ -109,7 +121,7 @@ const products = [
    {
     id: 11,
     name: "CHCNAV i73+",
-    category: "GNSS Receivers",
+    category: "Receiver",
     rating: 4.5,
     reviews: 89,
     image: i73PlusImg,
@@ -117,7 +129,7 @@ const products = [
   {
     id: 12,
     name: "CHCNAV i73",
-    category: "GNSS Receivers",
+    category: "Receiver",
     rating: 4.5,
     reviews: 89,
     image: i73PlusImg,
@@ -126,40 +138,52 @@ const products = [
    {
     id: 13,
     name: "CHCNAV i50",
-    category: "GNSS Receivers",
+    category: "Receiver",
     rating: 4.5,
     reviews: 89,
-    image: i73PlusImg,
+    image: i50Img,
   },
    {
     id:14,
-    name: "LT",
+    name: "CHCNAV LT800H Field Controller",
     category: "Accessories",
     rating: 4.4,
     reviews: 79,
-    image: i76Img,
+    image: lt800hImg,
+    badge: "Android Controller",
   },
    {
     id:15,
-    name: "CTS",
-    category: "Total Stations",
-    rating: 4.4,
-    reviews: 79,
-    image: i76Img,
-  },
-   {
-    id:16,
     name: "DSC-32B Automatic Level",
-    category: "Level machines",
+    category: "Level",
     rating: 4.4,
     reviews: 79,
-    image: i76Img,
+    image: levelImg,
+  },
+  {
+    id: 16,
+    name: "CHCNAV APACHE 6 Multibeam Marine Drone",
+    category: "Marine Survey",
+    rating: 4.7,
+    reviews: 28,
+    image: apache6Img,
+    badge: "Marine Survey",
+  },
+  {
+    id: 17,
+    name: "CHCNAV CTS-112R4 Total Station",
+    category: "Total Station",
+    rating: 4.5,
+    reviews: 24,
+    image: "/placeholder.svg",
+    badge: "Reflectorless EDM",
   },
 ];
 
 const Products = () => {
   const [activeCategory, setActiveCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedProduct, setSelectedProduct] = useState<(typeof products)[number] | null>(null);
 
   const filteredProducts = products.filter((product) => {
     const matchesCategory =
@@ -258,7 +282,11 @@ const Products = () => {
                     {product.name}
                   </h3>
                   <div className="mt-4 flex items-center justify-between">
-                    <Button size="sm" variant="outline">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => setSelectedProduct(product)}
+                    >
                       View Details
                     </Button>
                   </div>
@@ -276,6 +304,75 @@ const Products = () => {
           )}
         </div>
       </section>
+
+      <Dialog
+        open={selectedProduct !== null}
+        onOpenChange={(open) => {
+          if (!open) setSelectedProduct(null);
+        }}
+      >
+        {selectedProduct && (
+          <DialogContent className="max-h-[90vh] max-w-4xl overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>{selectedProduct.name}</DialogTitle>
+              <DialogDescription>
+                Product information and available resources.
+              </DialogDescription>
+            </DialogHeader>
+
+            <Tabs defaultValue="specifications">
+              <TabsList>
+                <TabsTrigger value="specifications">Specifications</TabsTrigger>
+                <TabsTrigger value="resources">Resources</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="specifications">
+                <div className="grid gap-6 md:grid-cols-2 md:items-start">
+                  <img
+                    src={selectedProduct.image}
+                    alt={selectedProduct.name}
+                    className="w-full rounded-xl object-contain"
+                  />
+                  <div className="space-y-4">
+                    <h3 className="text-xl font-semibold">{selectedProduct.name}</h3>
+                    <dl className="space-y-3">
+                      <div>
+                        <dt className="font-medium">Category</dt>
+                        <dd className="text-muted-foreground">{selectedProduct.category}</dd>
+                      </div>
+                      <div>
+                        <dt className="font-medium">Rating</dt>
+                        <dd className="text-muted-foreground">
+                          {selectedProduct.rating} / 5 ({selectedProduct.reviews} reviews)
+                        </dd>
+                      </div>
+                      {selectedProduct.badge && (
+                        <div>
+                          <dt className="font-medium">Product highlight</dt>
+                          <dd className="text-muted-foreground">{selectedProduct.badge}</dd>
+                        </div>
+                      )}
+                    </dl>
+                    <Button variant="outline" asChild>
+                      <a
+                        href={`mailto:sales@geomatics.co.ke?subject=${encodeURIComponent(`Quotation Request - ${selectedProduct.name}`)}`}
+                      >
+                        Request Quote
+                      </a>
+                    </Button>
+                  </div>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="resources">
+                <p className="py-8 text-center text-muted-foreground">
+                  No brochures, datasheets, or manuals are available for this product yet.
+                </p>
+              </TabsContent>
+            </Tabs>
+          </DialogContent>
+        )}
+      </Dialog>
 
       {/* CTA Section */}
       <section className="py-10 bg-gradient-card">

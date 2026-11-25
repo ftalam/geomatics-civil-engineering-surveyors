@@ -11,14 +11,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useOrderHistory } from "@/hooks/useOrderHistory";
 import { supabase } from "@/lib/supabaseClient";
 import GeoLtd from "@/assets/1.svg";
-import {
-  addItemToCart,
-  getCart,
-  getCartCount,
-  removeItemFromCart,
-  saveCart,
-  setItemQuantity,
-} from "@/utils/cart";
+import { addItemToCart, getCart, getCartCount, removeItemFromCart, saveCart, setItemQuantity,} from "@/utils/cart";
 
 const PRODUCT_IMAGES_BUCKET =
   import.meta.env.VITE_SUPABASE_PRODUCT_IMAGES_BUCKET || "product-images";
