@@ -96,6 +96,21 @@ const normalizeSpecItems = (value) => {
   return normalizeStringList(parsed);
 };
 
+const getSearchableText = (value) => {
+  const parsed = parseJsonIfNeeded(value);
+
+  if (parsed === null || parsed === undefined) return "";
+  if (typeof parsed !== "object") return String(parsed);
+
+  if (Array.isArray(parsed)) {
+    return parsed.map(getSearchableText).join(" ");
+  }
+
+  return Object.entries(parsed)
+    .map(([key, item]) => `${key} ${getSearchableText(item)}`)
+    .join(" ");
+};
+
 const getProductSpecificationSections = (product) => {
   const raw =
     parseJsonIfNeeded(product?.specifications) ??
@@ -787,14 +802,26 @@ const Geoshop = () => {
   }, [products]);
 
   const filteredProducts = useMemo(() => {
-    const query = searchQuery.trim().toLowerCase();
+    const searchTerms = searchQuery.trim().toLowerCase().split(/\s+/).filter(Boolean);
 
     return products.filter((product) => {
       const matchesCategory =
         activeCategory === "All" || product.category === activeCategory;
-      const matchesSearch = (product.name || "")
-        .toLowerCase()
-        .includes(query);
+      const searchableText = [
+        product.name,
+        product.category,
+        product.description,
+        product.details,
+        product.specifications,
+        product.spec_sections,
+        product.specs,
+      ]
+        .map(getSearchableText)
+        .join(" ")
+        .toLowerCase();
+      const matchesSearch = searchTerms.every((term) =>
+        searchableText.includes(term),
+      );
 
       return matchesCategory && matchesSearch;
     });
