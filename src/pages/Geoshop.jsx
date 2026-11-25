@@ -3,6 +3,13 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { LogIn, LogOut, Search, ShoppingCart, Star, Phone, Mail, User, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { toast } from "sonner";
 import GeoshopLogo from "@/assets/3.svg";
 import CartDrawer from "@/components/CartDrawer";
@@ -1012,7 +1019,7 @@ const Geoshop = () => {
           </div>
         )}
       </div>
-
+      {/* Hero Section */}
       <section className="py-6 bg-gradient-card">
         <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between gap-6 items-center">
           <div>
@@ -1155,20 +1162,32 @@ const Geoshop = () => {
               />
             </div>
 
-            <div className="flex gap-2 overflow-x-auto">
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  onClick={() => setActiveCategory(category)}
-                  className={`px-4 py-2 rounded-lg whitespace-nowrap ${
-                    activeCategory === category
-                      ? "bg-primary text-white"
-                      : "bg-muted"
-                  }`}
-                >
-                  {category}
-                </button>
-              ))}
+            <div className="flex gap-2">
+              <button
+                onClick={() => setActiveCategory("All")}
+                className={`h-12 px-4 rounded-lg whitespace-nowrap ${
+                  activeCategory === "All"
+                    ? "bg-primary text-white"
+                    : "bg-muted"
+                }`}
+              >
+                All
+              </button>
+              <Select
+                value={activeCategory === "All" ? "" : activeCategory}
+                onValueChange={setActiveCategory}
+              >
+                <SelectTrigger className="h-12 w-full min-w-48 rounded-lg bg-card">
+                  <SelectValue placeholder="Select category" />
+                </SelectTrigger>
+                <SelectContent>
+                  {categories.slice(1).map((category) => (
+                    <SelectItem key={category} value={category}>
+                      {category}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
